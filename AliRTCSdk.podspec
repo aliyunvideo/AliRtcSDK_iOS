@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "AliRTCSdk"
-  s.version      = "0.0.1"
+  s.version      = "1.7.0"
   s.summary      = "AliRTCSdk_iOS"
   s.description  = <<-DESC
                    It's an SDK for aliyun video rtc, which implement by Objective-C.
@@ -19,7 +19,7 @@ Pod::Spec.new do |s|
   }
 
   s.subspec 'AliRTCSdk' do |rtcsdk|
-    rtcsdk.vendored_framework = 'AliRTCSdk.framework'
+    rtcsdk.vendored_frameworks = 'AliRTCSdk.framework','UTDID.framework'
     # rtcsdk.resource = 'AlivcLibFaceResource.bundle'
     rtcsdk.frameworks = 'AudioToolbox','VideoToolbox','CoreVideo','CoreMedia','OpenGLES','AVFoundation','UIKit','CoreTelephony','SystemConfiguration'
     rtcsdk.libraries = 'c++','resolv'

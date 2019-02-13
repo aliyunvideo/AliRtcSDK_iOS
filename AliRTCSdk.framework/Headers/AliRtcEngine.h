@@ -226,7 +226,7 @@ typedef NS_ENUM(NSInteger, AliRtcVideoTextureType) {
 
 #pragma mark - "Engine的生命周期，工作参数以及频道操作"
 
-+ (instancetype)sharedInstance:(id<AliRtcEngineDelegate>)delegate;
++ (instancetype)sharedInstance:(id<AliRtcEngineDelegate>)delegate extras:(NSString *)extras;
 + (void)destroy;
 
 /**
@@ -398,20 +398,6 @@ typedef NS_ENUM(NSInteger, AliRtcVideoTextureType) {
  * @return YES: 允许；NO: 禁止
  */
 - (BOOL)isLocalCameraPublishEnabled;
-
-/**
- * @brief 设置是否允许推送screen track
- * @param enable   是否允许
- * @note 需要调用publish才能生效
- *       缺省不允许screen track推流
- */
-- (void)configLocalScreenPublish:(BOOL)enable;
-
-/**
- * @brief 查询是否允许推送screen track
- * @return YES: 允许；NO: 禁止
- */
-- (BOOL)isLocalScreenPublishEnabled;
 
 /**
  * @brief 设置是否允许推送audio
@@ -637,6 +623,11 @@ typedef NS_ENUM(NSInteger, AliRtcVideoTextureType) {
  *  是否在后台采集
  */
 - (BOOL)isBackGroundRecording;
+
+/**
+ * 设置customId
+ */
+- (int)setCustomId:(NSString *)customId;
 
 @end
 
