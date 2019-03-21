@@ -8,33 +8,61 @@
 
 #import <UIKit/UIKit.h>
 
-@interface AliRTCRenderView : UIView
-@end
+/**
+ 视频流类型
 
+ - AliRtcVideoTrackNo: No
+ - AliRtcVideoTrackCamera: 摄像头
+ - AliRtcVideoTrackScreen: 屏幕共享
+ - AliRtcVideoTrackBoth: 摄像头+屏幕共享
+ */
 typedef NS_ENUM(NSUInteger, AliRtcVideoTrack) {
-    AliRtcVideoTrackNo     = 0,  // no video track
-    AliRtcVideoTrackCamera = 1,  // video from camera, file, etc.
-    AliRtcVideoTrackScreen = 2,  // video dedicately from screen sharing
-    AliRtcVideoTrackBoth   = 3,  // both AliVideoTrackCamera and AliVideoTrackScreen
+    AliRtcVideoTrackNo     = 0,
+    AliRtcVideoTrackCamera = 1,
+    AliRtcVideoTrackScreen = 2,
+    AliRtcVideoTrackBoth   = 3,
 };
 
+/**
+ 音频流类型
+
+ - AliRtcAudioTrackNo: No
+ - AliRtcAudioTrackMic: 麦克风
+ */
 typedef NS_ENUM(NSUInteger, AliRtcAudioTrack) {
-    AliRtcAudioTrackNo   = 0,  // no audio track
-    AliRtcAudioTrackMic  = 1,  // audio from mic, file, etc.
+    AliRtcAudioTrackNo   = 0,
+    AliRtcAudioTrackMic  = 1,
 };
 
+/**
+ 网路状态
+
+ - AliRtcNetworkQualityGood: 良好
+ - AliRtcNetworkQualityPoor: 差
+ */
 typedef NS_ENUM(NSUInteger, AliRtcNetworkQuality) {
     AliRtcNetworkQualityGood   = 1,
     AliRtcNetworkQualityPoor   = 3,
 };
 
+/**
+ 渲染模式
+
+ - AliRtcRenderModeAuto: 自动模式
+ - AliRtcRenderModeStretch: 延伸
+ - AliRtcRenderModeFill: 填充
+ - AliRtcRenderModeCrop: 裁剪
+ */
 typedef NS_ENUM(NSUInteger, AliRtcRenderMode) {
-    AliRtcRenderModeAuto    = 0, // Auto adjust
-    AliRtcRenderModeStretch = 1, // Simply stretch to fill the view without keeping video aspect ratio
-    AliRtcRenderModeFill    = 2, // Scaling while keeping video aspect ratio, and fill black bars to the view
-    AliRtcRenderModeCrop    = 3, // Scaling while keeping video aspect ratio, and crop to fit the view
+    AliRtcRenderModeAuto    = 0,
+    AliRtcRenderModeStretch = 1,
+    AliRtcRenderModeFill    = 2,
+    AliRtcRenderModeCrop    = 3,
 };
 
+/**
+ Log级别
+ */
 typedef NS_ENUM(NSUInteger, AliRtcLogLevel) {
     AliRtcLogLevelDump,
     AliRtcLogLevelDebug,
@@ -46,6 +74,9 @@ typedef NS_ENUM(NSUInteger, AliRtcLogLevel) {
     AliRtcLogLevelNone,
 };
 
+/**
+ VideoProfile
+ */
 typedef NS_ENUM(NSInteger, AliRtcVideoProfile) {
     AliRtcVideoProfile_Default = 0,
     AliRtcVideoProfile_180_320P_15,
@@ -57,6 +88,9 @@ typedef NS_ENUM(NSInteger, AliRtcVideoProfile) {
     AliRtcVideoProfile_Max
 };
 
+/**
+ VideoSource
+ */
 typedef NS_ENUM(NSInteger, AliRtcVideoSource) {
     AliRtcVideosourceCameraLargeType = 0,
     AliRtcVideosourceCameraSmallType = 1,
@@ -64,36 +98,67 @@ typedef NS_ENUM(NSInteger, AliRtcVideoSource) {
     AliRtcVideosourceTypeMax,
 };
 
+/**
+ AudioSource
+ */
 typedef NS_ENUM(NSInteger, AliRtcAudioSource) {
     AliRtcAudiosourcePub = 0,
     AliRtcAudiosourceSub = 1,
 };
 
+/**
+ TextureType
+ */
 typedef NS_ENUM(NSInteger, AliRtcVideoTextureType) {
     AliRtcVideoTextureTypeUnknown = -1,
     AliRtcVideoTextureTypePre = 0,
     AliRtcVideoTextureTypePost = 1,
 };
 
+/**
+ 错误码
+
+ - AliRtcErrorCodeNone: 无
+ - AliRtcErrorCodeHeartbeatTimeout: 心跳超时
+ - AliRtcErrorCodePollingError: 信令错误
+ */
+typedef NS_ENUM(NSInteger, AliRtcErrorCode) {
+    AliRtcErrorCodeNone = 0,
+    AliRtcErrorCodeHeartbeatTimeout = 0x0102020C,
+    AliRtcErrorCodePollingError = 0x02010105,
+};
+
 
 @interface AliRtcAuthInfo : NSObject
+
 @property (nonatomic, retain) NSString *channel;
 @property (nonatomic, retain) NSString *user_id;
 @property (nonatomic, retain) NSString *appid;
 @property (nonatomic, retain) NSString *nonce;
 @property (nonatomic, retain) NSString *token;
-@property (nonatomic, retain) NSString *session;
 @property (nonatomic, retain) NSArray <NSString *> *gslb;
 @property (nonatomic, assign) long long timestamp;
+
 @end
+
+
+@interface AliRTCRenderView : UIView
+
+@end
+
 
 @interface AliRenderView : AliRTCRenderView
+
 @end
 
+
 @interface AliVideoCanvas : NSObject
-@property (nonatomic, strong) AliRenderView *view;       // could be nil
-@property (nonatomic) AliRtcRenderMode renderMode;       // default is AliRenderModeFill
+
+@property (nonatomic, strong) AliRenderView *view; // could be nil
+@property (nonatomic) AliRtcRenderMode renderMode; // default is AliRenderModeFill
+
 @end
+
 
 @interface AliRtcAudioDataSample : NSObject
 
@@ -104,6 +169,7 @@ typedef NS_ENUM(NSInteger, AliRtcVideoTextureType) {
 @property (nonatomic, assign) int samplesPerSec;
 
 @end
+
 
 @interface AliRtcVideoDataSample : NSObject
 
@@ -119,6 +185,7 @@ typedef NS_ENUM(NSInteger, AliRtcVideoTextureType) {
 @property (nonatomic, assign) long long timeStamp;
 
 @end
+
 
 @protocol AliRtcEngineDelegate <NSObject>
 @optional
@@ -221,12 +288,25 @@ typedef NS_ENUM(NSInteger, AliRtcVideoTextureType) {
 
 @end
 
+
 @interface AliRtcEngine : NSObject <AliRtcEngineDelegate>
+
 -(instancetype) init __attribute__((unavailable("use sharedInstance to create the singletone")));
 
 #pragma mark - "Engine的生命周期，工作参数以及频道操作"
 
+
+/**
+ * @brief 初始化
+ * @param delegate delegate
+ * @param extras extras [可以为空 @""]
+ * @return self
+ */
 + (instancetype)sharedInstance:(id<AliRtcEngineDelegate>)delegate extras:(NSString *)extras;
+
+/**
+ * @brief 销毁
+ */
 + (void)destroy;
 
 /**
@@ -240,6 +320,7 @@ typedef NS_ENUM(NSInteger, AliRtcVideoTextureType) {
  * @brief 设置是否自动publish音视频流和subscribe音视频流
  * @param autoPub    YES表示自动推流；NO表示不自动推流
  * @param autoSub    YES表示自动拉流；NO表示不自动拉流
+ * @return 0表示Success 非0表示Failure
  * @note 缺省是自动推流和拉流。只可以在joinChannel之前设置
  */
 - (int)setAutoPublish:(BOOL)autoPub withAutoSubscribe:(BOOL)autoSub;
@@ -247,6 +328,7 @@ typedef NS_ENUM(NSInteger, AliRtcVideoTextureType) {
 /**
  * @brief 设置音频模式还是音视频模式
  * @param audioOnly  YES表示只有音频推流和拉流；NO表示音视频都支持
+ * @return 0表示Success 非0表示Failure
  * @note 只可以在joinChannel之前设置
  */
 - (int)setAudioOnlyMode:(BOOL)audioOnly;
@@ -276,6 +358,7 @@ typedef NS_ENUM(NSInteger, AliRtcVideoTextureType) {
  * @brief 为本地预览设置窗口以及绘制参数
  * @param viewConfig 包含了窗口以及渲染方式
  * @param track      must be AliVideoTrackCamera
+ * @return 0表示Success 非0表示Failure
  * @note 支持joinChannel之前和之后切换窗口。如果viewConfig或者viewConfig中的view为nil，则停止渲染
  *       如果在播放过程中需要重新设置render mode，请保持canvas中其他成员变量不变，仅修改
  *       renderMode
@@ -286,6 +369,7 @@ typedef NS_ENUM(NSInteger, AliRtcVideoTextureType) {
 
 /**
  * @brief 开始本地预览
+ * @return 0表示Success 非0表示Failure
  * @note 如果没有设置view，则无法预览。可以在joinChannel之前就开启预览
  *       会自动打开摄像头
  */
@@ -293,6 +377,7 @@ typedef NS_ENUM(NSInteger, AliRtcVideoTextureType) {
 
 /**
  * @brief 停止本地预览
+ * @return 0表示Success 非0表示Failure
  * @note leaveChannel会自动停止本地预览
  *       会自动关闭摄像头 (如果正在publish camera流，则不会关闭摄像头)
  */
@@ -302,6 +387,7 @@ typedef NS_ENUM(NSInteger, AliRtcVideoTextureType) {
  * @brief 是否将停止本地视频采集
  * @param mute     YES表示停止视频采集；NO表示恢复正常
  * @param track    需要停止采集的track
+ * @return 0表示Success 非0表示Failure
  * @note 发送黑色的视频帧。本地预览也呈现黑色。采集，编码，发送模块仍然工作，
  *       只是视频内容是黑色帧
  */
@@ -357,6 +443,7 @@ typedef NS_ENUM(NSInteger, AliRtcVideoTextureType) {
  * @param canvas canvas包含了窗口以及渲染方式
  * @param uid    User ID。从App server分配的唯一标示符
  * @param track  需要设置的track
+ * @return 0表示Success 非0表示Failure
  * @note 支持joinChannel之前和之后切换窗口。如果canvas为nil或者view为nil，则停止渲染相应的流
  *       如果在播放过程中需要重新设置render mode，请保持canvas中其他成员变量不变，仅修改
  *       renderMode
@@ -368,6 +455,7 @@ typedef NS_ENUM(NSInteger, AliRtcVideoTextureType) {
  * @brief mute/unmute远端的音频track的播放
  * @param uid     User ID。从App server分配的唯一标示符
  * @param mute    YES表示停止播放；NO表示恢复播放
+ * @return 0表示Success 非0表示Failure
  * @note 拉流和解码不受影响。支持joinChannel之前和之后设置
  */
 - (int)muteRemoteAudioPlaying:(NSString *)uid mute:(BOOL)mute;
@@ -417,6 +505,7 @@ typedef NS_ENUM(NSInteger, AliRtcVideoTextureType) {
  * @brief 是否允许推送次要视频流
  * @param enabled    YES表示需要推送次流；NO表示不推送次流
  * @param track      must be AliVideoTrackCamera
+ * @return 0表示Success 非0表示Failure
  * @note 需要调用publish才能生效
  *。     缺省enable。目前只支持camera track，不支持screen track
  */
@@ -433,7 +522,7 @@ typedef NS_ENUM(NSInteger, AliRtcVideoTextureType) {
  * @param uid     User ID。从App server分配的唯一标示符。如果设置为nil，则表示
  *                对当前已知的用户进行通配
  * @param enable  YES: 拉取; NO: 不拉取
- * @note 可以在joinChannel之前或者之后设置。如果已经订阅该用户的流，需要调用startSubscribe:uid才生效
+ * @note 可以在joinChannel之前或者之后设置。如果已经订阅该用户的流，需要调用subscribe:(NSString *)uid onResult:才生效
  */
 - (void)configRemoteAudio:(NSString *)uid enable:(BOOL)enable;
 
@@ -443,7 +532,7 @@ typedef NS_ENUM(NSInteger, AliRtcVideoTextureType) {
  *                对当前已知的用户进行通配
  * @param master  是否优先拉取大流
  * @param enable  YES: 拉取; NO: 不拉取
- * @note 可以在joinChannel之前或者之后设置。如果已经订阅该用户的流，需要调用startSubscribe:uid才生效
+ * @note 可以在joinChannel之前或者之后设置。如果已经订阅该用户的流，需要调用subscribe:(NSString *)uid onResult:才生效
  */
 - (void)configRemoteCameraTrack:(NSString *)uid preferMaster:(BOOL)master enable:(BOOL)enable;
 
@@ -452,7 +541,7 @@ typedef NS_ENUM(NSInteger, AliRtcVideoTextureType) {
  * @param uid     User ID。从App server分配的唯一标示符。如果设置为nil，则表示
  *                对当前已知的用户进行通配
  * @param enable  YES: 拉取; NO: 不拉取
- * @note 可以在joinChannel之前或者之后设置。如果已经订阅该用户的流，需要调用startSubscribe:uid才生效
+ * @note 可以在joinChannel之前或者之后设置。如果已经订阅该用户的流，需要调用subscribe:(NSString *)uid onResult:才生效
  */
 - (void)configRemoteScreenTrack:(NSString *)uid enable:(BOOL)enable;
 
@@ -476,11 +565,13 @@ typedef NS_ENUM(NSInteger, AliRtcVideoTextureType) {
 /**
  * @brief 听筒还是耳机
  * @param enable   YES:听筒模式；NO:耳机模式
+ * @return 0表示Success 非0表示Failure
  * @note 只有手机有这个api
  */
  - (int)enableSpeakerphone:(BOOL)enable;
 /**
  * @brief 切换前后摄像头
+ * @return 0表示Success 非0表示Failure
  * @note 只有iOS和android提供这个接口
  */
 - (int)switchCamera;
@@ -490,6 +581,7 @@ typedef NS_ENUM(NSInteger, AliRtcVideoTextureType) {
  * @param zoom   zoom的级别
  * @param flash  是否允许闪光灯
  * @param autoFocus 是否自动对焦
+ * @return 0表示Success 非0表示Failure
  * @note 在将来版本中统一通过setParameters设置
  */
  - (int)setCameraZoom:(float)zoom flash:(BOOL)flash autoFocus:(BOOL)autoFocus;
@@ -516,16 +608,19 @@ typedef NS_ENUM(NSInteger, AliRtcVideoTextureType) {
 
 /**
  * @brief 查询是否自动publish
+ * @return YES表示自动Publish  NO表示非自动
  */
 - (BOOL)isAutoPublish;
 
 /**
  * @brief 查询是否自动subscribe
+ * @return YES表示自动Subscribe  NO表示非自动
  */
 - (BOOL)isAutoSubscribe;
 
 /**
  * @brief 查询是否audio only
+ * @return YES表示audio Only  NO表示非audio Only
  */
 - (BOOL)isAudioOnly;
 
@@ -615,17 +710,17 @@ typedef NS_ENUM(NSInteger, AliRtcVideoTextureType) {
 - (void)unSubscribeVideoTexture:(NSString *)uid videoSource:(AliRtcVideoSource)videoSource videoTextureType:(AliRtcVideoTextureType)videoTextureType;
 
 /**
- *  允许后台采集
+ * @brief 允许后台采集
  */
 - (void)enableBackGroundRecording:(BOOL)enable;
 
 /**
- *  是否在后台采集
+ * @brief 是否在后台采集
  */
 - (BOOL)isBackGroundRecording;
 
 /**
- * 设置customId
+ * @brief 设置customId
  */
 - (int)setCustomId:(NSString *)customId;
 
