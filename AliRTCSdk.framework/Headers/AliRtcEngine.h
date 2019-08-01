@@ -115,6 +115,21 @@ typedef NS_ENUM(NSInteger, AliRtcVideoTextureType) {
     AliRtcVideoTextureTypePost = 1,
 };
 
+
+
+/**
+ 镜像模式
+
+ - AliRtcRenderMirrorModeOnlyFrontCameraPreviewEnabled: 只有前置摄像头预览镜像，其余不镜像
+ - AliRtcRenderMirrorModeAllEnabled: 全部镜像
+ - AliRtcRenderMirrorModeAllDisabled: 全部不镜像
+ */
+typedef NS_ENUM(NSInteger, AliRtcRenderMirrorMode) {
+    AliRtcRenderMirrorModeOnlyFrontCameraPreviewEnabled = 0,
+    AliRtcRenderMirrorModeAllEnabled = 1,
+    AliRtcRenderMirrorModeAllDisabled = 2,
+};
+
 /**
  错误码
 
@@ -126,6 +141,17 @@ typedef NS_ENUM(NSInteger, AliRtcErrorCode) {
     AliRtcErrorCodeNone = 0,
     AliRtcErrorCodeHeartbeatTimeout = 0x0102020C,
     AliRtcErrorCodePollingError = 0x02010105,
+};
+
+
+
+/**
+ OnBye类型
+
+ - AliRtcOnByeChannelDestroy: channel已结束，需要离开会议
+ */
+typedef NS_ENUM(NSInteger, AliRtcOnByeType) {
+    AliRtcOnByeChannelTerminated = 2,
 };
 
 
@@ -154,8 +180,14 @@ typedef NS_ENUM(NSInteger, AliRtcErrorCode) {
 
 @interface AliVideoCanvas : NSObject
 
-@property (nonatomic, strong) AliRenderView *view; // could be nil
-@property (nonatomic) AliRtcRenderMode renderMode; // default is AliRenderModeFill
+// 渲染view，不可为nil
+@property (nonatomic, strong) AliRenderView *view;
+
+// 默认 AliRtcRenderModeAuto
+@property (nonatomic) AliRtcRenderMode renderMode;
+
+// 默认 AliRtcRenderMirrorModeOnlyFrontCameraPreviewEnabled
+@property (nonatomic) AliRtcRenderMirrorMode mirrorMode;
 
 @end
 
@@ -237,6 +269,13 @@ typedef NS_ENUM(NSInteger, AliRtcErrorCode) {
  * @param error  Error type
  */
 - (void)onOccurError:(int)error;
+
+/**
+ * @brief 首帧数据发送成功
+ * @param audioTrack  发送成功的音频流类型
+ * @param videoTrack  发送成功的视频流类型
+ */
+- (void)onFirstPacketSentWithAudioTrack:(AliRtcAudioTrack)audioTrack videoTrack:(AliRtcVideoTrack)videoTrack;
 
 /**
   * @brief remote user的第一帧视频帧显示时触发这个消息
@@ -447,7 +486,8 @@ typedef NS_ENUM(NSInteger, AliRtcErrorCode) {
  * @note 支持joinChannel之前和之后切换窗口。如果canvas为nil或者view为nil，则停止渲染相应的流
  *       如果在播放过程中需要重新设置render mode，请保持canvas中其他成员变量不变，仅修改
  *       renderMode
- *       当前版本不支持远端的视频渲染mirror
+ *       如果在播放过程中需要重新设置mirror mode，请保持canvas中其他成员变量不变，仅修改
+ *       mirrorMode
  */
 - (int)setRemoteViewConfig:(AliVideoCanvas *)canvas uid:(NSString *)uid forTrack:(AliRtcVideoTrack)track;
 
@@ -586,7 +626,42 @@ typedef NS_ENUM(NSInteger, AliRtcErrorCode) {
  */
  - (int)setCameraZoom:(float)zoom flash:(BOOL)flash autoFocus:(BOOL)autoFocus;
 
+/**
+ * @brief 开启音频采集
+ * @note 此接口可以控制提前打开音频采集，如果不设置，则SDK会在合适的时机在打开音频采集
+ */
+- (void)startAudioCapture;
+
+/**
+ * @brief 关闭音频采集
+ * @note 此接口可以控制关闭音频采集，与startAudioCapture对应
+ */
+- (void)stopAudioCapture;
+
+/**
+ * @brief 开启音频播放
+ * @note 此接口可以控制提前打开音频播放，如果不设置，则SDK会在合适的时机在打开音频播放
+ */
+- (void)startAudioPlayer;
+
+/**
+ * @brief 关闭音频播放
+ * @note 此接口可以控制关闭音频播放，与stopAudioPlayer对应
+ */
+- (void)stopAudioPlayer;
+
 #pragma mark - "其他"
+
+
+/**
+ 获取当前的媒体流信息
+
+ @param userId 需要查询的userId，self请赋值空字符串""
+ @param videoTrack 需要查询的媒体流类型
+ @param keys 查询key值数组
+ @return key-value的json格式字符串
+ */
+- (NSString *)getMediaInfoWithUserId:(NSString *)userId videoTrack:(AliRtcVideoTrack)videoTrack keys:(NSArray<NSString *> *)keys;
 
 /**
  * @brief 设置log
