@@ -34,15 +34,26 @@ typedef NS_ENUM(NSUInteger, AliRtcAudioTrack) {
     AliRtcAudioTrackMic  = 1,
 };
 
-/**
- 网路状态
 
- - AliRtcNetworkQualityGood: 良好
- - AliRtcNetworkQualityPoor: 差
+/**
+ 网络质量
+ 
+ - AlivcRtcNetworkQualityExcellent: 网络极好，流程度清晰度质量好
+ - AlivcRtcNetworkQualityGood: 网络好，流畅度清晰度和极好差不多
+ - AlivcRtcNetworkQualityPoor: 网络较差，音视频流畅度清晰度有瑕疵，不影响沟通
+ - AlivcRtcNetworkQualityBad: 网络差，视频卡顿严重，音频能正常沟通
+ - AlivcRtcNetworkQualityVeryBad: 网络极差，基本无法沟通
+ - AlivcRtcNetworkQualityDisconnect: 网络中断
+ - AlivcRtcNetworkQualityUnknow: 未知
  */
 typedef NS_ENUM(NSUInteger, AliRtcNetworkQuality) {
-    AliRtcNetworkQualityGood   = 1,
-    AliRtcNetworkQualityPoor   = 3,
+    AlivcRtcNetworkQualityExcellent  = 0,
+    AlivcRtcNetworkQualityGood       = 1,
+    AlivcRtcNetworkQualityPoor       = 2,
+    AlivcRtcNetworkQualityBad        = 3,
+    AlivcRtcNetworkQualityVeryBad    = 4,
+    AlivcRtcNetworkQualityDisconnect = 5,
+    AlivcRtcNetworkQualityUnknow     = 6,
 };
 
 /**
@@ -85,6 +96,8 @@ typedef NS_ENUM(NSInteger, AliRtcVideoProfile) {
     AliRtcVideoProfile_360_640P_30,
     AliRtcVideoProfile_720_1280P_15,
     AliRtcVideoProfile_720_1280P_30,
+    AliRtcVideoProfile_480_640P_15,
+    AliRtcVideoProfile_480_640P_30,
     AliRtcVideoProfile_Max
 };
 
@@ -148,10 +161,29 @@ typedef NS_ENUM(NSInteger, AliRtcErrorCode) {
 /**
  OnBye类型
 
- - AliRtcOnByeChannelDestroy: channel已结束，需要离开会议
+ - AliRtcOnByeBeKickedOut: 当前user被踢出channel
+ - AliRtcOnByeChannelTerminated: channel已结束，需要离开会议
+ - AliRtcOnByeUserReplaced: 相同userID在其他设备joinChannel，当前设备被下线
  */
 typedef NS_ENUM(NSInteger, AliRtcOnByeType) {
-    AliRtcOnByeChannelTerminated = 2,
+    AliRtcOnByeBeKickedOut          = 1,
+    AliRtcOnByeChannelTerminated    = 2,
+    AliRtcOnByeUserReplaced         = 3,
+};
+
+
+/**
+ 设备方向
+ 
+ - AliRtcOrientationModePortrait: 固定竖屏模式
+ - AliRtcOrientationModeLandscape: 固定横屏模式
+ - AliRtcOrientationModeAuto: 自适应
+ */
+typedef NS_ENUM(NSInteger, AliRtcOrientationMode) {
+    AliRtcOrientationModePortrait = 0,
+    AliRtcOrientationModeLandscapeLeft = 1,
+    AliRtcOrientationModeLandscapeRight = 2,
+    AliRtcOrientationModeAuto = 3,
 };
 
 
@@ -203,10 +235,45 @@ typedef NS_ENUM(NSInteger, AliRtcOnByeType) {
 @end
 
 
+typedef NS_ENUM(NSInteger, AliRtcImageFormat) {
+    AliRtcImageFormat_UNKNOW = -1,
+    AliRtcImageFormat_ARGB,
+    AliRtcImageFormat_BGRA,
+    AliRtcImageFormat_RGBA,
+    AliRtcImageFormat_YUV420P,
+    AliRtcImageFormat_YUVYV12,
+    AliRtcImageFormat_YUVNV21,
+    AliRtcImageFormat_YUVNV12,
+    AliRtcImageFormat_YUVNV12_FULL_RANGE,
+    AliRtcImageFormat_YUVJ420P,
+    AliRtcImageFormat_YUV420SP,
+    AliRtcImageFormat_YUVJ420SP,
+    AliRtcImageFormat_YUVJ444P,
+    AliRtcImageFormat_YUVJ422P,
+    AliRtcImageFormat_YUV444P,
+    AliRtcImageFormat_YUV2,
+    AliRtcImageFormat_MJPEG,
+    AliRtcImageFormat_TEXTURE_2D,
+    AliRtcImageFormat_TEXTURE_OES,
+} ;
+
+typedef NS_ENUM(NSInteger, AliRtcVideoDataType) {
+    AliRtcVideoDataType_CapturePost = 0,
+    AliRtcVideoDataType_DecoderPost,
+    AliRtcVideoDataType_RenderPre,
+    AliRtcVideoDataType_RenderPost,
+} ;
+
+
+
 @interface AliRtcVideoDataSample : NSObject
 
-@property (nonatomic, assign) NSInteger format;
+@property (nonatomic, assign) AliRtcImageFormat format;
+@property (nonatomic, assign) AliRtcVideoDataType dataType;
 @property (nonatomic, assign) long dataPtr;
+@property (nonatomic, assign) long dataYPtr;
+@property (nonatomic, assign) long dataUPtr;
+@property (nonatomic, assign) long dataVPtr;
 @property (nonatomic, assign) int strideY;
 @property (nonatomic, assign) int strideU;
 @property (nonatomic, assign) int strideV;
@@ -249,9 +316,30 @@ typedef NS_ENUM(NSInteger, AliRtcOnByeType) {
 
 /**
  * @brief 网络质量变化时发出的消息
- * @note 当网络质量发生变化时触发
+ * @param uid 网络质量发生变化的uid
+ * @param upQuality  上行网络质量
+ * @param downQuality  下行网络质量
+ * @note 当网络质量发生变化时触发，uid为@""时代表self的网络质量变化
  */
-- (void)onNetworkQualityChanged:(AliRtcNetworkQuality)quality;
+- (void)onNetworkQualityChanged:(NSString *)uid
+               upNetworkQuality:(AliRtcNetworkQuality)upQuality
+             downNetworkQuality:(AliRtcNetworkQuality)downQuality;
+
+/**
+ * @brief 网络连接断开
+ */
+- (void)onConnectionLost;
+
+/**
+ * @brief 网络连接正在尝试重连中
+ */
+- (void)onTryToReconnect;
+
+/**
+ * @brief 网络连接重连成功
+ */
+- (void)onConnectionRecovery;
+
 
 /**
  * @brief 被服务器踢出频道的消息
@@ -278,6 +366,13 @@ typedef NS_ENUM(NSInteger, AliRtcOnByeType) {
 - (void)onFirstPacketSentWithAudioTrack:(AliRtcAudioTrack)audioTrack videoTrack:(AliRtcVideoTrack)videoTrack;
 
 /**
+ * @brief 首包数据接收成功
+ * @param audioTrack  接收成功的音频流类型
+ * @param videoTrack  接收成功的视频流类型
+ */
+- (void)onFirstPacketReceivedWithAudioTrack:(AliRtcAudioTrack)audioTrack videoTrack:(AliRtcVideoTrack)videoTrack;
+
+/**
   * @brief remote user的第一帧视频帧显示时触发这个消息
   * @param uid   User ID。从App server分配的唯一标示符
   * @param videoTrack 屏幕流或者相机流
@@ -298,6 +393,41 @@ typedef NS_ENUM(NSInteger, AliRtcOnByeType) {
  * @param videoSample video sample
  */
 - (void)onVideoSampleCallback:(NSString *)uid videoSource:(AliRtcVideoSource)videoSource videoSample:(AliRtcVideoDataSample *)videoSample;
+
+
+/**
+ RTC采集视频数据回调
+ 
+ @param type video source type
+ @param videoFrame the video data frame
+ */
+- (long)onVideoDetectCallback:(AliRtcVideoSource)type videoFrame:(AliRtcVideoDataSample *)videoFrame;
+
+/**
+ * @brief 用户muteAudio通知
+ * @param uid 执行muteAudio的用户
+ * @param isMute YES:静音 NO:未静音
+ */
+- (void)onUserAudioMuted:(NSString *)uid audioMuted:(BOOL)isMute;
+
+/**
+ * @brief 用户muteVideo通知
+ * @param uid 执行muteVideo的用户
+ * @param isMute YES:推流黑帧 NO:正常推流
+ */
+- (void)onUserVideoMuted:(NSString *)uid videoMuted:(BOOL)isMute;
+
+/**
+ * @brief 用户audio被中断通知（一般用户打电话等音频被抢占场景）
+ * @param uid audio被中断的用户
+ */
+- (void)onUserAudioInterruptedBegin:(NSString *)uid;
+
+/**
+ * @brief 用户audio中断结束通知（对应onUserAudioInterruptedBegin）
+ * @param uid audio中断结束的用户
+ */
+- (void)onUserAudioInterruptedEnded:(NSString *)uid;
 
 /**
  * @brief 订阅的视频Texture回调
@@ -324,6 +454,14 @@ typedef NS_ENUM(NSInteger, AliRtcOnByeType) {
  * @param videoTextureType video texture type
  */
 - (void)onVideoTextureDestory:(NSString *)uid videoTextureType:(AliRtcVideoTextureType)videoTextureType;
+
+/**
+ * @brief 订阅的视频采集数据回调
+ * @param uid user id
+ * @param videoSource video source
+ * @param pixelBuffer video capture CVPixelBuffer
+ */
+- (void)onVideoPixelBuffer:(NSString *)uid videoSource:(AliRtcVideoSource)videoSource pixelBuffer:(CVPixelBufferRef)pixelBuffer;
 
 @end
 
@@ -392,6 +530,15 @@ typedef NS_ENUM(NSInteger, AliRtcOnByeType) {
 //
 // 本地视频预览 (只预览AliVideoTrackCamera，不预览AliVideoTrackScreen)
 //
+
+
+/**
+ * @brief 是否允许高清预览(默认打开)
+ * @param enable YES:允许 NO:不允许
+ * @return 0表示Success 非0表示Failure
+ * @note 需要在开启预览和开启推流之前调用
+ */
+- (BOOL)enableHighDefinitionPreview:(BOOL)enable;
 
 /**
  * @brief 为本地预览设置窗口以及绘制参数
@@ -627,6 +774,32 @@ typedef NS_ENUM(NSInteger, AliRtcOnByeType) {
  - (int)setCameraZoom:(float)zoom flash:(BOOL)flash autoFocus:(BOOL)autoFocus;
 
 /**
+ * @brief 摄像头是否支持手动聚焦
+ * @return YES表示支持 NO表示不支持
+ */
+- (BOOL)isCameraFocusPointSupported;
+
+/**
+ * @brief 摄像头是否支持设置曝光区域
+ * @return YES表示支持 NO表示不支持
+ */
+- (BOOL)isCameraExposurePointSupported;
+
+/**
+ * @brief 设置摄像头手动聚焦
+ * @param point   聚焦点
+ * @return 0表示Success 非0表示Failure
+ */
+- (int)setCameraFocusPoint:(CGPoint)point;
+
+/**
+ * @brief 设置摄像头曝光点
+ * @param point   曝光点
+ * @return 0表示Success 非0表示Failure
+ */
+- (int)setCameraExposurePoint:(CGPoint)point;
+
+/**
  * @brief 开启音频采集
  * @note 此接口可以控制提前打开音频采集，如果不设置，则SDK会在合适的时机在打开音频采集
  */
@@ -763,12 +936,34 @@ typedef NS_ENUM(NSInteger, AliRtcOnByeType) {
  * @param videoSource video source
  */
 - (void)unSubscribeVideoYUVData:(NSString *)uid videoSource:(AliRtcVideoSource)videoSource;
+
+/**
+ * @brief 订阅视频CVPixelBuffer数据
+ * @param uid user id
+ * @param videoSource video source
+ */
+- (void)subscribeVideoPixelBufferData:(NSString *)uid videoSource:(AliRtcVideoSource)videoSource;
+
+/**
+ * @brief 取消订阅视频CVPixelBuffer数据
+ * @param uid user id
+ * @param videoSource video source
+ */
+- (void)unSubscribeVideoPixelBufferData:(NSString *)uid videoSource:(AliRtcVideoSource)videoSource;
+
 /*
  * @brief 订阅视频数据
  * @param uid user id
  * @param videoSource video source
  */
 - (void)subscribeVideoData:(NSString *)uid videoSource:(AliRtcVideoSource)videoSource;
+
+/*
+ * @brief 取消订阅视频数据
+ * @param uid user id
+ * @param videoSource video source
+ */
+- (void)unSubscribeVideoData:(NSString *)uid videoSource:(AliRtcVideoSource)videoSource;
 
 /**
  * @brief 订阅视频纹理数据
@@ -783,6 +978,18 @@ typedef NS_ENUM(NSInteger, AliRtcOnByeType) {
  * @param videoSource video source
  */
 - (void)unSubscribeVideoTexture:(NSString *)uid videoSource:(AliRtcVideoSource)videoSource videoTextureType:(AliRtcVideoTextureType)videoTextureType;
+
+/**
+ * @brief 订阅采集视频前处理裸数据
+ * @param videoSource video source
+ */
+- (void)subscribeVideoPreprocessData:(AliRtcVideoSource)videoSource;
+
+/**
+ * @brief 取消采集订阅前处理裸数据
+ * @param videoSource video source
+ */
+- (void)unSubscribeVideoPreprocessData:(AliRtcVideoSource)videoSource;
 
 /**
  * @brief 允许后台采集
