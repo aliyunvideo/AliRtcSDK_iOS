@@ -112,11 +112,33 @@ typedef NS_ENUM(NSInteger, AliRtcVideoSource) {
 };
 
 /**
+ NumcChannel
+ */
+typedef NS_ENUM(NSInteger, AliRtcAudioNumChannel) {
+    AliRtcMonoAudio = 1,
+    AliRtcStereoAudio = 2,
+};
+
+/**
+ AudioSamplerate
+ */
+typedef NS_ENUM(NSInteger, AliRtcAudioSampleRate) {
+    AliRtcAudioSampleRate_8000 = 0,
+    AliRtcAudioSampleRate_11025 = 1,
+    AliRtcAudioSampleRate_16000 = 2,
+    AliRtcAudioSampleRate_22050 = 3,
+    AliRtcAudioSampleRate_32000 = 4,
+    AliRtcAudioSampleRate_44100 = 5,
+    AliRtcAudioSampleRate_48000 = 6,
+};
+
+/**
  AudioSource
  */
 typedef NS_ENUM(NSInteger, AliRtcAudioSource) {
     AliRtcAudiosourcePub = 0,
     AliRtcAudiosourceSub = 1,
+    AliRtcAudiosourceRawData = 2,
 };
 
 /**
@@ -128,7 +150,27 @@ typedef NS_ENUM(NSInteger, AliRtcVideoTextureType) {
     AliRtcVideoTextureTypePost = 1,
 };
 
+/**
+ 频道类型
+ 
+ - AliRtcChannelProfileCommunication: 通信模式
+ - AliRtcChannelProfileInteractivelive: 直播模式
+ */
+typedef NS_ENUM(NSInteger, AliRtcChannelProfile) {
+    AliRtcChannelProfileCommunication = 0,
+    AliRtcChannelProfileInteractivelive,
+};
 
+/**
+ 角色类型
+ 
+ - AliRtcClientRoleInteractive: 参与互动角色
+ - AliRtcClientRolelive: 仅观看角色
+ */
+typedef NS_ENUM(NSInteger, AliRtcClientRole) {
+    AliRtcClientRoleInteractive = 0,
+    AliRtcClientRolelive,
+};
 
 /**
  镜像模式
@@ -186,6 +228,20 @@ typedef NS_ENUM(NSInteger, AliRtcOrientationMode) {
     AliRtcOrientationModeAuto = 3,
 };
 
+/**
+ SDK对Audio Session的控制权限
+ 
+ AliRtcAudioSessionOperationRestrictionNone: 没有限制，SDK完全控制AVAudioSession
+ AliRtcAudioSessionOperationRestrictionSetCategory: SDK不能修改AVAudioSession的Category
+ AliRtcAudioSessionOperationRestrictionConfigureSession: SDK不能修改AVAudioSession的配置，包括Category，Mode，CategoryOptions
+ AliRtcAudioSessionOperationRestrictionDeactivateSession: SDK不能关闭AVAudioSession的活动状态，离开频道时，AVAudioSession依然处于活动状态
+ */
+typedef NS_ENUM(NSInteger, AliRtcAudioSessionOperationRestriction) {
+  AliRtcAudioSessionOperationRestrictionNone = 0,
+  AliRtcAudioSessionOperationRestrictionSetCategory = 1,
+  AliRtcAudioSessionOperationRestrictionConfigureSession = 2,
+  AliRtcAudioSessionOperationRestrictionDeactivateSession = 3
+};
 
 @interface AliRtcAuthInfo : NSObject
 
@@ -195,6 +251,7 @@ typedef NS_ENUM(NSInteger, AliRtcOrientationMode) {
 @property (nonatomic, retain) NSString *nonce;
 @property (nonatomic, retain) NSString *token;
 @property (nonatomic, retain) NSArray <NSString *> *gslb;
+@property (nonatomic, retain) NSArray <NSString *> *agent;
 @property (nonatomic, assign) long long timestamp;
 
 @end
@@ -235,41 +292,26 @@ typedef NS_ENUM(NSInteger, AliRtcOrientationMode) {
 @end
 
 
-typedef NS_ENUM(NSInteger, AliRtcImageFormat) {
-    AliRtcImageFormat_UNKNOW = -1,
-    AliRtcImageFormat_ARGB,
-    AliRtcImageFormat_BGRA,
-    AliRtcImageFormat_RGBA,
-    AliRtcImageFormat_YUV420P,
-    AliRtcImageFormat_YUVYV12,
-    AliRtcImageFormat_YUVNV21,
-    AliRtcImageFormat_YUVNV12,
-    AliRtcImageFormat_YUVNV12_FULL_RANGE,
-    AliRtcImageFormat_YUVJ420P,
-    AliRtcImageFormat_YUV420SP,
-    AliRtcImageFormat_YUVJ420SP,
-    AliRtcImageFormat_YUVJ444P,
-    AliRtcImageFormat_YUVJ422P,
-    AliRtcImageFormat_YUV444P,
-    AliRtcImageFormat_YUV2,
-    AliRtcImageFormat_MJPEG,
-    AliRtcImageFormat_TEXTURE_2D,
-    AliRtcImageFormat_TEXTURE_OES,
+typedef NS_ENUM(NSInteger, AliRtcVideoFormat) {
+    AliRtcVideoFormat_UNKNOW = -1,
+    AliRtcVideoFormat_BGRA = 0,
+    AliRtcVideoFormat_I420,
+    AliRtcVideoFormat_NV21,
+    AliRtcVideoFormat_NV12,
 } ;
 
-typedef NS_ENUM(NSInteger, AliRtcVideoDataType) {
-    AliRtcVideoDataType_CapturePost = 0,
-    AliRtcVideoDataType_DecoderPost,
-    AliRtcVideoDataType_RenderPre,
-    AliRtcVideoDataType_RenderPost,
+typedef NS_ENUM(NSInteger, AliRtcBufferType) {
+    AliRtcBufferType_Raw_Data = 0,
+    AliRtcBufferType_CVPixelBuffer,
+    AliRtcBufferType_Texture,
 } ;
-
 
 
 @interface AliRtcVideoDataSample : NSObject
 
-@property (nonatomic, assign) AliRtcImageFormat format;
-@property (nonatomic, assign) AliRtcVideoDataType dataType;
+@property (nonatomic, assign) AliRtcVideoFormat format;
+@property (nonatomic, assign) AliRtcBufferType type;
+@property (nonatomic, assign) CVPixelBufferRef pixelBuffer;
 @property (nonatomic, assign) long dataPtr;
 @property (nonatomic, assign) long dataYPtr;
 @property (nonatomic, assign) long dataUPtr;
@@ -288,6 +330,13 @@ typedef NS_ENUM(NSInteger, AliRtcVideoDataType) {
 
 @protocol AliRtcEngineDelegate <NSObject>
 @optional
+
+/**
+ * @brief 离开频道结果
+ * @param result 离开频道结果，成功返回0，失败返回错误码
+ * @note 调用leaveChannel接口后返回，如果leaveChannel后直接调用destroy，将不会收到此回调
+ */
+- (void)onLeaveChannelResult:(int)result;
 
 /**
  * @brief 当远端用户上线时会返回这个消息
@@ -313,6 +362,14 @@ typedef NS_ENUM(NSInteger, AliRtcVideoDataType) {
  * @brief 当订阅情况发生变化时，返回这个消息
  */
 - (void)onSubscribeChangedNotify:(NSString *)uid audioTrack:(AliRtcAudioTrack)audioTrack videoTrack:(AliRtcVideoTrack)videoTrack;
+
+/**
+ * @brief 当用户角色发生变化化时通知
+ * @param oldRole 变化前角色类型
+ * @param newRole 变化后角色类型
+ * @note 调用setClientRole方法切换角色成功时触发此回调
+ */
+- (void)onUpdateRoleNotifyWithOldRole:(AliRtcClientRole)oldRole newRole:(AliRtcClientRole)newRole;
 
 /**
  * @brief 网络质量变化时发出的消息
@@ -430,6 +487,18 @@ typedef NS_ENUM(NSInteger, AliRtcVideoDataType) {
 - (void)onUserAudioInterruptedEnded:(NSString *)uid;
 
 /**
+ * @brief 远端用户应用退到后台
+ * @param uid 用户
+ */
+- (void)onUserWillResignActive:(NSString *)uid;
+
+/**
+ * @brief 远端用户应用返回前台
+ * @param uid 用户
+ */
+- (void)onUserWillBecomeActive:(NSString *)uid;
+
+/**
  * @brief 订阅的视频Texture回调
  * @param uid user id
  * @param videoTextureType video texture type
@@ -446,7 +515,7 @@ typedef NS_ENUM(NSInteger, AliRtcVideoDataType) {
  * @param height height
  * @param extraData extraData
  */
-- (int)onVideoTexture:(NSString *)uid videoTextureType:(AliRtcVideoTextureType)videoTextureType textureId:(int)textureId width:(int)width height:(int)height extraData:(long)extraData ;
+- (int)onVideoTexture:(NSString *)uid videoTextureType:(AliRtcVideoTextureType)videoTextureType textureId:(int)textureId width:(int)width height:(int)height rotate:(int)rotate extraData:(long)extraData ;
 
 /**
  * @brief 订阅的视频Texture回调
@@ -494,6 +563,11 @@ typedef NS_ENUM(NSInteger, AliRtcVideoDataType) {
 + (NSString *)getSdkVersion;
 
 /**
+ * @brief 上报日志
+ */
++ (void)uploadLog;
+
+/**
  * @brief 设置是否自动publish音视频流和subscribe音视频流
  * @param autoPub    YES表示自动推流；NO表示不自动推流
  * @param autoSub    YES表示自动拉流；NO表示不自动拉流
@@ -525,6 +599,24 @@ typedef NS_ENUM(NSInteger, AliRtcVideoDataType) {
  */
 - (void)leaveChannel;
 
+
+/**
+ * @brief 设置频道模式
+ * @param[in] profile 频道模式类型
+ * @return 0为成功，非0失败
+ * @note 只可以在入会之前调用，会议中不可以重新设置，LeaveChannel后可以重新设置
+ */
+- (int)setChannelProfile:(AliRtcChannelProfile)profile;
+
+/**
+ * @brief 设置用户角色
+ * @param role 用户角色类型
+ * @return 0为成功，非0失败
+ * @note 只可以在频道模式为InteractiveLive下调用，入会前/会议中均可设置，设置成功会收到onUpdateRoleNotify
+ * @note 从Interactive转换为Live角色需要先停止推流，否则返回失败
+ */
+- (int)setClientRole:(AliRtcClientRole)role;
+
 #pragma mark - "设置和操作本地的媒体"
 
 //
@@ -537,6 +629,7 @@ typedef NS_ENUM(NSInteger, AliRtcVideoDataType) {
  * @param enable YES:允许 NO:不允许
  * @return 0表示Success 非0表示Failure
  * @note 需要在开启预览和开启推流之前调用
+ * @note 关闭高清预览之后，预览分辨率可能与推流分辨率比例不统一，导致预览画面与推流画面采集区域不统一，建议此时canvas的renderMode使用AliRtcRenderModeCrop模式
  */
 - (BOOL)enableHighDefinitionPreview:(BOOL)enable;
 
@@ -756,6 +849,12 @@ typedef NS_ENUM(NSInteger, AliRtcVideoDataType) {
  * @note 只有手机有这个api
  */
  - (int)enableSpeakerphone:(BOOL)enable;
+
+/**
+ 设置SDK对AVAudioSession的控制权限
+ */
+- (int)setAudioSessionOperationRestriction:(AliRtcAudioSessionOperationRestriction)restriction;
+
 /**
  * @brief 切换前后摄像头
  * @return 0表示Success 非0表示Failure
@@ -898,6 +997,18 @@ typedef NS_ENUM(NSInteger, AliRtcVideoDataType) {
 + (BOOL)getH5CompatibleMode;
 
 /**
+ * @brief 设置回调音频声道数，默认单声道
+ * @param audioNumChannel audio num channel
+ */
+- (void)setsubscribeAudioNumChannel:(AliRtcAudioNumChannel)audioNumChannel;
+
+/**
+ * @brief 设置回调音频采样率，默认44.1k
+ * @param audioSampleRate audio samplerate
+ */
+- (void)setsubscribeAudioSampleRate:(AliRtcAudioSampleRate)audioSampleRate;
+
+/**
  * @brief 订阅音频数据
  * @param audioSource audio source
  */
@@ -1005,6 +1116,160 @@ typedef NS_ENUM(NSInteger, AliRtcVideoDataType) {
  * @brief 设置customId
  */
 - (int)setCustomId:(NSString *)customId;
+
+
+#pragma mark - 音乐
+
+/**
+ * @brief 开始混音
+ * @param localPlay 是否只本地播放
+ * @param replaceMic 是否替换掉MIC
+ * @param loopCycles 循环次数(可以设置-1或者正整数)
+ * @return 返回0为成功，其他返回错误码
+ */
+- (int)startAudioAccompanyWithFile:(NSString *)filePath onlyLocalPlay:(BOOL)onlyLocalPlay replaceMic:(BOOL)replaceMic loopCycles:(NSInteger)loopCycles;
+
+/**
+ * @brief 停止混音
+ * @return 返回0为成功，其他返回错误码
+ */
+- (int)stopAudioAccompany;
+
+/**
+ * @brief 设置混音音量
+ * @param volume 混音音量 0~100
+ * @return 返回0为成功，其他返回错误码
+ */
+- (int)setAudioAccompanyVolume:(NSInteger)volume;
+
+/**
+ * @brief 设置混音之后推流出去的音量
+ * @param volume 混音音量 0~100
+ * @return 返回0为成功，其他返回错误码
+ */
+- (int)setAudioAccompanyPublishVolume:(NSInteger)volume;
+
+/**
+ * @brief 获取推流出去的混音音量
+ * @return 返回0为成功，其他返回错误码
+ */
+- (int)getAudioAccompanyPublishVolume;
+
+/**
+ * @brief 设置混音之后本地播放的音量
+ * @param volume 混音音量 0~100
+ * @return 返回0为成功，其他返回错误码
+ */
+- (int)setAudioAccompanyPlayoutVolume:(NSInteger)volume;
+
+/**
+ * @brief 获取混音本地播放的音量
+ * @return 返回0为成功，其他返回错误码
+ */
+- (int)getAudioAccompanyPlayoutVolume;
+
+
+/**
+ * @brief 暂停混音
+ * @return 返回0为成功，其他返回错误码
+ */
+- (int)pauseAudioAccompany;
+
+/**
+ * @brief 重新开始混音
+ * @return 返回0为成功，其他返回错误码
+ */
+- (int)resumeAudioAccompany;
+
+/**
+ * @brief 预加载音效文件
+ * @param soundId 用户给该音效文件分配的ID
+ * @param filePath 音效文件路径
+ * @return 返回0为成功，其他返回错误码
+ */
+- (int)preloadAudioEffectWithSoundId:(NSInteger)soundId filePath:(NSString *)filePath;
+
+/**
+ * @brief 删除预加载的音效文件
+ * @param soundId 用户给该音效文件分配的ID
+ * @return 返回0为成功，其他返回错误码
+ */
+- (int)unloadAudioEffectWithSoundId:(NSInteger)soundId;
+
+/**
+ * @brief 开始播放音效
+ * @param soundId 用户给该音效文件分配的ID
+ * @param filePath 文件路径
+ * @param cycles 循环次数(可以设置-1或者正整数)
+ * @param publish 是否发布
+ * @return 返回0为成功，其他返回错误码
+ */
+- (int)playAudioEffectWithSoundId:(NSInteger)soundId filePath:(NSString *)filePath cycles:(NSInteger)cycles publish:(BOOL)publish;
+
+/**
+ * @brief 停止播放音效
+ * @param soundId 用户给该音效文件分配的ID
+ * @return 返回0为成功，其他返回错误码
+ */
+- (int)stopAudioEffectWithSoundId:(NSInteger)soundId;
+
+/**
+ * @brief 设置音效推流音量
+ * @param soundId 用户给该音效文件分配的ID
+ * @param volume 混音音量 0~100
+ * @return 返回0为成功，其他返回错误码
+ */
+- (int)setAudioEffectPublishVolumeWithSoundId:(NSInteger)soundId volume:(NSInteger)volume;
+
+/**
+ * @brief 获取推流音效音量
+ * @param soundId 用户给该音效文件分配的ID
+ * @return 返回0~100为成功，其他返回错误码
+ */
+- (int)getAudioEffectPublishVolumeWithSoundId:(NSInteger)soundId;
+
+/**
+ * @brief 设置音效本地播放音量
+ * @param soundId 用户给该音效文件分配的ID
+ * @param volume 混音音量 0~100
+ * @return 返回0为成功，其他返回错误码
+ */
+- (int)setAudioEffectPlayoutVolumeWithSoundId:(NSInteger)soundId volume:(NSInteger)volume;
+
+/**
+ * @brief 获取音效本地播放音量
+ * @param soundId 用户给该音效文件分配的ID
+ * @return 返回0~100为成功，其他返回错误码
+ */
+- (int)getAudioEffectPlayoutVolumeWithSoundId:(NSInteger)soundId;
+
+/**
+ * @brief 暂停音效
+ * @param soundId 用户给该音效文件分配的ID
+ * @return 返回0为成功，其他返回错误码
+ */
+- (int)pauseAudioEffectWithSoundId:(NSInteger)soundId;
+
+/**
+ * @brief 重新开始播放音效
+ * @@param soundId 用户给该音效文件分配的ID
+ * @return 返回0为成功，其他返回错误码
+ */
+- (int)resumeAudioEffectWithSoundId:(NSInteger)soundId;
+
+/**
+ * 启用耳返
+ * @param enable 是否启用耳返
+ * @return 返回0为成功，其他返回错误码
+ */
+- (int)enableEarBack:(BOOL)enable;
+
+/**
+ * 设置耳返音量
+ * @param volume 音量 0~100 默认100
+ * @return 返回0为成功，其他返回错误码
+ */
+- (int)setEarBackVolume:(NSInteger)volume;
 
 @end
 
