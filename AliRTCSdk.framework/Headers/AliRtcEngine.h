@@ -872,12 +872,20 @@ typedef NS_ENUM(NSInteger, AliRtcBufferType) {
 //
 
 /**
+ * @brief 设置视频track是否需要交换宽高
+ * @param swapWidthAndHeight 是否需要交换宽高(默认NO)
+ * @param track       需要设置的track
+ * @note 请在setVideoProfile之前设置(与setVideoProfile配合使用)
+ */
+- (void)setVideoSwapWidthAndHeight:(BOOL)swapWidthAndHeight forTrack:(AliRtcVideoTrack)track;
+
+/**
  * @brief 设置视频track的profile
  * @param profile     预定义的视频profile
  * @param track       需要设置的track
  * @note 可以在join channel之前或者之后设置
  */
-- (void)setVideoProfile:(AliRtcVideoProfile)profile forTrack:(AliRtcVideoTrack)track; // not work by now
+- (void)setVideoProfile:(AliRtcVideoProfile)profile forTrack:(AliRtcVideoTrack)track;
 
 //
 // 话筒
