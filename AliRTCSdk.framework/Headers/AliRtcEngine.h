@@ -11,7 +11,7 @@
 /**
  视频流类型
 
- - AliRtcVideoTrackNo: No
+ - AliRtcVideoTrackNo: 无摄像头和屏幕共享
  - AliRtcVideoTrackCamera: 摄像头
  - AliRtcVideoTrackScreen: 屏幕共享
  - AliRtcVideoTrackBoth: 摄像头+屏幕共享
@@ -26,7 +26,7 @@ typedef NS_ENUM(NSUInteger, AliRtcVideoTrack) {
 /**
  音频流类型
 
- - AliRtcAudioTrackNo: No
+ - AliRtcAudioTrackNo: 无麦克风
  - AliRtcAudioTrackMic: 麦克风
  */
 typedef NS_ENUM(NSUInteger, AliRtcAudioTrack) {
@@ -86,7 +86,7 @@ typedef NS_ENUM(NSUInteger, AliRtcLogLevel) {
 };
 
 /**
- VideoProfile
+ 视频配置参数
  */
 typedef NS_ENUM(NSInteger, AliRtcVideoProfile) {
     AliRtcVideoProfile_Default = 0,
@@ -108,7 +108,41 @@ typedef NS_ENUM(NSInteger, AliRtcVideoProfile) {
 };
 
 /**
- VideoSource
+ 设备方向
+ 
+ - AliRtcOrientationModePortrait: 固定竖屏模式
+ - AliRtcOrientationModeLandscape: 固定横屏模式
+ - AliRtcOrientationModeAuto: 自适应
+ */
+typedef NS_ENUM(NSInteger, AliRtcOrientationMode) {
+    AliRtcOrientationModePortrait = 0,
+    AliRtcOrientationModeLandscapeLeft = 1,
+    AliRtcOrientationModeLandscapeRight = 2,
+    AliRtcOrientationModeAuto = 3,
+};
+
+/**
+ SDK对Audio Session的控制权限
+ 
+ AliRtcAudioSessionOperationRestrictionNone: 没有限制，SDK完全控制AVAudioSession
+ AliRtcAudioSessionOperationRestrictionSetCategory: SDK不能修改AVAudioSession的Category
+ AliRtcAudioSessionOperationRestrictionConfigureSession: SDK不能修改AVAudioSession的配置，包括Category，Mode，CategoryOptions
+ AliRtcAudioSessionOperationRestrictionDeactivateSession: SDK不能关闭AVAudioSession的活动状态，离开频道时，AVAudioSession依然处于活动状态
+ */
+typedef NS_ENUM(NSInteger, AliRtcAudioSessionOperationRestriction) {
+    AliRtcAudioSessionOperationRestrictionNone = 0,
+    AliRtcAudioSessionOperationRestrictionSetCategory = 1,
+    AliRtcAudioSessionOperationRestrictionConfigureSession = 2,
+    AliRtcAudioSessionOperationRestrictionDeactivateSession = 3
+};
+
+/**
+ 视频裸数据源类型
+
+ - AliRtcVideosourceCameraLargeType: 大分辨率视频流
+ - AliRtcVideosourceCameraSmallType: 小分辨率视频流
+ - AliRtcVideosourceScreenShareType: 屏幕共享流
+ - AliRtcVideosourceTypeMax: 占位符，无意义
  */
 typedef NS_ENUM(NSInteger, AliRtcVideoSource) {
     AliRtcVideosourceCameraLargeType = 0,
@@ -118,25 +152,65 @@ typedef NS_ENUM(NSInteger, AliRtcVideoSource) {
 };
 
 /**
- NumcChannel
+ 音频裸数据源类型
+ 
+ - AliRtcAudiosourcePub: 推流音频数据
+ - AliRtcAudiosourceSub: 拉流音频数据
+ - AliRtcAudiosourceRawData: 采集音频裸数据
+ - AliRtcAudiosourceVolume: 音量
+ */
+typedef NS_ENUM(NSInteger, AliRtcAudioSource) {
+    AliRtcAudiosourcePub = 0,
+    AliRtcAudiosourceSub = 1,
+    AliRtcAudiosourceRawData = 2,
+    AliRtcAudiosourceVolume = 3,
+};
+
+/**
+ 纹理类型
+ */
+typedef NS_ENUM(NSInteger, AliRtcVideoTextureType) {
+    AliRtcVideoTextureTypeUnknown = -1,
+    AliRtcVideoTextureTypePre = 0,
+    AliRtcVideoTextureTypePost = 1,
+};
+
+/**
+ 视频数据格式
+ */
+typedef NS_ENUM(NSInteger, AliRtcVideoFormat) {
+    AliRtcVideoFormat_UNKNOW = -1,
+    AliRtcVideoFormat_BGRA = 0,
+    AliRtcVideoFormat_I420,
+    AliRtcVideoFormat_NV21,
+    AliRtcVideoFormat_NV12,
+};
+
+
+/**
+ 视频数据类型
+
+ - AliRtcBufferType_Raw_Data: YUV裸数据
+ - AliRtcBufferType_CVPixelBuffer: CVPixelBuffer数据
+ - AliRtcBufferType_Texture: 纹理数据
+ */
+typedef NS_ENUM(NSInteger, AliRtcBufferType) {
+    AliRtcBufferType_Raw_Data = 0,
+    AliRtcBufferType_CVPixelBuffer,
+    AliRtcBufferType_Texture,
+};
+
+/**
+ 音频声道数
+
+ - AliRtcMonoAudio: 单声道
+ - AliRtcStereoAudio: 双声道
  */
 typedef NS_ENUM(NSInteger, AliRtcAudioNumChannel) {
     AliRtcMonoAudio = 1,
     AliRtcStereoAudio = 2,
 };
 
-/**
- AudioSamplerate
- */
-typedef NS_ENUM(NSInteger, AliRtcAudioSampleRate) {
-    AliRtcAudioSampleRate_8000 = 0,
-    AliRtcAudioSampleRate_11025 = 1,
-    AliRtcAudioSampleRate_16000 = 2,
-    AliRtcAudioSampleRate_22050 = 3,
-    AliRtcAudioSampleRate_32000 = 4,
-    AliRtcAudioSampleRate_44100 = 5,
-    AliRtcAudioSampleRate_48000 = 6,
-};
 /**
  文件录制质量
  - AliRtcRecording_Low_Quality: 低质量文件录制，文件体积较小，音质一般
@@ -150,33 +224,48 @@ typedef NS_ENUM(NSInteger, AliRtcRecordingQuality) {
 };
 
 /**
- AudioSource
+ 音效混响模式
  */
-typedef NS_ENUM(NSInteger, AliRtcAudioSource) {
-    AliRtcAudiosourcePub = 0,
-    AliRtcAudiosourceSub = 1,
-    AliRtcAudiosourceRawData = 2,
-    AliRtcAudiosourceVolume = 3,
+typedef NS_ENUM(NSInteger, AliRtcAudioEffectReverbMode) {
+    AliRtcAudioEffectReverb_Off = 0,            // 关闭
+    AliRtcAudioEffectReverb_Vocal_I ,           //人声 I
+    AliRtcAudioEffectReverb_Vocal_II,           // 人声 II
+    AliRtcAudioEffectReverb_Bathroom,           // 澡堂
+    AliRtcAudioEffectReverb_Small_Room_Bright,  // 明亮小房间
+    AliRtcAudioEffectReverb_Small_Room_Dark,    // 黑暗小房间
+    AliRtcAudioEffectReverb_Medium_Room,        // 中等房间
+    AliRtcAudioEffectReverb_Large_Room,         // 大房间
+    AliRtcAudioEffectReverb_Church_Hall,        // 教堂走廊
+    AliRtcAudioEffectReverb_Cathedral,          // 大教堂
+    AliRtcAudioEffectReverb_Mode_Max,           // 占位符，无含义
 };
 
 /**
- TextureType
+ 音效混响参数
  */
-typedef NS_ENUM(NSInteger, AliRtcVideoTextureType) {
-    AliRtcVideoTextureTypeUnknown = -1,
-    AliRtcVideoTextureTypePre = 0,
-    AliRtcVideoTextureTypePost = 1,
+typedef NS_ENUM(NSInteger, AliRtcAudioEffectReverbParamType) {
+    AliRtcAudioEffectReverb_Room_Size = 0, // 房间大小 [0, 100]
+    AliRtcAudioEffectReverb_Pre_Delay,     // 预延时ms [0, 200]
+    AliRtcAudioEffectReverb_Revetberance,  // 混响感[0,100]
+    AliRtcAudioEffectReverb_Hf_Damping,    // 消声 [0,100]
+    AliRtcAudioEffectReverb_Tone_Low,      // 低音调[0,100]
+    AliRtcAudioEffectReverb_Tone_High,     // 高音调[0,100]
+    AliRtcAudioEffectReverb_Dry_Gain,      // 干增益[-20,10]
+    AliRtcAudioEffectReverb_Wet_Gain,      // 湿增益[-20,10]
+    AliRtcAudioEffectReverb_Type_Max,      // 占位符，无含义
 };
 
 /**
  频道类型
  
- - AliRtcChannelProfileCommunication: 通信模式
- - AliRtcChannelProfileInteractivelive: 直播模式
+ - AliRtcCommunication: 通信模式
+ - AliRtcInteractivelive: 直播模式
+ - AliRtcInteractiveWithLowLatencyLive: 低延时互动直播模式
  */
 typedef NS_ENUM(NSInteger, AliRtcChannelProfile) {
-    AliRtcChannelProfileCommunication = 0,
-    AliRtcChannelProfileInteractivelive,
+    AliRtcCommunication = 0,
+    AliRtcInteractivelive,
+    AliRtcInteractiveWithLowLatencyLive,
 };
 
 /**
@@ -211,14 +300,90 @@ typedef NS_ENUM(NSInteger, AliRtcRenderMirrorMode) {
  - AliRtcAudioPlayingResumed: 播放恢复
  - AliRtcAudioPlayingEnded: 播放完毕
  */
-typedef NS_ENUM(NSInteger, AliRtcAudioPlayingType)
-{
+typedef NS_ENUM(NSInteger, AliRtcAudioPlayingType) {
     AliRtcAudioPlayingStarted   = 100,
     AliRtcAudioPlayingStopped   = 101,
     AliRtcAudioPlayingPaused    = 102,
     AliRtcAudioPlayingResumed   = 103,
     AliRtcAudioPlayingEnded     = 104,
 };
+
+/**
+ 录制类型
+
+ - AliRtcRecordTypeAudio: 纯音频录制
+*/
+typedef NS_ENUM(NSUInteger, AliRtcRecordType) {
+    AliRtcRecordTypeAudio = 0,
+};
+
+/**
+ 录制格式
+
+ - AliRtcRecordFormatAAC: AAC文件
+ - AliRtcRecordFormatWAV: WAV文件
+*/
+typedef NS_ENUM(NSUInteger, AliRtcRecordFormat) {
+    AliRtcRecordFormatAAC = 0,
+    AliRtcRecordFormatWAV,
+};
+
+/**
+ 录制音频质量
+
+ - AliRtcAudioQualityLow: 低
+ - AliRtcAudioQualityMidium: 中
+ - AliRtcAudioQualityHigh: 高
+*/
+typedef NS_ENUM(NSUInteger, AliRtcAudioQuality) {
+    AliRtcAudioQualityLow = 0,
+    AliRtcAudioQualityMidium,
+    AliRtcAudioQualityHigh,
+};
+
+/**
+ 录制视频质量
+
+ - AliRtcVideoQualityDefault: 默认，和采集保持一致
+*/
+typedef NS_ENUM(NSUInteger, AliRtcVideoQuality) {
+    AliRtcVideoQualityDefault = 0,
+};
+
+/**
+ 录制音频采样率
+*/
+typedef NS_ENUM(NSInteger, AliRtcAudioSampleRate) {
+    AliRtcAudioSampleRate_8000 = 0,
+    AliRtcAudioSampleRate_11025 = 1,
+    AliRtcAudioSampleRate_16000 = 2,
+    AliRtcAudioSampleRate_22050 = 3,
+    AliRtcAudioSampleRate_32000 = 4,
+    AliRtcAudioSampleRate_44100 = 5,
+    AliRtcAudioSampleRate_48000 = 6,
+};
+
+/**
+ 录制音频设置
+
+ - sampleRate: 音频采样率
+ - quality: 音频质量
+ - enableRecordExternalRenderPCM: 是否允许录制外部pcm输入渲染数据
+*/
+typedef struct  {
+    AliRtcAudioSampleRate sampleRate;
+    AliRtcAudioQuality quality;
+    bool enableRecordExternalRenderPCM;
+}AliRtcRecordAudioConfig;
+
+/**
+ 录制视频设置
+
+ - quality: 视频质量
+*/
+typedef struct  {
+    AliRtcVideoQuality quality; //视频质量
+}AliRtcRecordVideoConfig;
 
 /**
  错误码
@@ -249,6 +414,14 @@ typedef NS_ENUM(NSInteger, AliRtcAudioPlayingType)
  - AliRtcErrIceConnectionConnectFail: 媒体通道建立失败
  - AliRtcErrIceConnectionReconnectFail: 媒体通道重连失败
  - AliRtcErrIceConnectionHeartbeatTimeout: 信令心跳超时
+ ********************低延时互动直播模式相关错误码********************
+ - AliRtcErrCdnLiveCommunicationFailed: 低延时互动直播信令失败
+ - AliRtcErrCdnLiveMeidaSettingFailed: 低延时互动直播媒体设置错误
+ - AliRtcErrCdnLiveNoneBroadcaster: 低延时互动直播当前房间没有主播推流
+ - AliRtcErrCdnLiveNeedRestart: 低延时互动直播错误，应用层需要重新创建新的SDK实例
+ - AliRtcErrCdnLiveNeedRestartAgainLater: 低延时互动直播错误，应用层需要稍等一定时间（自定义间隔）重新创建新的SDK实例
+ - AliRtcErrCdnLiveServiceUnavailable: 低延时互动直播服务不可用或者服务降级
+ - AliRtcErrCdnLiveMediaConnectionInterruption: 低延时互动直播网络中断错误
  ***************************其他错误码***************************
  - AliRtcErrSdkInvalidState: sdk状态错误
  - AliRtcErrSessionRemoved: Session已经被移除
@@ -278,13 +451,18 @@ typedef NS_ENUM(NSInteger, AliRtcErrorCode) {
     AliRtcErrIceConnectionConnectFail       = 0x01050201,
     AliRtcErrIceConnectionReconnectFail     = 0x01050202,
     AliRtcErrIceConnectionHeartbeatTimeout  = 0x0102020C,
+    AliRtcErrCdnLiveCommunicationFailed     = 0x01070003,
+    AliRtcErrCdnLiveMeidaSettingFailed      = 0x01070004,
+    AliRtcErrCdnLiveNoneBroadcaster         = 0x01070005,
+    AliRtcErrCdnLiveNeedRestart             = 0x01070006,
+    AliRtcErrCdnLiveNeedRestartAgainLater   = 0x01070007,
+    AliRtcErrCdnLiveServiceUnavailable      = 0x01070008,
+    AliRtcErrCdnLiveMediaConnectionInterruption = 0x01070009,
     AliRtcErrSdkInvalidState                = 0x01030204,
     AliRtcErrSessionRemoved                 = 0x02010105,
     AliRtcErrAudioBufferFull                = 0x01070101,
     AliRtcErrInner                          = -1,
 };
-
-
 
 /**
  OnBye类型
@@ -299,47 +477,52 @@ typedef NS_ENUM(NSInteger, AliRtcOnByeType) {
     AliRtcOnByeUserReplaced         = 3,
 };
 
-
-/**
- 设备方向
- 
- - AliRtcOrientationModePortrait: 固定竖屏模式
- - AliRtcOrientationModeLandscape: 固定横屏模式
- - AliRtcOrientationModeAuto: 自适应
- */
-typedef NS_ENUM(NSInteger, AliRtcOrientationMode) {
-    AliRtcOrientationModePortrait = 0,
-    AliRtcOrientationModeLandscapeLeft = 1,
-    AliRtcOrientationModeLandscapeRight = 2,
-    AliRtcOrientationModeAuto = 3,
-};
-
-/**
- SDK对Audio Session的控制权限
- 
- AliRtcAudioSessionOperationRestrictionNone: 没有限制，SDK完全控制AVAudioSession
- AliRtcAudioSessionOperationRestrictionSetCategory: SDK不能修改AVAudioSession的Category
- AliRtcAudioSessionOperationRestrictionConfigureSession: SDK不能修改AVAudioSession的配置，包括Category，Mode，CategoryOptions
- AliRtcAudioSessionOperationRestrictionDeactivateSession: SDK不能关闭AVAudioSession的活动状态，离开频道时，AVAudioSession依然处于活动状态
- */
-typedef NS_ENUM(NSInteger, AliRtcAudioSessionOperationRestriction) {
-  AliRtcAudioSessionOperationRestrictionNone = 0,
-  AliRtcAudioSessionOperationRestrictionSetCategory = 1,
-  AliRtcAudioSessionOperationRestrictionConfigureSession = 2,
-  AliRtcAudioSessionOperationRestrictionDeactivateSession = 3
-};
-
 /**
  实时数据
  */
 typedef struct {
-    int64_t sent_kbitrate; // 总发送码率(kb)
-    int64_t rcvd_kbitrate; // 总接收码率(kb)
-    int64_t sent_bytes;    // 总发送数据量(bytes)
-    int64_t rcvd_bytes;    // 总接收数据量(bytes)
-    float cpu_usage;       // CPU使用量(%)
+    int64_t sent_kbitrate;      // 总发送码率(kb)
+    int64_t rcvd_kbitrate;      // 总接收码率(kb)
+    int64_t sent_bytes;         // 总发送数据量(bytes)
+    int64_t rcvd_bytes;         // 总接收数据量(bytes)
+    int64_t video_rcvd_kbitrate;// 视频发送码率(kb)
+    int64_t video_sent_kbitrate;// 视频接收码率(kb)
+    uint64_t call_duration;     // 通话时长(s)
+    float cpu_usage;            // CPU使用量(%)
 } AliRtcStats;
 
+
+/**
+ 本地视频统计信息
+ */
+@interface AliRtcLocalVideoStats : NSObject
+
+@property (nonatomic, assign) AliRtcVideoTrack track; // 视频流track类型
+@property (nonatomic, assign) uint32_t sent_bitrate;  // 发送码率
+@property (nonatomic, assign) uint32_t sent_fps;      // 发送帧率
+@property (nonatomic, assign) uint32_t encode_fps;    // 编码帧率
+
+@end
+
+/**
+ 远端视频统计信息
+ */
+@interface AliRtcRemoteVideoStats : NSObject
+
+@property (nonatomic, copy) NSString *userId;           // 远端用户userID
+@property (nonatomic, assign) AliRtcVideoTrack track;   // 视频流track类型
+@property (nonatomic, assign) uint32_t width;           // width
+@property (nonatomic, assign) uint32_t height;          // height
+@property (nonatomic, assign) uint32_t decode_fps;      // 解码帧率
+@property (nonatomic, assign) uint32_t render_fps;      // 渲染帧率
+@property (nonatomic, assign) uint32_t frozen_times;    // 卡顿次数
+
+@end
+
+
+/**
+ 入会参数
+ */
 @interface AliRtcAuthInfo : NSObject
 
 @property (nonatomic, retain) NSString *channel;
@@ -353,37 +536,38 @@ typedef struct {
 
 @end
 
-
+/**
+ 渲染view基类
+ */
 @interface AliRTCRenderView : UIView
 
 @end
 
-
+/**
+ 渲染view
+ */
 @interface AliRenderView : AliRTCRenderView
 
 @end
 
-
+/**
+ 渲染配置
+ */
 @interface AliVideoCanvas : NSObject
 
-// 渲染view，不可为nil
-@property (nonatomic, strong) AliRenderView *view;
+@property (nonatomic, strong) AliRenderView *view;  // 渲染view，不可为nil
+@property (nonatomic) AliRtcRenderMode renderMode;  // 渲染模式，默认AliRtcRenderModeAuto
+@property (nonatomic) AliRtcRenderMirrorMode mirrorMode; // 镜像模式
 
-@property (nonatomic) int textureId;
-
-@property (nonatomic) int textureWidth;
-
-@property (nonatomic) int textureHeight;
-
-// 默认 AliRtcRenderModeAuto
-@property (nonatomic) AliRtcRenderMode renderMode;
-
-// 默认 AliRtcRenderMirrorModeOnlyFrontCameraPreviewEnabled
-@property (nonatomic) AliRtcRenderMirrorMode mirrorMode;
+@property (nonatomic) int textureId;                // 纹理Id
+@property (nonatomic) int textureWidth;             // 纹理宽
+@property (nonatomic) int textureHeight;            // 纹理高
 
 @end
 
-
+/**
+ 音频裸数据
+ */
 @interface AliRtcAudioDataSample : NSObject
 
 @property (nonatomic, assign) long dataPtr;
@@ -394,22 +578,9 @@ typedef struct {
 
 @end
 
-
-typedef NS_ENUM(NSInteger, AliRtcVideoFormat) {
-    AliRtcVideoFormat_UNKNOW = -1,
-    AliRtcVideoFormat_BGRA = 0,
-    AliRtcVideoFormat_I420,
-    AliRtcVideoFormat_NV21,
-    AliRtcVideoFormat_NV12,
-} ;
-
-typedef NS_ENUM(NSInteger, AliRtcBufferType) {
-    AliRtcBufferType_Raw_Data = 0,
-    AliRtcBufferType_CVPixelBuffer,
-    AliRtcBufferType_Texture,
-} ;
-
-
+/**
+ 视频裸数据
+ */
 @interface AliRtcVideoDataSample : NSObject
 
 @property (nonatomic, assign) AliRtcVideoFormat format;
@@ -430,6 +601,9 @@ typedef NS_ENUM(NSInteger, AliRtcBufferType) {
 
 @end
 
+/**
+ 音乐音效播放状态
+ */
 @interface AliRtcAudioPlayingStatus : NSObject
 
 @property (nonatomic, assign) AliRtcAudioPlayingType playType;
@@ -437,8 +611,17 @@ typedef NS_ENUM(NSInteger, AliRtcBufferType) {
 @end
 
 
+#pragma mark - 回调
+
 @protocol AliRtcEngineDelegate <NSObject>
 @optional
+
+/**
+ * @brief 加入频道结果
+ * @param result 加入频道结果，成功返回0，失败返回错误码
+ * @note 此回调等同于joinChannel接口的block，二者择一处理即可
+ */
+- (void)onJoinChannelResult:(int)result;
 
 /**
  * @brief 离开频道结果
@@ -448,15 +631,24 @@ typedef NS_ENUM(NSInteger, AliRtcBufferType) {
 - (void)onLeaveChannelResult:(int)result;
 
 /**
+ * 发布流状态变化
+ * @param result 当前推拉流结果
+ * @param isPublished 是否处于推流状态 YES:推流 NO:停止推流
+ * @note 此回调等同于publish接口的block，二者择一处理即可
+ * @note 自动推流模式下建议使用此回调做推流状态的监听处理
+ */
+- (void)onPublishResult:(int)result isPublished:(BOOL)isPublished;
+
+/**
  * @brief 当远端用户上线时会返回这个消息
- * @param uid         User ID。从App server分配的唯一标示符
+ * @param uid userID 从App server分配的唯一标示符
  * @note This message does not mean the user remains online state
  */
 - (void)onRemoteUserOnLineNotify:(NSString *)uid;
 
 /**
  * @brief 当远端用户下线时会返回这个消息
- * @param uid         User ID。从App server分配的唯一标示符
+ * @param uid userID 从App server分配的唯一标示符
  * @note This message does not mean the user remains offline state
  */
 - (void)onRemoteUserOffLineNotify:(NSString *)uid;
@@ -569,10 +761,11 @@ typedef NS_ENUM(NSInteger, AliRtcBufferType) {
 
 /**
  * @brief 订阅的音频音量回调，其中callid为"0"表示本地推流音量，"1"表示远端混音音量，其他表示远端用户音量
- * @param audioSource audio source
- * @param volume  current sub audio volume
+ * @param audioSource 音频数据类型
+ * @param volume 当前回调的音量
+ * @param uid 当前用户的uid，"0"表示本地，"1"表示远端混音，其他表示远端用户
  */
-- (void)onAudioVolumeCallback:(AliRtcAudioSource)audioSource audioVolume:(NSInteger)volume audioUserid:(NSString *)uid;
+- (void)onAudioVolumeCallback:(AliRtcAudioSource)audioSource audioVolume:(NSInteger)volume audioUserid:(NSString *)uid audioState:(NSInteger)audiostate;
 
 /**
  * @brief 订阅的视频数据回调
@@ -678,11 +871,6 @@ typedef NS_ENUM(NSInteger, AliRtcBufferType) {
  */
 - (void)onVideoPixelBuffer:(NSString *)uid videoSource:(AliRtcVideoSource)videoSource pixelBuffer:(CVPixelBufferRef)pixelBuffer;
 
-/**
- * @brief 实时数据回调(2s触发一次)
- * @param stats stats
- */
-- (void)onAliRtcStats:(AliRtcStats)stats;
 
 /**
  * @brief 伴奏播放回调
@@ -696,16 +884,42 @@ typedef NS_ENUM(NSInteger, AliRtcBufferType) {
  * @param networkQuality 网络质量
  */
 - (void)onLastmileDetectResultWithQuality:(AliRtcNetworkQuality)networkQuality;
+/**
+ * @brief 文件录制回调事件
+ * @param event 录制事件
+ * @param filePath 录制文件路径
+*/
+- (void)onMediaRecordEvent:(int)event filePath:(NSString *)filePath;
+
+/**
+ * @brief 实时数据回调(2s触发一次)
+ * @param stats stats
+ */
+- (void)onRtcStats:(AliRtcStats)stats;
+
+/**
+ * @brief 本地视频统计信息(2s触发一次)
+ * @param localVideoStats 本地视频统计信息
+ * @note SDK每两秒触发一次此统计信息回调
+ */
+- (void)onRtcLocalVideoStats:(AliRtcLocalVideoStats *)localVideoStats;
+
+/**
+ * @brief 远端视频统计信息(2s触发一次)
+ * @param remoteVideoStats 远端视频统计信息
+ */
+- (void)onRtcRemoteVideoStats:(AliRtcRemoteVideoStats *)remoteVideoStats;
 
 @end
 
 
+#pragma mark - 接口主类
+
 @interface AliRtcEngine : NSObject <AliRtcEngineDelegate>
 
--(instancetype) init __attribute__((unavailable("use sharedInstance to create the singletone")));
+- (instancetype)init __attribute__((unavailable("use sharedInstance to create the singletone")));
 
 #pragma mark - "Engine的生命周期，工作参数以及频道操作"
-
 
 /**
  * @brief 初始化
@@ -768,14 +982,13 @@ typedef NS_ENUM(NSInteger, AliRtcBufferType) {
 
 /**
  * @brief 离开频道
- * @note: 如果当前不在频道内，leaveChannel不会有任何影响。leaveChannel会产生消息通知频道内其他用户
+ * @note 如果当前不在频道内，leaveChannel不会有任何影响。leaveChannel会产生消息通知频道内其他用户
  */
 - (void)leaveChannel;
 
-
 /**
  * @brief 设置频道模式
- * @param[in] profile 频道模式类型
+ * @param profile 频道模式类型
  * @return 0为成功，非0失败
  * @note 只可以在入会之前调用，会议中不可以重新设置，LeaveChannel后可以重新设置
  */
@@ -791,11 +1004,6 @@ typedef NS_ENUM(NSInteger, AliRtcBufferType) {
 - (int)setClientRole:(AliRtcClientRole)role;
 
 #pragma mark - "设置和操作本地的媒体"
-
-//
-// 本地视频预览 (只预览AliVideoTrackCamera，不预览AliVideoTrackScreen)
-//
-
 
 /**
  * @brief 是否允许高清预览(默认打开)
@@ -853,10 +1061,6 @@ typedef NS_ENUM(NSInteger, AliRtcBufferType) {
  */
 - (int)muteLocalCamera:(BOOL)mute forTrack:(AliRtcVideoTrack)track;
 
-//
-// 推流 (音频/视频)
-//
-
 /**
  * @brief 手动推送视频和音频流
  * @param onResult    当publish执行结束后调用这个回调
@@ -866,10 +1070,6 @@ typedef NS_ENUM(NSInteger, AliRtcBufferType) {
  *       如果想停止推送所有流，通过publish实现
  */
 - (void)publish:(void (^)(int errCode))onResult;
-
-//
-// 编码
-//
 
 /**
  * @brief 设置视频track是否需要交换宽高
@@ -887,10 +1087,6 @@ typedef NS_ENUM(NSInteger, AliRtcBufferType) {
  */
 - (void)setVideoProfile:(AliRtcVideoProfile)profile forTrack:(AliRtcVideoTrack)track;
 
-//
-// 话筒
-//
-
 /**
  * @brief mute/unmute本地音频采集
  * @param mute  YES表示本地音频采集空帧；NO表示恢复正常
@@ -898,10 +1094,6 @@ typedef NS_ENUM(NSInteger, AliRtcBufferType) {
  * @return 0表示成功放入队列，-1表示被拒绝
  */
 - (int)muteLocalMic:(BOOL)mute;
-
-//
-// 扬声器
-//
 
 
 #pragma mark - "操作来自远端的媒体"
@@ -937,7 +1129,6 @@ typedef NS_ENUM(NSInteger, AliRtcBufferType) {
  */
 - (int)muteAllRemoteAudioPlaying:(BOOL)mute;
 
-
 /**
  * @brief mute/unmute远端的所有视频track的渲染
  * @param mute    YES表示停止渲染；NO表示恢复渲染
@@ -945,7 +1136,6 @@ typedef NS_ENUM(NSInteger, AliRtcBufferType) {
  * @note 拉流和解码不受影响。支持joinChannel之前和之后设置
  */
 - (int)muteAllRemoteVideoRendering:(BOOL)mute;
-
 
 /**
  * @brief 手动拉视频和音频流
@@ -957,6 +1147,7 @@ typedef NS_ENUM(NSInteger, AliRtcBufferType) {
  *       configRemoteScreenTrack来清除设置，然后调用subscribe
  */
 - (void)subscribe:(NSString *)uid onResult:(void (^)(NSString *uid, AliRtcVideoTrack vt, AliRtcAudioTrack at))onResult;
+
 
 #pragma mark - "用户管理"
 
@@ -1006,8 +1197,7 @@ typedef NS_ENUM(NSInteger, AliRtcBufferType) {
 
 /**
  * @brief 设置是否拉取音频流
- * @param uid     User ID。从App server分配的唯一标示符。如果设置为nil，则表示
- *                对当前已知的用户进行通配
+ * @param uid userId 从App server分配的唯一标示符
  * @param enable  YES: 拉取; NO: 不拉取
  * @note 可以在joinChannel之前或者之后设置。如果已经订阅该用户的流，需要调用subscribe:(NSString *)uid onResult:才生效
  */
@@ -1015,8 +1205,7 @@ typedef NS_ENUM(NSInteger, AliRtcBufferType) {
 
 /**
  * @brief 设置是否拉取camera视频流
- * @param uid     User ID。从App server分配的唯一标示符。如果设置为nil，则表示
- *                对当前已知的用户进行通配
+ * @param uid userId 从App server分配的唯一标示符。
  * @param master  是否优先拉取大流
  * @param enable  YES: 拉取; NO: 不拉取
  * @note 可以在joinChannel之前或者之后设置。如果已经订阅该用户的流，需要调用subscribe:(NSString *)uid onResult:才生效
@@ -1025,14 +1214,11 @@ typedef NS_ENUM(NSInteger, AliRtcBufferType) {
 
 /**
  * @brief 设置是否拉取screen视频流
- * @param uid     User ID。从App server分配的唯一标示符。如果设置为nil，则表示
- *                对当前已知的用户进行通配
+ * @param uid  uerId从App server分配的唯一标示符
  * @param enable  YES: 拉取; NO: 不拉取
  * @note 可以在joinChannel之前或者之后设置。如果已经订阅该用户的流，需要调用subscribe:(NSString *)uid onResult:才生效
  */
 - (void)configRemoteScreenTrack:(NSString *)uid enable:(BOOL)enable;
-
-// 订阅情况查询，见- (NSDictionary *)getUserInfo:(NSString *)uid
 
 /**
  * @brief 获取远端在线用户列表
@@ -1042,10 +1228,11 @@ typedef NS_ENUM(NSInteger, AliRtcBufferType) {
 
 /**
  * @brief 判断用户是否在线
- * @param uid     User ID。从App server分配的唯一标示符。不可为nil
+ * @param uid userId 从App server分配的唯一标示符。不可为nil
  * @return YES表示在线，NO表示不在线
  */
 - (BOOL)isUserOnline:(NSString *)uid;
+
 
 #pragma mark - "设备管理"
 
@@ -1075,6 +1262,7 @@ typedef NS_ENUM(NSInteger, AliRtcBufferType) {
  * @return 0表示Success 非0表示Failure
  */
 - (int)setPlayoutVolume:(NSInteger)volume;
+
 
 /**
  设置SDK对AVAudioSession的控制权限
@@ -1148,18 +1336,8 @@ typedef NS_ENUM(NSInteger, AliRtcBufferType) {
  */
 - (void)stopAudioPlayer;
 
+
 #pragma mark - "其他"
-
-
-/**
- 获取当前的媒体流信息
-
- @param userId 需要查询的userId，self请赋值空字符串""
- @param videoTrack 需要查询的媒体流类型
- @param keys 查询key值数组
- @return key-value的json格式字符串
- */
-- (NSString *)getMediaInfoWithUserId:(NSString *)userId videoTrack:(AliRtcVideoTrack)videoTrack keys:(NSArray<NSString *> *)keys;
 
 /**
  * @brief 设置log
@@ -1199,7 +1377,7 @@ typedef NS_ENUM(NSInteger, AliRtcBufferType) {
 
 /**
  * @brief 查询远端用户的各种状态
- * @param uid        User ID。从App server分配的唯一标示符
+ * @param uid userId 从App server分配的唯一标示符
  * @note Key: userID, isOnline, sessionID, callID, displayName
  *            hasAudio, hasCameraMaster, hasCameraSlave, hasScreenSharing
  *            requestAudio, requestCameraMaster, requestCameraSlave, requestScreenSharing, preferCameraMaster
@@ -1222,17 +1400,20 @@ typedef NS_ENUM(NSInteger, AliRtcBufferType) {
  */
 + (BOOL)getH5CompatibleMode;
 
+
+#pragma mark - "音视频裸数据输入输出"
+
 /**
  * @brief 设置回调音频声道数，默认单声道
  * @param audioNumChannel audio num channel
  */
-- (void)setsubscribeAudioNumChannel:(AliRtcAudioNumChannel)audioNumChannel;
+- (void)setSubscribeAudioNumChannel:(AliRtcAudioNumChannel)audioNumChannel;
 
 /**
- * @brief 设置回调音频采样率，默认44.1k
+ * @brief 设置回调音频采样率，默认44100
  * @param audioSampleRate audio samplerate
  */
-- (void)setsubscribeAudioSampleRate:(AliRtcAudioSampleRate)audioSampleRate;
+- (void)setSubscribeAudioSampleRate:(AliRtcAudioSampleRate)audioSampleRate;
 
 /**
  * @brief 订阅音频数据
@@ -1245,6 +1426,16 @@ typedef NS_ENUM(NSInteger, AliRtcBufferType) {
  * @param audioSource audio source
  */
 - (void)unSubscribeAudioData:(AliRtcAudioSource)audioSource;
+
+/**
+ * 设置音量回调频率和平滑系数
+ *
+ * @param interval 时间间隔，单位毫秒，最小值不得小于10ms
+ * @param smooth 平滑系数，数值越大平滑程度越高，反之越低，实时性越好，建议设置3，范围[0, 9]
+ * @param reportVad 本地语音检测开关，1：开启，通过onAudioVolumeCallback接口回调, 0:关闭
+ * @return 0 表示成功，-1 表示interval设置小于10，-2 表示平滑系数超出范围.
+ */
+- (int)setVolumeCallbackIntervalMs:(NSInteger)interval smooth:(NSInteger)smooth reportVad:(NSInteger)reportVad;
 
 /**
  * @brief 订阅视频RGB数据
@@ -1297,21 +1488,6 @@ typedef NS_ENUM(NSInteger, AliRtcBufferType) {
 - (void)unSubscribeVideoPreprocessData:(AliRtcVideoSource)videoSource;
 
 /**
- * @brief 允许后台采集
- */
-- (void)enableBackGroundRecording:(BOOL)enable;
-
-/**
- * @brief 是否在后台采集
- */
-- (BOOL)isBackGroundRecording;
-
-/**
- * @brief 设置customId
- */
-- (int)setCustomId:(NSString *)customId;
-
-/**
  * @brief 获取textureId
  */
 - (int)generateTexture;
@@ -1321,9 +1497,43 @@ typedef NS_ENUM(NSInteger, AliRtcBufferType) {
  */
 - (void)removeTexture:(int)textureId;
 
+/**
+ * @brief 设置是否启用外部输入音频播放
+ * @param enable YES 开启，NO 关闭
+ * @param sampleRate 采样率 16000 48000...
+ * @param channelsPerFrame 声道数 1 or 2
+ * @return return>=0 Success, return<0 Failure
+ */
+- (int)setExteranlAudioRender:(BOOL)enable sampleRate:(NSUInteger)sampleRate channelsPerFrame:(NSUInteger)channelsPerFrame;
+
+/**
+ * @brief 输入音频播放数据
+ * @param audioSamples 音频数据
+ * @param sampleLength 音频数据长度
+ * @param sampleRate 音频采样率
+ * @param channelsPerFrame 音频声道数
+ * @param timestamp 时间戳
+ * @return return>=0 Success, return<0 Failure
+ * @note 如果返回值为errorCode中的AliRtcErrAudioBufferFull，代表当前buffer队列塞满，需要等待后再继续输送数据，，建议等待20ms
+ */
+- (int)pushExternalAudioRenderRawData:(const void* _Nullable)audioSamples sampleLength:(NSUInteger)sampleLength sampleRate:(NSUInteger)sampleRate channelsPerFrame:(NSUInteger)channelsPerFrame timestamp:(long long)timestamp;
 
 
-#pragma mark - 音乐
+#pragma mark - "音乐伴奏音效"
+
+/**
+ * @brief 设置混响音效模式
+ * @param mode 模式值，参看对应枚举类型
+ * @return 0表示Success 非0表示Failure
+ */
+- (int)setAudioEffectReverbMode:(AliRtcAudioEffectReverbMode)mode;
+
+/**
+ * @brief 设置混响音效类型
+ * @param type 模式值，参看对应枚举类型
+ * @return 0表示Success 非0表示Failure
+ */
+- (int)setAudioEffectReverbParamType:(AliRtcAudioEffectReverbParamType)type value:(float)value;
 
 /**
  * @brief 开始混音
@@ -1344,6 +1554,7 @@ typedef NS_ENUM(NSInteger, AliRtcBufferType) {
  * @brief 设置混音音量
  * @param volume 混音音量 0~100
  * @return 返回0为成功，其他返回错误码
+ * @note 设置音量需要在startAudioAccompanyWithFile后才能生效
  */
 - (int)setAudioAccompanyVolume:(NSInteger)volume;
 
@@ -1351,6 +1562,7 @@ typedef NS_ENUM(NSInteger, AliRtcBufferType) {
  * @brief 设置混音之后推流出去的音量
  * @param volume 混音音量 0~100
  * @return 返回0为成功，其他返回错误码
+ * @note 设置音量需要在startAudioAccompanyWithFile后才能生效
  */
 - (int)setAudioAccompanyPublishVolume:(NSInteger)volume;
 
@@ -1364,6 +1576,7 @@ typedef NS_ENUM(NSInteger, AliRtcBufferType) {
  * @brief 设置混音之后本地播放的音量
  * @param volume 混音音量 0~100
  * @return 返回0为成功，其他返回错误码
+ * @note 设置音量需要在startAudioAccompanyWithFile后才能生效
  */
 - (int)setAudioAccompanyPlayoutVolume:(NSInteger)volume;
 
@@ -1463,58 +1676,42 @@ typedef NS_ENUM(NSInteger, AliRtcBufferType) {
 - (int)resumeAudioEffectWithSoundId:(NSInteger)soundId;
 
 /**
- * 启用耳返
+ * @brief 启用耳返
  * @param enable 是否启用耳返
  * @return 返回0为成功，其他返回错误码
  */
 - (int)enableEarBack:(BOOL)enable;
 
 /**
- * 设置耳返音量
+ * @brief 设置耳返音量
  * @param volume 音量 0~100 默认100
  * @return 返回0为成功，其他返回错误码
  */
 - (int)setEarBackVolume:(NSInteger)volume;
 
-#pragma mark - 音频录制
-/**
- * 开始音频文件录制
- * @param filePath 支持文件名后缀为.wav或者.aac格式的录制
- * @param sampleRateType 录制音频文件的采样率类型，支持8k, 16k, 32k, 44.1k,48k音频文件
- * @param quality 录制音频文件的质量
- * @return 返回0为成功，其他返回错误码
- */
-- (int)startAudioFileRecording:(NSString *)filePath sampleRateType:(AliRtcAudioSampleRate)sampleRateType quality:(AliRtcRecordingQuality)quality;
+
+#pragma mark - "文件录制"
 
 /**
- *  停止音频文件录制
- *  @return 返回0为成功，其他返回错误码
+ * @brief 开始录制
+ * @param recordType 录制类型
+ * @param recordFormat 录制文件格式
+ * @param filePath 文件路径
+ * @param audioConfig 音频设置
+ * @param videoConfig 视频设置
+ * @return 成功/失败
  */
-- (int)stopAudioFileRecording;
+- (BOOL)startRecord:(AliRtcRecordType)recordType recordFormat:(AliRtcRecordFormat)recordFormat filePath:(NSString*)filePath audioConfig:(AliRtcRecordAudioConfig*)audioConfig videoConfig:(AliRtcRecordVideoConfig*)videoConfig;
 
-#pragma mark - 外部数据源输入
-/**
- * @brief 设置是否启用外部输入音频播放
- * @param enable YES 开启，NO 关闭
- * @param sampleRate 采样率 16k 48k...
- * @param channelsPerFrame 采样率 16k 48k...
- * @return return>=0 Success, return<0 Failure
- */
-- (int)setExteranlAudioRender:(BOOL)enable sampleRate:(NSUInteger)sampleRate channelsPerFrame:(NSUInteger)channelsPerFrame;
 
 /**
- * @brief 输入音频播放数据
- * @param audioSamples 音频数据
- * @param sampleLength 音频数据长度
- * @param sampleRate 音频采样率
- * @param channelsPerFrame 音频声道数
- * @param timestamp 时间戳
- * @return return>=0 Success, return<0 Failure
- * @note 如果返回值为errorCode中的AliRtcErrAudioBufferFull，代表当前buffer队列塞满，需要等待后再继续输送数据，，建议等待20ms
+ @brief 停止录制
  */
-- (int)pushExternalAudioRenderRawData:(const void* _Nullable)audioSamples sampleLength:(NSUInteger)sampleLength sampleRate:(NSUInteger)sampleRate channelsPerFrame:(NSUInteger)channelsPerFrame timestamp:(long long)timestamp;
+- (void)stopRecord;
 
-#pragma mark - 网络测试
+
+#pragma mark - "网络测试"
+
 /**
  * @brief 开始网络质量探测
  * @return 0表示Success 非0表示Failure
@@ -1528,6 +1725,26 @@ typedef NS_ENUM(NSInteger, AliRtcBufferType) {
  */
 - (int)stopLastmileDetect;
 
+
+#pragma mark - "低延时互动直播模式"
+
+/**
+ * 开始低延时互动直播拉流
+ * @param authInfo 入会鉴权信息
+ * @param onResult 拉流结果 errCode=0为Success，其他为Failure
+ */
+- (void)startLiveStreamingWithAuthInfo:(AliRtcAuthInfo *)authInfo onResult:(void(^)(int errCode))onResult;
+
+/**
+ * 停止低延时互动直播拉流
+ */
+- (int)stopLiveStreaming;
+
+/**
+ * 设置低延时互动直播拉流渲染Canvas
+ * @param canvas 渲染参数
+ */
+- (int)setLiveStreamingViewConfig:(AliVideoCanvas *)canvas;
 
 @end
 
