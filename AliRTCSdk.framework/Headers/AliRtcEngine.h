@@ -104,6 +104,15 @@ typedef NS_ENUM(NSInteger, AliRtcVideoProfile) {
     AliRtcVideoProfile_720_960P_30,
     AliRtcVideoProfile_720_1280P_15,
     AliRtcVideoProfile_720_1280P_30,
+    AliRtcVideoProfile_1080_1920P_15,
+    AliRtcVideoProfile_1080_1920P_30,
+    AliRtcVideoProfile_480_640P_15_1500Kb,
+    AliRtcVideoProfile_900_1600P_20,
+    AliRtcVideoProfile_360_640P_15_800Kb,
+    AliRtcVideoProfile_480_840P_15_500Kb,
+    AliRtcVideoProfile_480_840P_15_800Kb,
+    AliRtcVideoProfile_540_960P_15_800Kb,
+    AliRtcVideoProfile_540_960P_15_1200Kb,
     AliRtcVideoProfile_Max
 };
 
@@ -386,6 +395,18 @@ typedef struct  {
 }AliRtcRecordVideoConfig;
 
 /**
+ 美颜设置
+
+ - whiteningLevel: 美白等级
+ - smoothnessLevel: 磨皮等级
+*/
+typedef struct  {
+    float whiteningLevel; //美白等级[0-1.0]
+    float smoothnessLevel;//磨皮等级[0-1.0]
+}AliRtcBeautyConfig;
+
+
+/**
  错误码
  
  - AliRtcErrNone: 无
@@ -519,6 +540,16 @@ typedef struct {
 
 @end
 
+/**
+ *  音量信息格式
+ */
+@interface AliRtcUserVolumeInfo : NSObject
+
+@property (nonatomic, assign) NSString *uid;
+@property (nonatomic, assign) BOOL speech_state;// true:表示正在说话;false:没说话
+@property (nonatomic, assign) int volume;
+
+@end
 
 /**
  入会参数
@@ -590,13 +621,14 @@ typedef struct {
 @property (nonatomic, assign) long dataYPtr;
 @property (nonatomic, assign) long dataUPtr;
 @property (nonatomic, assign) long dataVPtr;
+@property (nonatomic, assign) long dataLength;
 @property (nonatomic, assign) int strideY;
 @property (nonatomic, assign) int strideU;
 @property (nonatomic, assign) int strideV;
+@property (nonatomic, assign) int stride;
 @property (nonatomic, assign) int height;
 @property (nonatomic, assign) int width;
 @property (nonatomic, assign) int rotation;
-@property (nonatomic, assign) int stride;
 @property (nonatomic, assign) long long timeStamp;
 
 @end
@@ -621,7 +653,7 @@ typedef struct {
  * @param result 加入频道结果，成功返回0，失败返回错误码
  * @note 此回调等同于joinChannel接口的block，二者择一处理即可
  */
-- (void)onJoinChannelResult:(int)result;
+- (void)onJoinChannelResult:(int)result authInfo:(AliRtcAuthInfo *)authInfo;
 
 /**
  * @brief 离开频道结果
@@ -738,7 +770,9 @@ typedef struct {
  * @param audioTrack  接收成功的音频流类型
  * @param videoTrack  接收成功的视频流类型
  */
-- (void)onFirstPacketReceivedWithAudioTrack:(AliRtcAudioTrack)audioTrack videoTrack:(AliRtcVideoTrack)videoTrack;
+- (void)onFirstPacketReceivedWithUid:(NSString *)uid
+                          audioTrack:(AliRtcAudioTrack)audioTrack
+                          videoTrack:(AliRtcVideoTrack)videoTrack;
 
 /**
   * @brief remote user的第一帧视频帧显示时触发这个消息
@@ -760,12 +794,11 @@ typedef struct {
 - (void)onAudioSampleCallback:(AliRtcAudioSource)audioSource audioSample:(AliRtcAudioDataSample *)audioSample;
 
 /**
- * @brief 订阅的音频音量回调，其中callid为"0"表示本地推流音量，"1"表示远端混音音量，其他表示远端用户音量
+ * @brief 订阅的音频音量，语音状态和uid
  * @param audioSource 音频数据类型
- * @param volume 当前回调的音量
- * @param uid 当前用户的uid，"0"表示本地，"1"表示远端混音，其他表示远端用户
+ * @param array 表示回调用户音量信息数组，包含用户uid,语音状态以及音量
  */
-- (void)onAudioVolumeCallback:(AliRtcAudioSource)audioSource audioVolume:(NSInteger)volume audioUserid:(NSString *)uid audioState:(NSInteger)audiostate;
+- (void)onAudioVolumeCallback:(AliRtcAudioSource)audioSource userAudioinfo:(NSArray <AliRtcUserVolumeInfo *> *)array;
 
 /**
  * @brief 订阅的视频数据回调
@@ -909,6 +942,12 @@ typedef struct {
  * @param remoteVideoStats 远端视频统计信息
  */
 - (void)onRtcRemoteVideoStats:(AliRtcRemoteVideoStats *)remoteVideoStats;
+
+/**
+ * 收到媒体扩展信息回调
+ * @param uid：远端用户uid，data：媒体扩展信息
+ */
+- (void)onMediaExtensionMsgReceived:(NSString *)uid message:(NSData *)data;
 
 @end
 
@@ -1497,6 +1536,58 @@ typedef struct {
  */
 - (void)removeTexture:(int)textureId;
 
+/*
+ * @brief 是否启用外部视频输入源
+ * @param enable YES 开启，NO 关闭
+ * @param useTexture 是否使用texture 模式
+ * @param type 流类型
+ */
+- (int)setExternalVideoSource:(BOOL)enable useTexture:(BOOL)useTexture sourceType:(AliRtcVideoSource)type;
+
+/**
+ * @brief 输入视频数据
+ * @param frame 帧数据
+ * @param type 流类型
+ */
+- (int)pushExternalVideoFrame:(AliRtcVideoDataSample *)frame sourceType:(AliRtcVideoSource)type;
+
+/**
+ * @brief 设置是否启用外部音频输入源
+ * @param enable YES 开启，NO 关闭
+ * @param sampleRate 采样率 16k, 48k...
+ * @param channelsPerFrame 声道数 1, 2
+ * @return return>=0 Success, return<0 Failure
+ */
+- (int)setExternalAudioSource:(BOOL)enable withSampleRate:(NSUInteger)sampleRate channelsPerFrame:(NSUInteger)channelsPerFrame;
+
+/**
+ * @brief 输入音频数据
+ * @param data 音频数据 不建议超过40ms数据
+ * @param samples 采样
+ * @param timestamp 时间戳
+ * @return return>=0 Success, return<0 Failure
+ * @note 如果返回值为errorCode中的AliRtcErrAudioBufferFull，代表当前buffer队列塞满，需要等待后再继续输送数据，，建议等待20ms
+ */
+- (int)pushExternalAudioFrameRawData:(void *_Nonnull)data samples:(NSUInteger)samples timestamp:(NSTimeInterval)timestamp;
+
+/**
+ * @brief 设置混音音量
+ * @param vol 音量 0-100
+ */
+- (int)setExternalAudioVolume:(int)vol;
+
+/**
+ * @brief 获取混音音量
+ * @return vol 音量
+ */
+- (int)getExternalAudioVolume;
+
+/**
+ * @brief 设置是否与麦克风采集音频混合
+ * @param mixed YES 混音，NO 完全替换麦克风采集数据
+ */
+- (int)setMixedWithMic:(BOOL)mixed;
+
 /**
  * @brief 设置是否启用外部输入音频播放
  * @param enable YES 开启，NO 关闭
@@ -1745,6 +1836,17 @@ typedef struct {
  * @param canvas 渲染参数
  */
 - (int)setLiveStreamingViewConfig:(AliVideoCanvas *)canvas;
+
+#pragma mark - "美颜控制"
+/**
+ * 开始低延时互动直播拉流
+ * @param enable 美颜开关
+ * @param config 美颜参数控制
+*/
+- (int)setBeautyEffect:(BOOL)enable config:(AliRtcBeautyConfig)config;
+
+#pragma mark - "媒体扩展信息"
+- (int)sendMediaExtensionMsg:(NSData *)data repeatCount:(int)repeatCount;
 
 @end
 
