@@ -642,6 +642,27 @@ typedef struct {
 
 @end
 
+/**
+ 消息通道消息
+ */
+@interface AliRtcMessage : NSObject
+
+@property (nonatomic, strong) NSString *tID;
+@property (nonatomic, strong) NSString *contentType;
+@property (nonatomic, strong) NSString *content;
+@end
+
+/**
+ 消息通道Response
+ */
+@interface AliRtcMessageResponse : NSObject
+
+@property (nonatomic, assign) int result;
+@property (nonatomic, strong) NSString *contentType;
+@property (nonatomic, strong) NSString *content;
+@end
+
+
 
 #pragma mark - 回调
 
@@ -945,9 +966,24 @@ typedef struct {
 
 /**
  * 收到媒体扩展信息回调
- * @param uid：远端用户uid，data：媒体扩展信息
+ * @param uid 远端用户uid
+ * @param data 媒体扩展信息
  */
 - (void)onMediaExtensionMsgReceived:(NSString *)uid message:(NSData *)data;
+
+/**
+ * @brief 下行消息通道（接收消息）
+ * @param messageInfo message
+ */
+- (void)onDownlinkMessageNotify:(AliRtcMessage *)messageInfo;
+
+/**
+ * @brief 发送上行消息后返回结果
+ * @param resultInfo send message result
+ */
+- (void)onUplinkMessageResponse:(AliRtcMessageResponse *)resultInfo;
+
+
 
 @end
 
@@ -1041,6 +1077,12 @@ typedef struct {
  * @note 从Interactive转换为Live角色需要先停止推流，否则返回失败
  */
 - (int)setClientRole:(AliRtcClientRole)role;
+
+/**
+ * @brief 获取当前用户角色
+ * @return 当前用户角色
+ */
+- (AliRtcClientRole)getCurrentClientRole;
 
 #pragma mark - "设置和操作本地的媒体"
 
@@ -1541,8 +1583,9 @@ typedef struct {
  * @param enable YES 开启，NO 关闭
  * @param useTexture 是否使用texture 模式
  * @param type 流类型
+ * @param renderMode 输入视频比例和推流profile不一致时，按照设置的renderMode进行对应处理
  */
-- (int)setExternalVideoSource:(BOOL)enable useTexture:(BOOL)useTexture sourceType:(AliRtcVideoSource)type;
+- (int)setExternalVideoSource:(BOOL)enable useTexture:(BOOL)useTexture sourceType:(AliRtcVideoSource)type renderMode:(AliRtcRenderMode)renderMode;
 
 /**
  * @brief 输入视频数据
@@ -1839,14 +1882,31 @@ typedef struct {
 
 #pragma mark - "美颜控制"
 /**
- * 开始低延时互动直播拉流
+ * 设置美颜
  * @param enable 美颜开关
  * @param config 美颜参数控制
-*/
+ */
 - (int)setBeautyEffect:(BOOL)enable config:(AliRtcBeautyConfig)config;
 
 #pragma mark - "媒体扩展信息"
+
+/**
+ * 发送媒体扩展信息
+ */
 - (int)sendMediaExtensionMsg:(NSData *)data repeatCount:(int)repeatCount;
 
-@end
+#pragma mark - "消息通道"
 
+/**
+ * @brief 下行消息通道 反馈消息处理结果
+ * @param messageInfo message
+ */
+- (int)sendDownlinkMessageResponse:(AliRtcMessage *)messageInfo;
+
+/**
+ * @brief 发送上行通道消息
+ * @param messageInfo message
+ */
+- (int)sendUplinkMessage:(AliRtcMessage *)messageInfo;
+
+@end
