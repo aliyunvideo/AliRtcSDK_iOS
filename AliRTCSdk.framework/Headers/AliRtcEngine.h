@@ -499,6 +499,22 @@ typedef NS_ENUM(NSInteger, AliRtcOnByeType) {
 };
 
 /**
+ SDK反馈问题类型
+ */
+typedef NS_ENUM(NSInteger, AliRtcFeedbackType) {
+    AliRtcFeedbackVideoDeviceFail   = 101, // 视频设备问题
+    AliRtcFeedbackVideoNotRender    = 102, // 视频无画面
+    AliRtcFeedbackAudioDeviceFail   = 201, // 音频设备问题
+    AliRtcFeedbackAudioNotRender    = 202, // 音频无声音
+    AliRtcFeedbackAudioEchoError    = 203, // 音频回声异常
+    AliRtcFeedbackChannelTypeError  = 301, // 会议状态异常：入会异常、离会异常等
+    AliRtcFeedbackSDKTypeError      = 302, // SDK其他状态异常
+    AliRtcFeedbackNetworkUnfluent   = 401, // 网络卡顿问题
+    AliRtcFeedbackVideoBlurring     = 402, // 视频清晰问题
+    AliRtcFeedbackUnkonw            = -1,  // 未知类型
+};
+
+/**
  实时数据
  */
 typedef struct {
@@ -1908,5 +1924,17 @@ typedef struct {
  * @param messageInfo message
  */
 - (int)sendUplinkMessage:(AliRtcMessage *)messageInfo;
+
+#pragma mark - "问题上报"
+
+/**
+ * @brief SDK问题反馈
+ * @param uid 当前 uid(允许为nil)
+ * @param channelId 当前channel id(允许为nil)
+ * @param description 问题描述(支持中英文, Nonnull)
+ * @param type 问题类型(见AliRtcFeedbackType注释)
+ * @param timeStamp 问题发生的时间戳(Unix时间戳，大致时间，无需特别精确，可以为0)
+ */
+- (void)postFeedbackWithUid:(NSString *_Nullable)uid channleId:(NSString *_Nullable)channelId description:(NSString *_Nonnull)description type:(AliRtcFeedbackType)type timeStamp:(NSTimeInterval)timeStamp;
 
 @end
