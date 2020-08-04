@@ -131,6 +131,15 @@ typedef NS_ENUM(NSInteger, AliRtcOrientationMode) {
 };
 
 /**
+摄像头方向
+*/
+typedef NS_ENUM(NSInteger, AliRtcCameraDirection)  {
+  AliRtcCameraDirectionInvalid = -1,
+  AliRtcCameraDirectionBack = 0,
+  AliRtcCameraDirectionFront = 1,
+};
+
+/**
  SDK对Audio Session的控制权限
  
  AliRtcAudioSessionOperationRestrictionNone: 没有限制，SDK完全控制AVAudioSession
@@ -1372,6 +1381,11 @@ typedef struct {
  * @note 只有iOS和android提供这个接口
  */
 - (int)switchCamera;
+
+/**
+ * @brief 获取当前摄像头方向，默认前置摄像头
+ */
+- (AliRtcCameraDirection)getCurrentCameraDirection;
 
 /**
  * @brief 设置摄像头参数
