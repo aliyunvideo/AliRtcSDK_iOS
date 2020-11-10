@@ -317,15 +317,30 @@ typedef NS_ENUM(NSInteger, AliRtcRenderMirrorMode) {
  - AliRtcAudioPlayingPaused: 播放暂停
  - AliRtcAudioPlayingResumed: 播放恢复
  - AliRtcAudioPlayingEnded: 播放完毕
+ - AliRtcAudioPlayingBuffering: 正在缓冲
+ - AliRtcAudioPlayingBufferingEnd: 缓冲结束
  */
-typedef NS_ENUM(NSInteger, AliRtcAudioPlayingType) {
+typedef NS_ENUM(NSInteger, AliRtcAudioPlayingStateCode) {
     AliRtcAudioPlayingStarted   = 100,
     AliRtcAudioPlayingStopped   = 101,
     AliRtcAudioPlayingPaused    = 102,
     AliRtcAudioPlayingResumed   = 103,
     AliRtcAudioPlayingEnded     = 104,
+    AliRtcAudioPlayingBuffering = 105,
+    AliRtcAudioPlayingBufferingEnd = 106,
+    AliRtcAudioPlayingFailed = 107,
 };
 
+/**
+ 音乐伴奏播放错误码
+ - AliRtcAudioPlayingNoError: 没有错误
+ - AliRtcAudioPlayingOpenFailed: 打开文件错误
+ */
+typedef NS_ENUM(NSInteger, AliRtcAudioPlayingErrorCode) {
+    AliRtcAudioPlayingNoError   = 0,
+    AliRtcAudioPlayingOpenFailed   = -100,
+
+};
 /**
  录制类型
 
@@ -658,14 +673,6 @@ typedef struct {
 
 @end
 
-/**
- 音乐音效播放状态
- */
-@interface AliRtcAudioPlayingStatus : NSObject
-
-@property (nonatomic, assign) AliRtcAudioPlayingType playType;
-
-@end
 
 /**
  消息通道消息
@@ -952,11 +959,17 @@ typedef struct {
 
 
 /**
- * @brief 伴奏播放回调
- * @param playStatus 当前播放状态
- * @param errorCode errorCode
+ * @brief 伴奏播放状态回调
+ * @param playState 当前播放状态
+ * @param errorCode 播放错误码
  */
-- (void)onAudioPlayingStateChanged:(AliRtcAudioPlayingStatus *)playStatus errorCode:(int)errorCode;
+- (void)onAudioPlayingStateChanged:(AliRtcAudioPlayingStateCode)playState errorCode:(AliRtcAudioPlayingErrorCode)errorCode;
+
+/**
+* @brief 音效播放结束回调
+* @param soundId 用户给该音效文件分配的ID
+*/
+- (void)onAudioEffectFinished:(int)soundId;
 
 /**
  * @brief 网络质量探测回调
@@ -1705,6 +1718,7 @@ typedef struct {
  * @param replaceMic 是否替换掉MIC
  * @param loopCycles 循环次数(可以设置-1或者正整数)
  * @return 返回0为成功，其他返回错误码
+ * @note 异步接口，可通过onAudioPlayingStateChanged监听播放器状态
  */
 - (int)startAudioAccompanyWithFile:(NSString *)filePath onlyLocalPlay:(BOOL)onlyLocalPlay replaceMic:(BOOL)replaceMic loopCycles:(NSInteger)loopCycles;
 
@@ -1764,6 +1778,25 @@ typedef struct {
 - (int)resumeAudioAccompany;
 
 /**
+ * @brief 获取伴奏文件时长, 单位为ms
+ * @return 返回0为成功，其他返回错误码
+ */
+- (int)getAudioAccompanyDuration;
+
+/**
+ * @brief 获取音乐文件播放进度，单位为毫秒。
+ * @return 返回0为成功，其他返回错误码
+ */
+- (int)getAudioAccompanyCurrentPosition;
+
+/**
+ * @brief 设置音频文件的播放位置
+ * @param pos 进度条位置，单位为毫秒
+ * @return 返回0为成功，其他返回错误码
+ */
+- (int)setAudioAccompanyPosition:(int)pos;
+
+/**
  * @brief 预加载音效文件
  * @param soundId 用户给该音效文件分配的ID
  * @param filePath 音效文件路径
@@ -1796,12 +1829,25 @@ typedef struct {
 - (int)stopAudioEffectWithSoundId:(NSInteger)soundId;
 
 /**
+* @brief 停止播放所有音效
+* @return 返回0为成功，其他返回错误码
+*/
+- (int)stopAllAudioEffects;
+
+/**
  * @brief 设置音效推流音量
  * @param soundId 用户给该音效文件分配的ID
  * @param volume 混音音量 0~100
  * @return 返回0为成功，其他返回错误码
  */
 - (int)setAudioEffectPublishVolumeWithSoundId:(NSInteger)soundId volume:(NSInteger)volume;
+
+/**
+ * @brief 设置所有音效推流音量
+ * @param volume 混音音量 0~100
+ * @return 返回0为成功，其他返回错误码
+ */
+- (int)setAllAudioEffectsPublishVolume:(NSInteger)volume;
 
 /**
  * @brief 获取推流音效音量
@@ -1819,6 +1865,13 @@ typedef struct {
 - (int)setAudioEffectPlayoutVolumeWithSoundId:(NSInteger)soundId volume:(NSInteger)volume;
 
 /**
+ * @brief 设置所有音效本地播放音量
+ * @param volume 混音音量 0~100
+ * @return 返回0为成功，其他返回错误码
+ */
+- (int)setAllAudioEffectsPlayoutVolume:(NSInteger)volume;
+
+/**
  * @brief 获取音效本地播放音量
  * @param soundId 用户给该音效文件分配的ID
  * @return 返回0~100为成功，其他返回错误码
@@ -1833,11 +1886,24 @@ typedef struct {
 - (int)pauseAudioEffectWithSoundId:(NSInteger)soundId;
 
 /**
+* @brief 暂停所有音效
+* @return 返回0为成功，其他返回错误码
+*/
+- (int)pauseAllAudioEffects;
+
+/**
  * @brief 重新开始播放音效
  * @@param soundId 用户给该音效文件分配的ID
  * @return 返回0为成功，其他返回错误码
  */
 - (int)resumeAudioEffectWithSoundId:(NSInteger)soundId;
+
+/**
+
+* @brief 重新开始播放所有音效
+* @return 返回0为成功，其他返回错误码
+*/
+- (int)resumeAllAudioEffects;
 
 /**
  * @brief 启用耳返
