@@ -375,6 +375,17 @@ typedef NS_ENUM(NSUInteger, AliRtcAudioQuality) {
 };
 
 /**
+ 编码视频镜像模式
+
+ - AliRtcVideoEncoderMirrorModeDisabled: 编码视频镜像
+ - AliRtcVideoEncoderMirrorModeEnabled: 编码视频不镜像
+ */
+typedef NS_ENUM(NSInteger, AliRtcVideoEncoderMirrorMode) {
+    AliRtcVideoEncoderMirrorModeDisabled = 0,
+    AliRtcVideoEncoderMirrorModeEnabled = 1,
+};
+
+/**
  录制视频质量
 
  - AliRtcVideoQualityDefault: 默认，和采集保持一致
@@ -428,6 +439,14 @@ typedef struct  {
     float whiteningLevel; //美白等级[0-1.0]
     float smoothnessLevel;//磨皮等级[0-1.0]
 }AliRtcBeautyConfig;
+
+/**
+ 视频编码偏好
+*/
+@interface AliRtcVideoEncoderConfiguration : NSObject
+
+@property (nonatomic, assign) AliRtcVideoEncoderMirrorMode mirrorMode;
+@end
 
 
 /**
@@ -585,7 +604,7 @@ typedef struct {
  */
 @interface AliRtcUserVolumeInfo : NSObject
 
-@property (nonatomic, assign) NSString *uid;
+@property (nonatomic, copy) NSString *uid;
 @property (nonatomic, assign) BOOL speech_state;// true:表示正在说话;false:没说话
 @property (nonatomic, assign) int volume;
 
@@ -596,13 +615,13 @@ typedef struct {
  */
 @interface AliRtcAuthInfo : NSObject
 
-@property (nonatomic, retain) NSString *channel;
-@property (nonatomic, retain) NSString *user_id;
-@property (nonatomic, retain) NSString *appid;
-@property (nonatomic, retain) NSString *nonce;
-@property (nonatomic, retain) NSString *token;
-@property (nonatomic, retain) NSArray <NSString *> *gslb;
-@property (nonatomic, retain) NSArray <NSString *> *agent;
+@property (nonatomic, copy) NSString *channel;
+@property (nonatomic, copy) NSString *user_id;
+@property (nonatomic, copy) NSString *appid;
+@property (nonatomic, copy) NSString *nonce;
+@property (nonatomic, copy) NSString *token;
+@property (nonatomic, copy) NSArray <NSString *> *gslb;
+@property (nonatomic, copy) NSArray <NSString *> *agent;
 @property (nonatomic, assign) long long timestamp;
 
 @end
@@ -627,12 +646,12 @@ typedef struct {
 @interface AliVideoCanvas : NSObject
 
 @property (nonatomic, strong) AliRenderView *view;  // 渲染view，不可为nil
-@property (nonatomic) AliRtcRenderMode renderMode;  // 渲染模式，默认AliRtcRenderModeAuto
-@property (nonatomic) AliRtcRenderMirrorMode mirrorMode; // 镜像模式
+@property (nonatomic, assign) AliRtcRenderMode renderMode;  // 渲染模式，默认AliRtcRenderModeAuto
+@property (nonatomic, assign) AliRtcRenderMirrorMode mirrorMode; // 镜像模式
 
-@property (nonatomic) int textureId;                // 纹理Id
-@property (nonatomic) int textureWidth;             // 纹理宽
-@property (nonatomic) int textureHeight;            // 纹理高
+@property (nonatomic, assign) int textureId;                // 纹理Id
+@property (nonatomic, assign) int textureWidth;             // 纹理宽
+@property (nonatomic, assign) int textureHeight;            // 纹理高
 
 @end
 
@@ -679,9 +698,9 @@ typedef struct {
  */
 @interface AliRtcMessage : NSObject
 
-@property (nonatomic, strong) NSString *tID;
-@property (nonatomic, strong) NSString *contentType;
-@property (nonatomic, strong) NSString *content;
+@property (nonatomic, copy) NSString *tID;
+@property (nonatomic, copy) NSString *contentType;
+@property (nonatomic, copy) NSString *content;
 @end
 
 /**
@@ -690,8 +709,8 @@ typedef struct {
 @interface AliRtcMessageResponse : NSObject
 
 @property (nonatomic, assign) int result;
-@property (nonatomic, strong) NSString *contentType;
-@property (nonatomic, strong) NSString *content;
+@property (nonatomic, copy) NSString *contentType;
+@property (nonatomic, copy) NSString *content;
 @end
 
 
@@ -1213,6 +1232,13 @@ typedef struct {
  * @return 0表示成功放入队列，-1表示被拒绝
  */
 - (int)muteLocalMic:(BOOL)mute;
+
+/**
+ * @brief 设置视频编码属性
+ * @param config     预定义的视频编码属性
+ * @note 可以在join channel之前或者之后设置
+*/
+- (void)setVideoEncoderConfiguration:(AliRtcVideoEncoderConfiguration* _Nonnull )config;
 
 
 #pragma mark - "操作来自远端的媒体"
