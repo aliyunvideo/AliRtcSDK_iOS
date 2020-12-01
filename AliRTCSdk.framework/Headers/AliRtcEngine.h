@@ -1739,7 +1739,7 @@ typedef struct {
 - (int)setAudioEffectReverbParamType:(AliRtcAudioEffectReverbParamType)type value:(float)value;
 
 /**
- * @brief 开始混音
+ * @brief 开始伴奏混音
  * @param onlyLocalPlay 是否只本地播放
  * @param replaceMic 是否替换掉MIC
  * @param loopCycles 循环次数(可以设置-1或者正整数)
@@ -1749,13 +1749,13 @@ typedef struct {
 - (int)startAudioAccompanyWithFile:(NSString *)filePath onlyLocalPlay:(BOOL)onlyLocalPlay replaceMic:(BOOL)replaceMic loopCycles:(NSInteger)loopCycles;
 
 /**
- * @brief 停止混音
+ * @brief 停止伴奏混音
  * @return 返回0为成功，其他返回错误码
  */
 - (int)stopAudioAccompany;
 
 /**
- * @brief 设置混音音量
+ * @brief 设置伴奏混音音量
  * @param volume 混音音量 0~100
  * @return 返回0为成功，其他返回错误码
  * @note 设置音量需要在startAudioAccompanyWithFile后才能生效
@@ -1763,7 +1763,7 @@ typedef struct {
 - (int)setAudioAccompanyVolume:(NSInteger)volume;
 
 /**
- * @brief 设置混音之后推流出去的音量
+ * @brief 设置伴奏混音之后推流出去的音量
  * @param volume 混音音量 0~100
  * @return 返回0为成功，其他返回错误码
  * @note 设置音量需要在startAudioAccompanyWithFile后才能生效
@@ -1771,13 +1771,13 @@ typedef struct {
 - (int)setAudioAccompanyPublishVolume:(NSInteger)volume;
 
 /**
- * @brief 获取推流出去的混音音量
- * @return 返回0为成功，其他返回错误码
+ * @brief 获取伴奏推流出去的混音音量
+ * @return 返回0~100为成功，其他返回错误码
  */
 - (int)getAudioAccompanyPublishVolume;
 
 /**
- * @brief 设置混音之后本地播放的音量
+ * @brief 设置伴奏混音之后本地播放的音量
  * @param volume 混音音量 0~100
  * @return 返回0为成功，其他返回错误码
  * @note 设置音量需要在startAudioAccompanyWithFile后才能生效
@@ -1785,38 +1785,38 @@ typedef struct {
 - (int)setAudioAccompanyPlayoutVolume:(NSInteger)volume;
 
 /**
- * @brief 获取混音本地播放的音量
- * @return 返回0为成功，其他返回错误码
+ * @brief 获取伴奏混音本地播放的音量
+ * @return 返回0~100为成功，其他返回错误码
  */
 - (int)getAudioAccompanyPlayoutVolume;
 
 
 /**
- * @brief 暂停混音
+ * @brief 暂停伴奏混音
  * @return 返回0为成功，其他返回错误码
  */
 - (int)pauseAudioAccompany;
 
 /**
- * @brief 重新开始混音
+ * @brief 重新开始伴奏混音
  * @return 返回0为成功，其他返回错误码
  */
 - (int)resumeAudioAccompany;
 
 /**
  * @brief 获取伴奏文件时长, 单位为ms
- * @return 返回0为成功，其他返回错误码
+ * @return 返回伴奏文件时长，小于0返回错误码
  */
 - (int)getAudioAccompanyDuration;
 
 /**
- * @brief 获取音乐文件播放进度，单位为毫秒。
- * @return 返回0为成功，其他返回错误码
+ * @brief 获取伴奏文件播放进度，单位为毫秒。
+ * @return 返回伴奏文件播放进度，小于0返回错误码
  */
 - (int)getAudioAccompanyCurrentPosition;
 
 /**
- * @brief 设置音频文件的播放位置
+ * @brief 设置伴奏文件的播放位置
  * @param pos 进度条位置，单位为毫秒
  * @return 返回0为成功，其他返回错误码
  */
