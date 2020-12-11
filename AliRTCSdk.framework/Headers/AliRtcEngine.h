@@ -569,6 +569,8 @@ typedef struct {
     int64_t video_sent_kbitrate;// 视频接收码率(kb)
     uint64_t call_duration;     // 通话时长(s)
     float cpu_usage;            // CPU使用量(%)
+    int8_t sent_loss_rate;      // 客户端到服务器的丢包率(%)
+    int64_t lastmile_delay;     // 客户端到服务器的延迟(ms)
 } AliRtcStats;
 
 
