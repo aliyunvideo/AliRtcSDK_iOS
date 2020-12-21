@@ -1192,6 +1192,12 @@ typedef struct {
 - (int)stopPreview;
 
 /**
+ * 禁用或重新启用本地视频采集
+ * @param enabled  NO表示停止视频采集；YES表示恢复正常
+ */
+- (int)enableLocalVideo:(BOOL)enable;
+
+/**
  * @brief 是否将停止本地视频采集
  * @param mute     YES表示停止视频采集；NO表示恢复正常
  * @param track    需要停止采集的track
