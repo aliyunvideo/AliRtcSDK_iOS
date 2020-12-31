@@ -766,6 +766,22 @@ typedef struct {
 - (void)onRemoteTrackAvailableNotify:(NSString *)uid audioTrack:(AliRtcAudioTrack)audioTrack videoTrack:(AliRtcVideoTrack)videoTrack;
 
 /**
+ * 当订阅远端用户媒体流时会返回这个消息
+ * @param uid userID 从App server分配的唯一标示符
+ * @param result  0表示订阅成功，失败返回错误码
+ * @param audioTrack 订阅成功的视频流
+ * @param videoTrack 订阅成功的音频流
+*/
+- (void)onSubscribeResult:(NSString *)uid result:(int)result audioTrack:(AliRtcAudioTrack)audioTrack videoTrack:(AliRtcVideoTrack)videoTrack;
+
+/**
+ * 当取消订阅远端用户媒体流时会返回这个消息
+ * @param uid userID 从App server分配的唯一标示符
+ * @param result  0表示取消订阅成功，失败返回错误码
+*/
+- (void)onUnsubscribeResult:(NSString *)uid result:(int)result;
+
+/**
  * @brief 当订阅情况发生变化时，返回这个消息
  */
 - (void)onSubscribeChangedNotify:(NSString *)uid audioTrack:(AliRtcAudioTrack)audioTrack videoTrack:(AliRtcVideoTrack)videoTrack;
