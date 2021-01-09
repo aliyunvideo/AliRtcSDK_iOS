@@ -155,6 +155,20 @@ typedef NS_ENUM(NSInteger, AliRtcAudioSessionOperationRestriction) {
 };
 
 /**
+ 设备音量类型
+ - AliRtcDeviceVolumeTypeAuto: SDK自动设置音量类型
+ - AliRtcDeviceVolumeTypeMedia: 设置为媒体音量，适合媒体播放场景，音量可以调节到零
+ - AliRtcDeviceVolumeTypeVOIP: 设置为通话音量，适合通话场景，音量无法调节到零
+ 默认为Auto类型，SDK 内部会自动选择合适的音量类型
+ 如无特殊需求，不推荐自行设置
+ */
+typedef NS_ENUM(NSInteger, AliRtcDeviceVolumeType) {
+    AliRtcDeviceVolumeTypeAuto = 0,
+    AliRtcDeviceVolumeTypeMedia = 1,
+    AliRtcDeviceVolumeTypeVOIP = 2,
+};
+
+/**
  视频裸数据源类型
 
  - AliRtcVideosourceCameraLargeType: 大分辨率视频流
@@ -1437,6 +1451,11 @@ typedef struct {
  设置SDK对AVAudioSession的控制权限
  */
 - (int)setAudioSessionOperationRestriction:(AliRtcAudioSessionOperationRestriction)restriction;
+
+/**
+ 设置SDK设备音量类型
+ */
+- (int)setDeviceVolumeType:(AliRtcDeviceVolumeType)type;
 
 /**
  * @brief 切换前后摄像头
