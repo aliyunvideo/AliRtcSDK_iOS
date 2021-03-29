@@ -1065,12 +1065,14 @@ typedef struct {
 /**
  * @brief 下行消息通道（接收消息）
  * @param messageInfo message
+ * @note 已废弃使用
  */
 - (void)onDownlinkMessageNotify:(AliRtcMessage *)messageInfo;
 
 /**
  * @brief 发送上行消息后返回结果
  * @param resultInfo send message result
+ * @note 已废弃使用
  */
 - (void)onUplinkMessageResponse:(AliRtcMessageResponse *)resultInfo;
 
@@ -2074,12 +2076,14 @@ typedef struct {
 /**
  * @brief 下行消息通道 反馈消息处理结果
  * @param messageInfo message
+ * @note 已废弃使用
  */
 - (int)sendDownlinkMessageResponse:(AliRtcMessage *)messageInfo;
 
 /**
  * @brief 发送上行通道消息
  * @param messageInfo message
+ * @note 已废弃使用
  */
 - (int)sendUplinkMessage:(AliRtcMessage *)messageInfo;
 
