@@ -1173,14 +1173,10 @@ typedef struct {
 @property (nonatomic, copy) NSArray<AliRtcTranscodingLayout *> *_Nullable layouts;
 @property (nonatomic, copy) NSString *_Nullable taskProfile;
 @property (nonatomic, strong) UIColor *_Nullable backgroundColor;
-
 @property (nonatomic, assign) int mediaEncode;
 @property (nonatomic, assign) int cropMode;
-//@property (nonatomic, assign) int reportVad;
-//@property (nonatomic, assign) int rtpExtInfo;
 @property (nonatomic, assign) int streamType;  // 0 original stream, 1 audio only, 2 video only 
 @property (nonatomic, copy) NSString *_Nullable sourceType;
-
 @property (nonatomic, copy) NSString *_Nullable externalParam;
 
 - (void)addUser:(AliRtcTranscodingUser *_Nonnull)user;
