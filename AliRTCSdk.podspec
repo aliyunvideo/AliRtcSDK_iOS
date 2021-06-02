@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "AliRTCSdk"
-  s.version      = "1.17.46"
+  s.version      = "2.2"
   s.summary      = "AliRTCSdk_iOS"
   s.description  = <<-DESC
                    It's an SDK for aliyun video rtc, which implement by Objective-C.
