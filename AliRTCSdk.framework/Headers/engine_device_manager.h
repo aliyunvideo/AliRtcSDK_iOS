@@ -116,6 +116,32 @@ namespace AliRTCSdk
        * @return 设备音量
       */
       virtual int GetPlaybackDeviceVolume() = 0;
+        
+      /**
+       * @brief 静音音频采集设备
+       * @param mute true：设备设置为静音，false: 设备设置为不静音
+       * @return 0：方法调用成功，<0：方法调用失败
+      */
+      virtual int SetRecordingDeviceMute(bool mute) = 0;
+ 
+     /**
+      * @brief 获取音频采集设备静音状态
+      * @return true：已静音状态，false: 非静音状态
+     */
+      virtual bool GetRecordingDeviceMute() = 0;
+ 
+     /**
+      * @brief 静音音频播放设备
+      * @param mute true：设备设置为静音，false: 设备设置为不静音
+      * @return 0：方法调用成功，<0：方法调用失败
+     */
+      virtual int SetPlaybackDeviceMute(bool mute) = 0;
+ 
+     /**
+      * @brief 获取音频播放设备静音状态
+      * @return true：已静音状态，false: 非静音状态
+     */
+      virtual bool GetPlaybackDeviceMute() = 0;
 
       /**
        * @brief 开始测试音频采集设备

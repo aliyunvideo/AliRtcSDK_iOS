@@ -154,9 +154,25 @@ namespace AliRTCSdk
     } AliEngineVideoObserPosition;
 
     /**
+     * @brief 视频输出宽度对齐方式
+     * AliEngineAlignmentDefault：保持原有视频宽度
+     * AliEngineAlignmentEven：宽度偶数对齐
+     * AliEngineAlignment4：宽度是4的倍数
+     * AliEngineAlignment8：宽度是8的倍数
+     * AliEngineAlignment16：宽度是16的倍数
+     */
+    typedef enum {
+      AliEngineAlignmentDefault = 0,
+      AliEngineAlignmentEven = 1,
+      AliEngineAlignment4 = 2,
+      AliEngineAlignment8 = 3,
+      AliEngineAlignment16 = 4,
+    } AliEngineVideoObserAlignment;
+
+    /**
      * @brief 音频裸数据
      */
-    typedef struct  {
+    typedef struct AliEngineAudioRawData {
         void* dataPtr        = 0;
         int numOfSamples    = 0;
         int bytesPerSample  = 0;
@@ -168,7 +184,7 @@ namespace AliRTCSdk
     /**
      * @brief 视频裸数据
      */
-    typedef struct  {
+    typedef struct AliEngineVideoRawData {
         AliEngineVideoFormat format = AliEngineVideoFormatUnknow;
         AliEngineBufferType type    = AliEngineBufferTypeRawData;
         long dataLength  = 0;
@@ -250,16 +266,40 @@ namespace AliRTCSdk
         AliEngineVideoRawData &videoRawData) = 0;
 
       /**
+       * @brief 视频输出数据是否由用户来获取
+       * @return true, 用户获取；false（默认）, sdk向外抛
+       */ 
+      virtual bool GetIfUserFetchObserverData() {return false;}
+  
+      /**
        * @brief 视频数据输出格式
        * @return 期望视频输出格式
        */ 
       virtual AliEngineVideoFormat GetVideoFormatPreference() { return AliEngineVideoFormatI420; }
 
       /**
+       * @brief 视频输出宽度对齐方式
+       * @return 期望视频输出宽度对齐方式
+       */ 
+      virtual AliEngineVideoObserAlignment GetVideoAlignment() { return AliEngineAlignmentDefault; }
+
+      /**
        * @brief 视频数据输出内容
        * @return 期望视频输出内容，参考AliEngineVideoObserPosition
        */
       virtual uint32_t GetObservedFramePosition() { return static_cast<uint32_t>(AliEnginePositionPostCapture | AliEnginePositionPreRender); };
+
+      /**
+       * @brief 视频输出数据是否需要镜像
+       * @return true, 镜像；false（默认）, 不镜像
+       */
+      virtual bool GetObserverDataMirrorApplied() {return false;}
+
+      /**
+       * @brief 拉流视频数据是否平滑输出
+       * @return true, 平滑输出；false（默认）, 直接输出。只在 GetIfUserFetchObserverData 为false时有效
+       */
+      virtual bool GetSmoothRenderingEnabled() {return false;}
     };
 
 
@@ -312,6 +352,28 @@ namespace AliRTCSdk
        * @brief 取消订阅视频数据输出
        */
       virtual void UnRegisterVideoSampleObserver(IVideoFrameObserver* observer) = 0;
+
+      /**
+       * 主动获取采集数据，onGetIfUserFetchObserverData 返回true时有效
+       * @param track  需要设置的track
+       * @return 返回 null表示没有数据， 非null表示获取成功
+       */
+      virtual bool GetVideoCaptureData(AliEngineVideoTrack type, AliEngineVideoRawData &videoRaw) = 0;
+
+      /**
+       * 主动获取编码前数据，onGetIfUserFetchObserverData 返回true时有效
+       * @param track  需要设置的track
+       * @return 返回 null表示没有数据， 非null表示获取成功
+       */
+      virtual bool GetVideoPreEncoderData(AliEngineVideoTrack type, AliEngineVideoRawData &videoRaw) = 0;
+
+      /**
+       * 主动获取拉流数据，onGetIfUserFetchObserverData 返回true时有效
+       * @param uid User ID。从App server分配的唯一标示符
+       * @param track  需要设置的track
+       * @return 返回 null表示没有数据， 非null表示获取成功
+       */
+      virtual bool GetVideoRenderData(const char *uid,AliEngineVideoTrack type, AliEngineVideoRawData &videoRaw) = 0;
 
       /**
        * @brief 订阅本地视频纹理数据
