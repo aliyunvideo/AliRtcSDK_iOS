@@ -96,10 +96,7 @@ namespace AliRTCSdk
      * @brief 日志级别
      */
     typedef enum {
-        AliEngineLogLevelDump      = 0,
-        AliEngineLogLevelDebug,
-        AliEngineLogLevelVerbose,
-        AliEngineLogLevelInfo,
+        AliEngineLogLevelInfo = 3,
         AliEngineLogLevelWarn,
         AliEngineLogLevelError,
         AliEngineLogLevelFatal,
@@ -142,46 +139,43 @@ namespace AliRTCSdk
      * @brief 变声音效模式
      */
     typedef enum {
-        AliEngineAudioEffectVoiceChanger_OFF = 0,     /* 关闭 */
-        AliEngineAudioEffectVoiceChanger_OLD_MAN,     /* 老人 */
-        AliEngineAudioEffectVoiceChanger_BABYBOY,     /* 男孩 */
-        AliEngineAudioEffectVoiceChanger_BABYGILR,    /* 女孩 */
-        AliEngineAudioEffectVoiceChanger_ROBOT,       /* 机器人 */
-        AliEngineAudioEffectVoiceChanger_DAIMO,       /* 大魔王 */
-        AliEngineAudioEffectVoiceChanger_KTV,         /* KTV */
-        AliEngineAudioEffectVoiceChangerR_ECHO,       /* 回声 */
-        AliEngineAudioEffectVoiceChanger_MAX,
+        AliEngineAudioEffectVoiceChangerOff = 0,     /* 关闭 */
+        AliEngineAudioEffectVoiceChangerOldMan,      /* 老人 */
+        AliEngineAudioEffectVoiceChangerBabyBoy,     /* 男孩 */
+        AliEngineAudioEffectVoiceChangerBabGirl,     /* 女孩 */
+        AliEngineAudioEffectVoiceChangerRobot,       /* 机器人 */
+        AliEngineAudioEffectVoiceChangerDaimo,       /* 大魔王 */
+        AliEngineAudioEffectVoiceChangerKTV,         /* KTV */
+        AliEngineAudioEffectVoiceChangerEcho,        /* 回声 */
     } AliEngineAudioEffectVoiceChangerMode;
     
     /**
      * @brief 音效模式
      */
     typedef enum {
-        AliEngineAudioEffect_Reverb_Off             = 0,/* 关闭 */
-        AliEngineAudioEffect_Reverb_Vocal_I,            /* 人声 I */
-        AliEngineAudioEffect_Reverb_Vocal_II,           /* 人声 II */
-        AliEngineAudioEffect_Reverb_Bathroom,           /* 澡堂 */
-        AliEngineAudioEffect_Reverb_Small_Room_Bright,  /* 明亮小房间 */
-        AliEngineAudioEffect_Reverb_Small_Room_Dark,    /* 黑暗小房间 */
-        AliEngineAudioEffect_Reverb_Medium_Room,        /* 中等房间 */
-        AliEngineAudioEffect_Reverb_Large_Room,         /* 大房间 */
-        AliEngineAudioEffect_Reverb_Church_Hall,        /* 教堂走廊 */
-        AliEngineAudioEffect_Reverb_MAX,                /* 占位符，无意义 */
+        AliEngineAudioEffectReverbOff             = 0,/* 关闭 */
+        AliEngineAudioEffectReverbVocal_I,            /* 人声 I */
+        AliEngineAudioEffectReverbVocal_II,           /* 人声 II */
+        AliEngineAudioEffectReverbBathroom,           /* 澡堂 */
+        AliEngineAudioEffectReverbSmallRoomBright,    /* 明亮小房间 */
+        AliEngineAudioEffectReverbSmallRoomDark,      /* 黑暗小房间 */
+        AliEngineAudioEffectReverbMediumRoom,         /* 中等房间 */
+        AliEngineAudioEffectReverbLargeRoom,          /* 大房间 */
+        AliEngineAudioEffectReverbChurchHall,         /* 教堂走廊 */
     } AliEngineAudioEffectReverbMode;
 
     /**
      * @brief 音效混响模式
      */
     typedef enum {
-        AliEngineAudioEffect_Reverb_Room_Size      = 0,/* 房间大小 [0, 100] */
-        AliEngineAudioEffect_Reverb_Pre_Delay,         /* 预延时ms [0, 200] */
-        AliEngineAudioEffect_Reverb_Reverberance,      /* 混响感[0,100] */
-        AliEngineAudioEffect_Reverb_Hf_Damping,        /* 消声 [0,100] */
-        AliEngineAudioEffect_Reverb_Tone_Low,          /* 低音调[0,100] */
-        AliEngineAudioEffect_Reverb_Tone_High,         /* 高音调[0,100] */
-        AliEngineAudioEffect_Reverb_Dry_Gain,          /* 干增益[-20,10] */
-        AliEngineAudioEffect_Reverb_Wet_Gain,          /* 湿增益[-20,10] */
-        AliEngineAudioEffect_Reverb_Type_Max,          /* 占位符，无意义 */
+        AliEngineAudioEffectReverbRoomSize      = 0, /* 房间大小 [0, 100] */
+        AliEngineAudioEffectReverbPreDelay,          /* 预延时ms [0, 200] */
+        AliEngineAudioEffectReverbReverberance,      /* 混响感[0,100] */
+        AliEngineAudioEffectReverbHfDamping,         /* 消声 [0,100] */
+        AliEngineAudioEffectReverbToneLow,           /* 低音调[0,100] */
+        AliEngineAudioEffectReverbToneHigh,          /* 高音调[0,100] */
+        AliEngineAudioEffectReverbDryGain,           /* 干增益[-20,10] */
+        AliEngineAudioEffectReverbWetGain,           /* 湿增益[-20,10] */
     } AliEngineAudioEffectReverbParamType;
 
     /**
@@ -221,7 +215,7 @@ namespace AliRTCSdk
     /**
      * @brief 录制视频分辨率
     */
-    typedef struct  {
+    typedef struct AliEngineVideoRecordCanvasConfig {
         int canvasWidth;
         int canvasHeight;
     }AliEngineVideoRecordCanvasConfig;
@@ -229,34 +223,34 @@ namespace AliRTCSdk
     /**
      * @brief 录制视频背景色
     */
-    typedef struct  {
-      uint8_t r;
-      uint8_t g;
-      uint8_t b;
+    typedef struct AliEngineRecordVideoBgColor {
+        unsigned char r;
+        unsigned char g;
+        unsigned char b;
     }AliEngineRecordVideoBgColor;
 
     /**
      * @brief 录制视频坐标值
     */
-    typedef struct {
-      uint32_t numerator;
-      uint32_t denominator;
+    typedef struct AliEngineRecordVideoRational {
+        unsigned int numerator;
+        unsigned int denominator;
     }AliEngineRecordVideoRational;
 
     /**
     * @brief 录制视频布局
     */
     typedef enum {
-        AliEngineRecordVideoLayoutMode_GRID = 0,
-        AliEngineRecordVideoLayoutMode_SPEAKER,
-        AliEngineRecordVideoLayoutMode_UNIQUE,
-        AliEngineRecordVideoLayoutMode_CUSTOM,
+        AliEngineRecordVideoLayoutModeGrid = 0,
+        AliEngineRecordVideoLayoutModeSpeaker,
+        AliEngineRecordVideoLayoutModeUnique,
+        AliEngineRecordVideoLayoutModeCustom,
     }AliEngineRecordVideoLayoutMode;
 
     /**
      * @brief 录制视频坐标
     */
-    typedef struct  {
+    typedef struct AliEngineRecordVideoRectangle {
       AliEngineRecordVideoRational left;// percentage
       AliEngineRecordVideoRational top;
       AliEngineRecordVideoRational width;
@@ -266,7 +260,7 @@ namespace AliRTCSdk
     /**
      * @brief 录制视频用户布局
     */
-    typedef struct{
+    typedef struct AliEngineRecordVideoRegion {
       char* userId;
       AliEngineVideoSource sourceType;
       AliEngineRecordVideoRectangle area;
@@ -296,8 +290,8 @@ namespace AliRTCSdk
     /**
      * @brief 录制视频布局
     */
-    typedef struct  {
-        AliEngineRecordVideoLayoutMode mode = AliEngineRecordVideoLayoutMode_GRID;
+    typedef struct AliEngineRecordVideoLayout {
+        AliEngineRecordVideoLayoutMode mode = AliEngineRecordVideoLayoutModeGrid;
         AliEngineRecordVideoRegionArray shapes;
         AliEngineRecordVideoBgColor backColor = {0x00, 0x00, 0x00};
     }AliEngineRecordVideoLayout;
@@ -305,7 +299,7 @@ namespace AliRTCSdk
     /**
      * @brief 录制视频模板
     */
-    typedef struct  {
+    typedef struct AliEngineRecordTemplate {
         AliEngineRecordType recordType;
         AliEngineRecordFormat recordFormat;
         //audio
@@ -428,9 +422,9 @@ namespace AliRTCSdk
      * @brief 音乐伴奏播放错误码
      */
     typedef enum {
-        AliRtcAudioPlayingNoError   = 0,
-        AliRtcAudioPlayingOpenFailed   = -100,
-        AliRtcAudioPlayingDecodeFailed   = -101,
+        AliEngineAudioPlayingNoError   = 0,
+        AliEngineAudioPlayingOpenFailed   = -100,
+        AliEngineAudioPlayingDecodeFailed   = -101,
     } AliEngineAudioPlayingErrorCode;
 
     /**
@@ -537,38 +531,28 @@ namespace AliRTCSdk
     } AliEngineSubscribeState;
 
     /**
-     * @brief 旁路推流LiveStream状态
-    */
-    typedef enum {
-      AliEngineTrascodingStatusStart = 0,               /* 任务开始 */
-      AliEngineTrascodingStatusUpdate = 1,              /* 任务更新 */
-      AliEngineTrascodingStatusStop = 2,                /* 任务停止 */
-      AliEngineTrascodingStatusEnd = 3,                 /* 推流未开始或已结束 */
-      AliEngineTrascodingStatusConnect = 4,             /* 正在连接推流服务器和 RTMP 服务器 */
-      AliEngineTrascodingStatusRunning = 5,             /* 推流正在进行 */
-      AliEngineTrascodingStatusRecovering = 6,          /* 正在恢复推流 */
-      AliEngineTrascodingStatusFailed = 7,              /* 推流失败 */
-      AliEngineTrascodingStatusIdle = 8,                /* 当前流空闲 */
-    } AliEngineTrascodingLiveStreamStatus;
-
-    /**
      * @brief 旁路推流错误码
     */
     typedef enum {
-      AliEngineTrascodingLiveStreamErrorUserStop = 0,                 /* 用户停止任务 */
-      AliEngineTrascodingLiveStreamErrorChannelStop = 1,              /* channel已停止 */
-      AliEngineTrascodingLiveStreamErrorInvalidNetwork = 2,           /* 网络/CDN问题,直播停止 */
-      AliEngineTrascodingLiveStreamErrorInvalidSteamURL = 3,          /* 直播URL问题,直播停止 */
-    } AliEngineTrascodingLiveStreamErrorCode;
+      AliEngineLiveTranscodingErrorPublishOk            = 0,
+      AliEngineLiveTranscodingErrorStreamNotFound       = 0x01100001,
+      AliEngineLiveTranscodingErrorStreamAlreadyExist   = 0x01100002,
+      AliEngineLiveTranscodingErrorInvalidParam         = 0x01100003,
+      AliEngineLiveTranscodingErrorInternalError        = 0x01100004,
+      AliEngineLiveTranscodingErrorRtmpServerError      = 0x01100005,
+      AliEngineLiveTranscodingErrorRtmpStreamUrlError   = 0x01100006,
+      AliEngineLiveTranscodingErrorPublishTimeout       = 0x01100007,
+      AliEngineLiveTranscodingErrorNotAuthorized        = 0x01100008,
+    } AliEngineLiveTranscodingErrorCode;
 
     /**
-     * @brief 旁路推流PublsihTask状态
+     * @brief 旁路推流PublishTask状态
     */
     typedef enum {
-      AliEngineTrascodingPublsihTaskStatusStart = 0,                /* 任务开始 */
-      AliEngineTrascodingPublsihTaskStatusUpdate = 1,               /* 任务更新 */
-      AliEngineTrascodingPublsihTaskStatusStop = 2,                 /* 任务已停止 */
-    } AliEngineTrascodingPublsihTaskStatus;
+      AliEngineTrascodingPublishTaskStatusStart = 0,                /* 任务开始 */
+      AliEngineTrascodingPublishTaskStatusUpdate = 1,               /* 任务更新 */
+      AliEngineTrascodingPublishTaskStatusStop = 2,                 /* 任务已停止 */
+    } AliEngineTrascodingPublishTaskStatus;
 
     /**
      * @brief 用户离线原因
@@ -583,12 +567,12 @@ namespace AliRTCSdk
      * @brief 音频编码配置
     */
     typedef enum {
-      AliEngineLowQualityMode = 0x0000,  //1ch, 8khz,  24kbps;
-      AliEngineBasicQualityMode = 0x0001,  //1ch, 16khz, 24kbps;
-      AliEngineHighQualityMode = 0x0010,  //1ch, 48khz, 48kbps;
-      AliEngineStereoHighQualityMode = 0x0011,  //2ch, 48khz, 64kbps;
-      AliEngineSuperHighQualityMode = 0x0012, //1ch, 48khz, 96kbps;
-      AliEngineStereoSuperHighQualityMode = 0x0013, //2ch, 48khz, 128kbps;
+      AliEngineLowQualityMode = 0x0000,               /* 1ch, 8khz,  24kbps */
+      AliEngineBasicQualityMode = 0x0001,             /* 1ch, 16khz, 24kbps */
+      AliEngineHighQualityMode = 0x0010,              /* 1ch, 48khz, 48kbps */
+      AliEngineStereoHighQualityMode = 0x0011,        /* 2ch, 48khz, 64kbps */
+      AliEngineSuperHighQualityMode = 0x0012,         /* 1ch, 48khz, 96kbps */
+      AliEngineStereoSuperHighQualityMode = 0x0013,   /* 2ch, 48khz, 128kbps */
     }AliEngineAudioProfile;
 
     /**
@@ -599,6 +583,7 @@ namespace AliRTCSdk
       AliEngineSceneEducationMode = 0x0100,
       AliEngineSeneMediaMode = 0x0200,
       AliEngineSceneMusicMode = 0x0300,
+      AliEngineSceneChatroomMode = 0x0400,
     }AliEngineAudioScenario;
 
     /**
@@ -634,9 +619,21 @@ namespace AliRTCSdk
     } AliEngineChannelRelayErrorCode;
 
     /**
+     * @brief 用户离线原因
+    */
+    typedef enum {
+      AliEngineShowTypeNone = 0,              /* 不显示 */
+      AliEngineShowTypeAudio = 1,             /* 音频 */
+      AliEngineShowTypeVideo = 2,             /* 视频 */
+      AliEngineShowTypeNetwork = 3,           /* 网络 */
+      AliEngineShowTypeAll = 4,               /* 全部 */
+    } AliEngineShowDebugViewType;
+
+
+    /**
      * @brief 屏幕分享区域
      */
-    typedef struct {
+    typedef struct AliEngineScreenShareRegion {
       float originX = -1.f;
       float originY = -1.f;
       float width = 0.f;
@@ -646,7 +643,7 @@ namespace AliRTCSdk
     /**
      * @brief 屏幕分享源信息
      */
-    typedef struct {
+    typedef struct AliEngineScreenSourcInfo {
         String sourceId;
         String sourceName;
     } AliEngineScreenSourcInfo;
@@ -656,15 +653,15 @@ namespace AliRTCSdk
      */
     class ALI_RTC_API AliEngineScreenSourceList {
     public:
-        virtual uint32_t GetCount() = 0;
-        virtual AliEngineScreenSourcInfo GetSourceInfo(uint32_t index) = 0;
+        virtual unsigned int GetCount() = 0;
+        virtual AliEngineScreenSourcInfo GetSourceInfo(unsigned int index) = 0;
         virtual void Release() = 0;
     };
 
     /**
      * @brief 用户鉴权信息
      */
-    typedef struct {
+    typedef struct AliEngineAuthInfo {
         char* channelId     = nullptr;
         char* userId        = nullptr;
         char* appId         = nullptr;
@@ -677,7 +674,6 @@ namespace AliRTCSdk
         char** agent   = nullptr;
         int agentCount = 0;
         unsigned long long timestamp =0;
-        char* arch = nullptr;  /* arch: "alirtc" | "grtn"，default value of `arch` is "grtn" if not designated */
     } AliEngineAuthInfo;
 
     /**
@@ -688,26 +684,26 @@ namespace AliRTCSdk
             if (size>0)
             {
                 count = size;
-                info_list = new AliEngineAuthInfo[count];
+                infoList = new AliEngineAuthInfo[count];
             }
         };
 
         ~_tagAliEngineAuthInfoList() {
-            if (info_list)
+            if (infoList)
             {
-                delete[] info_list;
-                info_list = nullptr;
+                delete[] infoList;
+                infoList = nullptr;
                 count = 0;
             }
         };
-        AliEngineAuthInfo* info_list = nullptr;
+        AliEngineAuthInfo* infoList = nullptr;
         int count = 0;
     }AliEngineAuthInfoList;
 
     /**
      * @brief camera 采集偏好
      */
-    typedef struct {
+    typedef struct AliEngineCameraCapturerConfiguration {
         AliEngineCaptureOutputPreference preference;        /** Camera capturer preference settings. See: #AliEngineCaptureOutputPreference. */
 #if defined(__ANDROID__) || (defined(__APPLE__) && TARGET_OS_IOS)
         AliEngineCameraDirection cameraDirection;           /** Camera direction settings (for Android/iOS only). See: #AliEngineCameraDirection. */
@@ -850,7 +846,7 @@ namespace AliRTCSdk
     /**
      * @brief 视频显示窗口设置
      */
-    typedef struct {
+    typedef struct AliEngineVideoCanvas {
         void *displayView   = nullptr;
         int backgroundColor = 0;
         AliEngineRenderMode renderMode = AliEngineRenderModeAuto;
@@ -866,7 +862,7 @@ namespace AliRTCSdk
     /**
      * @brief 录制音频设置
      */
-    typedef struct  {
+    typedef struct AliEngineRecordAudioConfig {
         AliEngineAudioSampleRate sampleRate = AliEngineAudioSampleRate_16000;
         AliEngineAudioQuality quality       = AliEngineAudioQualityHigh;
         bool externalPcmCaptureRecording    = false;
@@ -876,7 +872,7 @@ namespace AliRTCSdk
     /**
      * @brief 录制视频设置
      */
-    typedef struct  {
+    typedef struct AliEngineRecordVideoConfig {
         int fps;
         int bitrate;
         AliEngineVideoQuality quality;
@@ -887,81 +883,87 @@ namespace AliRTCSdk
     /**
      * @brief 音量信息
      */
-    typedef struct {
+    typedef struct AliEngineUserVolumeInfo {
         String uid = nullptr;  /* 用户id */
-        bool speechState = 0; /* 语音状态，1表示当前在说话，0表示当前未说话 */
-        int volume = 0;       /* 音量 */
-        int sum_volume = 0;   /* 回调周期内累计的音量, 用于判别当前说话人 */
+        bool speechState = 0;  /* 语音状态，1表示当前在说话，0表示当前未说话 */
+        int volume = 0;        /* 音量 */
+        int sumVolume = 0;    /* 回调周期内累计的音量, 用于判别当前说话人 */
     } AliEngineUserVolumeInfo;
 
     /**
      * @brief 会话数据统计信息
      */
-    typedef struct {
-        long long sent_kbitrate = 0;
-        long long rcvd_kbitrate = 0;
-        long long sent_bytes = 0;
-        long long rcvd_bytes = 0;
-        long long video_rcvd_kbitrate = 0;
-        long long video_sent_kbitrate = 0;
-        unsigned int system_cpu = 0;
-        unsigned int app_cpu = 0;
-        unsigned long long call_duration = 0;
-        long long sent_loss_rate = 0;
-        long long lastmile_delay = 0;
+    typedef struct AliEngineStats {
+        long long sentKBitrate = 0;
+        long long rcvdKBitrate = 0;
+        long long sentBytes = 0;
+        long long rcvdBytes = 0;
+        long long videoRcvdKBitrate = 0;
+        long long videoSentKBitrate = 0;
+        unsigned int systemCpu = 0;
+        unsigned int appCpu = 0;
+        unsigned long long callDuration = 0;
+        long long sentLossRate = 0;
+        long long sentLossPkts = 0;
+        long long sentExpectedPkts = 0;
+        long long rcvdLossRate = 0;
+        long long rcvdLossPkts = 0;
+        long long rcvdExpectedPkts = 0;
+        long long lastmileDelay = 0;
     } AliEngineStats;
 
     /**
      * @brief 本地视频统计信息
      */
-    typedef struct {
+    typedef struct AliEngineLocalVideoStats {
         AliEngineVideoTrack track;
-        unsigned int sent_bitrate = 0;
-        unsigned int sent_fps = 0;
-        unsigned int encode_fps = 0;
+        unsigned int sentBitrate = 0;
+        unsigned int sentFps = 0;
+        unsigned int encodeFps = 0;
     } AliEngineLocalVideoStats;
 
     /**
      * @brief 远端视频统计信息
      */
-    typedef struct {
-        const char* user_id;
+    typedef struct AliEngineRemoteVideoStats {
+        const char* userId;
         AliEngineVideoTrack track;
         unsigned int width = 0;
         unsigned int height = 0;
-        unsigned int decode_fps = 0;
-        unsigned int render_fps = 0;
-        unsigned int frozen_times = 0;
+        unsigned int decodeFps = 0;
+        unsigned int renderFps = 0;
+        unsigned int frozenTimes = 0;
     } AliEngineRemoteVideoStats;
 
     /**
      * @brief 本地音频统计信息
      */
-    typedef struct {
+    typedef struct AliEngineLocalAudioStats {
         AliEngineAudioTrack track;
-        unsigned int sent_bitrate = 0;
-        unsigned int sent_samplerate = 0;
-        unsigned int num_channel = 0;
-        unsigned int input_level = 0;
+        unsigned int sentBitrate = 0;
+        unsigned int sentSamplerate = 0;
+        unsigned int numChannel = 0;
+        unsigned int inputLevel = 0;
     } AliEngineLocalAudioStats;
 
     /**
      * @brief 远端音频统计信息
      */
-    typedef struct {
-        const char* user_id;
+    typedef struct AliEngineRemoteAudioStats {
+        const char* userId;
         AliEngineAudioTrack track;
         int quality = 0;
-        int network_transport_delay = 0;
-        int audio_loss_rate = 0;
-        int rcvd_bitrate = 0;
-        int total_frozen_times = 0;
+        int networkTransportDelay = 0;
+        int jitterBufferDelay = 0;
+        int audioLossRate = 0;
+        int rcvdBitrate = 0;
+        int totalFrozenTimes = 0;
     } AliEngineRemoteAudioStats;
         
     /**
      * @brief 美颜设置
      */
-    typedef struct  {
+    typedef struct AliEngineBeautyConfig {
         float whiteningLevel;       /* 美白等级[0-1.0] */
         float smoothnessLevel;      /* 磨皮等级[0-1.0] */
     } AliEngineBeautyConfig;
@@ -969,7 +971,7 @@ namespace AliRTCSdk
     /**
      * @brief 水印坐标系
      */
-    typedef struct {
+    typedef struct AliEngineWaterMarkPosition {
         float x = 0;
         float y = 0;
         float w = 0;
@@ -979,7 +981,7 @@ namespace AliRTCSdk
     /**
      * @brief 水印配置
      */
-    typedef struct {
+    typedef struct AliEngineWaterMarkConfig {
         bool visibleInPreview = true;
         AliEngineWaterMarkPosition positionInPortraitMode;
         AliEngineWaterMarkPosition positionInLandscapeMode;
@@ -990,7 +992,7 @@ namespace AliRTCSdk
     /**
      * @brief 屏幕共享参数配置
      */
-    typedef struct {
+    typedef struct AliEngineScreenShareConfig {
         bool isShareByRegion = false;
         AliEngineScreenShareRegion shareRegion;
 
@@ -1006,7 +1008,7 @@ namespace AliRTCSdk
     /**
      * @brief 屏幕共享配置信息
     */
-    typedef struct {
+    typedef struct AliEngineScreenShareInfo {
       AliEngineScreenShareType shareType = AliEngineScreenShareDesktop;
       unsigned int shareSourceId = 0;
       AliEngineScreenShareConfig shareConfig;
@@ -1016,7 +1018,7 @@ namespace AliRTCSdk
      * @brief 消息通道消息
      * @note 已废弃使用
      */
-    typedef struct {
+    typedef struct AliEngineMessage {
         String tID;
         String contentType;
         String content;
@@ -1026,25 +1028,11 @@ namespace AliRTCSdk
      * @brief 消息通道Response
      * @note 已废弃使用
      */
-    typedef struct {
+    typedef struct AliEngineMessageResponse {
         int result;
         String contentType;
         String content;
     } AliEngineMessageResponse;
-
-    /**
-     * @brief 旁路直播用户信息
-     */
-    struct AliEngineTranscodingUser{
-        int pane_id;
-        String user_id;
-        String source_type;
-
-        bool operator==(const AliEngineTranscodingUser &rhs) const 
-        {
-          return this->user_id == rhs.user_id;
-        };
-    };
 
     /**
      * @brief 跨频道转推设置
@@ -1053,8 +1041,8 @@ namespace AliRTCSdk
       AliEngineChannelRelayConfiguration(int size) {
             if (size > 0)
             {
-                dests_size = size;
-                dests = new AliEngineAuthInfo[dests_size];
+                destsSize = size;
+                dests = new AliEngineAuthInfo[destsSize];
             }
         };
 
@@ -1063,35 +1051,168 @@ namespace AliRTCSdk
             {
                 delete[] dests;
                 dests = nullptr;
-                dests_size = 0;
+                destsSize = 0;
             }
         };
         AliEngineAuthInfo* dests = nullptr;
-        int dests_size = 0;
+        int destsSize = 0;
+    };
+
+    /** 旁路直播 **/
+    enum AliEngineLiveTranscodingState {
+        AliEngineLiveTranscodingState_IDLE = 0,
+        AliEngineLiveTranscodingState_CONNNECT = 1,
+        AliEngineLiveTranscodingState_RUNNING = 2,
+        AliEngineLiveTranscodingState_RECOVERING = 3,
+        AliEngineLiveTranscodingState_FAILURE = 4,
+        AliEngineLiveTranscodingState_END = 5
     };
 
     /**
-     * @brief 旁路直播用户窗格信息
-     */
-    struct AliEngineMpuTaskUserPane{
-        int pane_id;
-        String user_id;
-        String source_type;
+    * @brief 旁路模式
+    */
+    enum AliEngineLiveTranscodingMixMode {
+        AliEngineLiveTranscodingSINGLE = 0,  // 单路模式
+        AliEngineLiveTranscodingMIX = 1      // 混流模式
     };
 
     /**
-     * @brief 旁路直播用户窗格列表
+    * @brief 旁路直播转推流模式
+    */
+    enum AliEngineLiveTranscodingStreamType {
+        AliEngineLiveTranscodingOrigin = 0,
+        AliEngineLiveTranscodingAudio = 1,
+        AliEngineLiveTranscodingVideo = 2
+    };
+
+    /**
+    * @brief 旁路直播输入类型
+    */
+    enum AliEngineLiveTranscodingSourceType {
+        AliEngineLiveTranscodingCamera = 0,
+        AliEngineLiveTranscodingShareScreen = 1
+    };
+
+    /**
+    * @brief 旁路直播计费规格
+    */
+    enum AliEngineLiveTranscodingTaskProfile {
+        AliEngineLiveTranscoding_Profile_1IN_1080P = 0,
+        AliEngineLiveTranscoding_Profile_1IN_720P = 1,
+        AliEngineLiveTranscoding_Profile_1IN_360P = 2,
+        AliEngineLiveTranscoding_Profile_2IN_1080P = 3,
+        AliEngineLiveTranscoding_Profile_2IN_720P = 4,
+        AliEngineLiveTranscoding_Profile_2IN_360P = 5,
+        AliEngineLiveTranscoding_Profile_4IN_1080P = 6,
+        AliEngineLiveTranscoding_Profile_4IN_720P = 7,
+        AliEngineLiveTranscoding_Profile_4IN_360P = 8,
+        AliEngineLiveTranscoding_Profile_9IN_1080P = 9,
+        AliEngineLiveTranscoding_Profile_9IN_720P = 10,
+        AliEngineLiveTranscoding_Profile_9IN_360P = 11,
+        AliEngineLiveTranscoding_Profile_12IN_1080P = 12,
+        AliEngineLiveTranscoding_Profile_12IN_720P = 13,
+        AliEngineLiveTranscoding_Profile_12IN_360P = 14,
+        AliEngineLiveTranscoding_Profile_16IN_1080P = 15,
+        AliEngineLiveTranscoding_Profile_16IN_720P = 16,
+        AliEngineLiveTranscoding_Profile_16IN_360P = 17,
+        AliEngineLiveTranscoding_Profile_Mixed = 9999 // only audio
+    };
+
+    /**
+    * @brief 旁路直播音频采样
+    */
+    enum AliEngineLiveTranscodingAudioSampleRate {
+        AliEngineLiveTranscoding_HZ_48000 = 48000,
+        AliEngineLiveTranscoding_HZ_44100 = 44100,
+        AliEngineLiveTranscoding_HZ_32000 = 32000,
+        AliEngineLiveTranscoding_HZ_16000 = 16000,
+        AliEngineLiveTranscoding_HZ_8000 = 8000
+    };
+
+    /**
+    * @brief 旁路直播自定义编码参数
+    */
+    struct AliEngineLiveTranscodingEncodeParam {
+        int videoWidth = 360; //(0-1920]
+        int videoHeight = 640; //(0-1920]
+        int videoFramerate = 15; //[1,60]
+        int videoBitrate = 500; //[1kbps,10000kbps]
+        int videoGop = 30; //[1,60]
+        AliEngineLiveTranscodingAudioSampleRate audioSamplerate = AliEngineLiveTranscoding_HZ_32000;
+        int audioBitrate = 500; //[8kbps,500kbps]
+        int audioChannels = 1; //[1,2]
+    };
+
+    /**
+    * @brief 旁路直播图片
+    */
+    struct AliEngineLiveTranscodingImage {
+        enum DisplayType { NOT_DISPLAY = 0, ALWAYS = 1, WHEN_NO_VIDEO = 2 };
+
+        String url;
+        float alpha = 1.0;
+        DisplayType display = DisplayType::ALWAYS;
+        int x;
+        int y;
+        int width;
+        int height;
+        int zOrder = 0;
+    };
+
+    /**
+     * @brief 旁路直播图片列表
      */
-    class ALI_RTC_API AliEngineTranscodingUserPaneArray
+    class ALI_RTC_API AliEngineLiveTranscodingImageArray
     {
     public:
-      AliEngineTranscodingUserPaneArray();
-      virtual ~AliEngineTranscodingUserPaneArray();
-      AliEngineTranscodingUserPaneArray(const AliEngineTranscodingUserPaneArray &other);
-      AliEngineTranscodingUserPaneArray & operator=(const AliEngineTranscodingUserPaneArray& other);
+      AliEngineLiveTranscodingImageArray();
+      virtual ~AliEngineLiveTranscodingImageArray();
+      AliEngineLiveTranscodingImageArray(const AliEngineLiveTranscodingImageArray &other);
+      AliEngineLiveTranscodingImageArray & operator=(const AliEngineLiveTranscodingImageArray& other);
 
-      void AddUserPane(const AliEngineMpuTaskUserPane &item);
-      AliEngineMpuTaskUserPane GetUserPane(int index) const;
+      void Add(const AliEngineLiveTranscodingImage &item);
+      AliEngineLiveTranscodingImage Get(int index) const;
+      void Clear();
+      int Count() const;
+
+    private:
+      void *data{ nullptr };
+    };
+
+    enum AliEngineLiveTranscodingFontType {
+      NOTO_SERIF_CJKSC_REGULAR = 0,
+      ALIBABA_PUHUITI_REGULAR = 1,
+      ALIBABA_PUHUITI_BOLD = 2,
+      ALIBABA_PUHUITI_Heavy = 3,
+      ALIBABA_PUHUITI_LIGHT = 4,
+      ALIBABA_PUHUITI_MEDIUM = 5
+    };
+
+    /**
+    * @brief 旁路直播时钟格式
+    */
+    struct AliEngineLiveTranscodingClockWidget {
+        int x;
+        int y;
+        AliEngineLiveTranscodingFontType fontType = NOTO_SERIF_CJKSC_REGULAR;
+        int fontSize;
+        int fontColor = 0xFFFFFF;  // 0xRRGGBB
+        int zOrder = 0;
+    };
+
+    /**
+     * @brief 旁路直播时钟格式列表
+     */
+    class ALI_RTC_API AliEngineLiveTranscodingClockWidgetArray
+    {
+    public:
+      AliEngineLiveTranscodingClockWidgetArray();
+      virtual ~AliEngineLiveTranscodingClockWidgetArray();
+      AliEngineLiveTranscodingClockWidgetArray(const AliEngineLiveTranscodingClockWidgetArray &other);
+      AliEngineLiveTranscodingClockWidgetArray & operator=(const AliEngineLiveTranscodingClockWidgetArray& other);
+
+      void Add(const AliEngineLiveTranscodingClockWidget &item);
+      AliEngineLiveTranscodingClockWidget Get(int index) const;
       void Clear();
       int Count() const;
 
@@ -1100,34 +1221,31 @@ namespace AliRTCSdk
     };
 
     /**
-     * @brief 旁路直播自定义窗格
-     */
-    struct AliEngineMpuTaskPane{
-        int pane_id;
-        int major_pane;
-        float x;
-        float y;
-        float width;
-        float height;
-        int zorder;
-        String user_id;
-        String source_type;
-        int segment_type;
+    * @brief 旁路直播文字格式
+    */
+    struct AliEngineLiveTranscodingText {
+        String text;
+        int x;
+        int y;
+        int zOrder;
+        AliEngineLiveTranscodingFontType fontType = NOTO_SERIF_CJKSC_REGULAR;
+        int fontSize;
+        int fontColor = 0x000000;
     };
 
     /**
-     * @brief 旁路直播自定义窗格列表
+     * @brief 旁路直播文字列表
      */
-    class ALI_RTC_API AliEngineTranscodingPaneArray
+    class ALI_RTC_API AliEngineLiveTranscodingTextArray
     {
     public:
-      AliEngineTranscodingPaneArray();
-      virtual ~AliEngineTranscodingPaneArray();
-      AliEngineTranscodingPaneArray(const AliEngineTranscodingPaneArray &other);
-      AliEngineTranscodingPaneArray & operator=(const AliEngineTranscodingPaneArray& other);
+      AliEngineLiveTranscodingTextArray();
+      virtual ~AliEngineLiveTranscodingTextArray();
+      AliEngineLiveTranscodingTextArray(const AliEngineLiveTranscodingTextArray &other);
+      AliEngineLiveTranscodingTextArray & operator=(const AliEngineLiveTranscodingTextArray& other);
 
-      void AddPane(const AliEngineMpuTaskPane &item);
-      AliEngineMpuTaskPane GetPane(int index) const;
+      void Add(const AliEngineLiveTranscodingText &item);
+      AliEngineLiveTranscodingText Get(int index) const;
       void Clear();
       int Count() const;
 
@@ -1136,47 +1254,64 @@ namespace AliRTCSdk
     };
 
     /**
-     * @brief 旁路直播用户自定义layout信息
-     */
-    struct AliEngineMpuTaskLayout{
-        int audio_mix_count;
-        AliEngineTranscodingPaneArray panes;
+    * @brief 旁路直播裁剪模式
+    */
+    enum AliEngineLiveTranscodingCropMode {
+        AliEngineLiveTranscodingCrop = 1,
+        AliEngineLiveTranscodingFill = 2
     };
 
     /**
-     * @brief 旁路直播用户自定义layout列表
+    * @brief 旁路直播媒体处理模式
+    */
+    enum AliEngineLiveTranscodingMediaProcessMode {
+        AliEngineLiveTranscodingNormal = 0, /*通用模式*/
+        AliEngineLiveTranscodingVirtualBackground = 1 /*虚拟背景模式*/
+    };
+
+    /**
+    * @brief 旁路直播输入类型
+    */
+    enum AliEngineLiveTranscodingSegmentType {
+        AliEngineLiveTranscodingNoBody = 0, /* 无人像分割 */
+        AliEngineLiveTranscodingBody = 1    /* 人像分割 */
+    };
+
+    /**
+     * @brief 旁路直播用户信息
      */
-    class ALI_RTC_API AliEngineTranscodingLayoutArray
-    {
-    public:
-      AliEngineTranscodingLayoutArray();
-      virtual ~AliEngineTranscodingLayoutArray();
-      AliEngineTranscodingLayoutArray(const AliEngineTranscodingLayoutArray &other);
-      AliEngineTranscodingLayoutArray & operator=(const AliEngineTranscodingLayoutArray& other);
+    struct AliEngineLiveTranscodingUser{
+        String userId;
+        int x;
+        int y;
+        int width;
+        int height;
+        int zOrder;
+        AliEngineLiveTranscodingSourceType sourceType;
+        AliEngineLiveTranscodingSegmentType segmentType = AliEngineLiveTranscodingNoBody;
+        AliEngineLiveTranscodingImageArray images;
+        AliEngineLiveTranscodingTextArray texts;
 
-      void AddLayout(const AliEngineMpuTaskLayout &item);
-      AliEngineMpuTaskLayout GetLayout(int index) const;
-      void Clear();
-      int Count() const;
-
-    private:
-      void *data{ nullptr };
+        bool operator==(const AliEngineLiveTranscodingUser &rhs) const
+        {
+          return this->userId == rhs.userId;
+        };
     };
 
     /**
      * @brief 旁路直播用户列表
     */
-    class ALI_RTC_API AliEngineTranscodingUserArray
+    class ALI_RTC_API AliEngineLiveTranscodingUserArray
     {
     public:
-      AliEngineTranscodingUserArray();
-      virtual ~AliEngineTranscodingUserArray();
-      AliEngineTranscodingUserArray(const AliEngineTranscodingUserArray &other);
-      AliEngineTranscodingUserArray & operator=(const AliEngineTranscodingUserArray& other);
+      AliEngineLiveTranscodingUserArray();
+      virtual ~AliEngineLiveTranscodingUserArray();
+      AliEngineLiveTranscodingUserArray(const AliEngineLiveTranscodingUserArray &other);
+      AliEngineLiveTranscodingUserArray & operator=(const AliEngineLiveTranscodingUserArray& other);
 
-      void AddTranscodingUser(const AliEngineTranscodingUser &item);
-      void RemoveTranscodingUser(const AliEngineTranscodingUser &item);
-      AliEngineTranscodingUser GetTranscodingUser(int index) const;
+      void AddTranscodingUser(const AliEngineLiveTranscodingUser &item);
+      void RemoveTranscodingUser(const AliEngineLiveTranscodingUser &item);
+      AliEngineLiveTranscodingUser GetTranscodingUser(int index) const;
       void Clear();
       int Count() const;
 
@@ -1185,62 +1320,46 @@ namespace AliRTCSdk
     };
 
     /**
-     * @brief 旁路直播配置
-     */
-    class ALI_RTC_API AliEngineLiveTranscoding{
-    public:
-        AliEngineLiveTranscoding() = default;
-        ~AliEngineLiveTranscoding() = default;
-        int mix_mode = 1; // 0 single stream, 1 multy stream mix
-        StringArray layout_ids;
-        AliEngineTranscodingUserPaneArray user_panes;
-        AliEngineTranscodingLayoutArray layouts;
-        int media_encode;
-        String task_profile;
-        int crop_mode;
-        int background_color;
-        AliEngineTranscodingUserArray subspec_users;
-        int payload_type;
-        int stream_type = 0;  // only for mix_mode 0, 0 original stream(default), 1 audio only, 2 video only
-        String source_type;  // only for mix_mode 0
-        
-        void AddUser(AliEngineTranscodingUser user){
-            bool found = false;
-            auto count = subspec_users.Count();
-            for (int idx = 0; idx < count; idx ++)
-            {
-              if (subspec_users.GetTranscodingUser(idx).user_id == user.user_id)
-              {
-                found = true;
-                break;
-              }
-            }
+    * @brief 旁路模式单路参数
+    */
+    struct AliEngineLiveTranscodingSingleParam
+    {
+        String userId;
+        AliEngineLiveTranscodingStreamType streamType;
+        AliEngineLiveTranscodingSourceType sourceType;
+    };
 
-            if(!found){
-                subspec_users.AddTranscodingUser(user);
-            }
-            
-        }
-        
-        void RemoveUser(AliEngineTranscodingUser user){
-            auto count = subspec_users.Count();
-            for (int idx = 0; idx < count; idx++)
-            {
-              AliEngineTranscodingUser iter = subspec_users.GetTranscodingUser(idx);
-              if (iter.user_id == user.user_id)
-              {
-                subspec_users.RemoveTranscodingUser(iter);
-                break;
-              }
-            }  
-        }
+    /**
+    * @brief 旁路模式混流参数
+    */
+    struct AliEngineLiveTranscodingMixParam
+    {
+        AliEngineLiveTranscodingTaskProfile taskProfile;
+        AliEngineLiveTranscodingEncodeParam encodeParam;
+        AliEngineLiveTranscodingUserArray users;
+        int backgroundColor = 0x000000; //0xRRGGBB
+        AliEngineLiveTranscodingImageArray backgrounds;
+        AliEngineLiveTranscodingImageArray watermarks;
+        AliEngineLiveTranscodingClockWidgetArray clockWidgets;
+        AliEngineLiveTranscodingCropMode cropMode;
+        AliEngineLiveTranscodingMediaProcessMode mediaProcessMode;
+    };
+
+    /**
+    * @brief 旁路模式参数
+    */
+    struct AliEngineLiveTranscodingParam
+    {
+        AliEngineLiveTranscodingMixMode mixMode = AliEngineLiveTranscodingMIX;
+        AliEngineLiveTranscodingSingleParam singleParam;
+        AliEngineLiveTranscodingMixParam mixParam;
     };
 
     /**
      * @brief 滑动配置
      * @note 已废弃使用
      */
-    typedef struct {
+    typedef struct AliEngineScrollViewConfig {
       float fOriginX;
       float fOriginY;
       float width;
@@ -1248,6 +1367,31 @@ namespace AliRTCSdk
       AliEngineRenderMode renderMode{ AliEngineRenderModeAuto };
       AliEngineVideoTrack videoTrack{ AliEngineVideoTrackScreen };
     } AliEngineScrollViewConfig;
+
+    /**
+     * @brief 视频流的状态
+     */
+    typedef enum {
+      AliEngineVideoClose = 0,
+      AliEngineVideoOpen = 1,
+    } AliEngineVideoState;
+
+
+    /**
+     * @brief 触发视频流状态变化的原因
+     */
+    typedef enum {
+      AliEngineVideoChangeByClient = 0,
+      AliEngineVideoChangeByServer = 1,
+    } AliEngineVideoReason;
+
+    /*
+     * @brief 虚拟背景背景图缩放模式
+     */
+    typedef enum {
+        AliEngineBokehScaleModelCrop = 0, /* 等比裁剪 */
+        AliEngineBokehScaleModelFill = 1, /* 填充黑边 */
+    }AliEngineBokehScaleModel;
 
     /**
      * @brief SDK事件回调基础类
@@ -1476,10 +1620,10 @@ namespace AliRTCSdk
         
         /**
          * @brief 视频首包发送回调
-         * @param stream_url 发送视频track
+         * @param streamUrl 发送视频track
          * @param timeCost 耗时
          */
-        virtual void OnFirstVideoPacketSend(AliEngineVideoTrack stream_url, int timeCost) {};
+        virtual void OnFirstVideoPacketSend(AliEngineVideoTrack streamUrl, int timeCost) {};
 
         /**
          * @brief 视频首包接收回调
@@ -1545,7 +1689,7 @@ namespace AliRTCSdk
         virtual void OnUserVideoEnabled(const char* uid, bool isEnable) {}
 
         /**
-         * @brief 用户音频被中断通知（一般用户打电话等音频被抢占场景）
+         * @brief 用户audio被中断通知（一般用户打电话等音频被抢占场景）
          * @param uid audio被中断的用户
          */
         virtual void OnUserAudioInterruptedBegin(const char* uid) {}
@@ -1582,12 +1726,12 @@ namespace AliRTCSdk
         
         /**
          * @brief 当前角色变化通知回调
-         * @param old_role 切换前的角色
-         * @param new_role 切换后的角色
+         * @param oldRole 切换前的角色
+         * @param newRole 切换后的角色
          * @note 调用setClientRole方法切换角色成功时触发此回调
          */
-        virtual void OnUpdateRoleNotify(const AliEngineClientRole old_role,
-                                        const AliEngineClientRole new_role) {}
+        virtual void OnUpdateRoleNotify(const AliEngineClientRole oldRole,
+                                        const AliEngineClientRole newRole) {}
 
         /**
          * @brief 订阅的音频音量回调，其中callid为"0"表示本地推流音量，"1"表示远端混音音量，其他表示远端用户音量
@@ -1603,14 +1747,14 @@ namespace AliRTCSdk
         virtual void OnActiveSpeaker(const char *uid) {}
         
         /**
-         * @brief 伴奏播放回调
+         * @brief 伴奏/音效播放回调
          * @param type 当前播放状态
          * @param errorCode errorCode
          */
         virtual void OnAudioPlayingStateChanged(AliEngineAudioPlayingType type,
                                                 AliEngineAudioPlayingErrorCode errorCode) {}
         /**
-         * @brief 伴奏播放结束回调
+         * @brief 伴奏/音效播放结束回调
          * @param soundId soundId
         */
         virtual void OnAudioEffectFinished(int soundId) {}
@@ -1754,18 +1898,18 @@ namespace AliRTCSdk
 
         /**
          * @brief 旁路推流状态改变回调
-         * @param stream_url 流地址
-         * @param state 推流状态, 参考AliEngineTrascodingLiveStreamStatus
-         * @param err_code 错误码, 参考AliEngineTrascodingLiveStreamErrorCode
+         * @param streamUrl 流地址
+         * @param state 推流状态, 参考AliEngineLiveTranscodingState
+         * @param errCode 错误码, 参考AliEngineLiveTranscodingErrorCode
          */
-        virtual void OnPublishLiveStreamStateChanged(const char* stream_url ,int state ,int err_code){};
+        virtual void OnPublishLiveStreamStateChanged(const char* streamUrl ,AliEngineLiveTranscodingState state ,AliEngineLiveTranscodingErrorCode errCode){};
         
         /**
          * @brief 旁路任务状态改变回调
-         * @param stream_url  流地址
-         * @param state 任务状态, 参考AliEngineTrascodingPublsihTaskStatus
+         * @param streamUrl  流地址
+         * @param state 任务状态, 参考AliEngineTrascodingPublishTaskStatus
          */
-        virtual void OnPublishTaskStateChanged(const char* stream_url, int state){};
+        virtual void OnPublishTaskStateChanged(const char* streamUrl, AliEngineTrascodingPublishTaskStatus state){};
 
         /**
          * @brief 跨频道连麦状态变化
@@ -1780,6 +1924,15 @@ namespace AliRTCSdk
          * @param state 状态码，参考AliEngineChannelRelayEvent
          */
         virtual void OnChannelRelayEvent(int state){};
+        
+        /**
+         * @brief 用户remote video change通知
+         * @param uid 需要被通知的用户
+         * @param track 变化视频track
+         * @param state 视频状态的类型
+         * @param reason 触发状态变化的原因
+         */
+        virtual void OnRemoteVideoChanged(const char* uid, AliEngineVideoTrack trackType, const AliEngineVideoState state, const AliEngineVideoReason reason) {};
     };
 
     /**
@@ -2108,12 +2261,12 @@ namespace AliRTCSdk
  
         /**
          * @brief 设置视频流附加属性
-         * @param video_track 视频流类型
+         * @param videoTrack 视频流类型
          * @param attr 流属性
          * @return 0为成功，非0失败
          * @note 已废弃使用
         */
-        virtual int SetPublishVideoStreamAttribute(AliEngineVideoTrack video_track, const char* attr) = 0;
+        virtual int SetPublishVideoStreamAttribute(AliEngineVideoTrack videoTrack, const char* attr) = 0;
 
         /**
          * @brief 设置本地播放的指定远端用户音量
@@ -2150,12 +2303,12 @@ namespace AliRTCSdk
         /**
          * @brief 添加水印
          * @param track 数据流类型
-         * @param image_url 水印图片路径
+         * @param imageUrl 水印图片路径
          * @param options 水印配置
          * @return 0:成功，-1:失败
          */
         virtual int AddVideoWatermark(AliEngineVideoTrack track,
-                                      const char* image_url,
+                                      const char* imageUrl,
                                       const AliEngineWaterMarkConfig &options) = 0;
         /**
          * @brief 清理对应数据流水印信息
@@ -2202,10 +2355,10 @@ namespace AliRTCSdk
 
         /**
          * @brief 设置音频Profile
-         * @param audio_profile 音频采集/编码模式参数，参考AliEngineAudioProfile
-         * @return audio_scene 音频场景模式参数，参考AliEngineAudioScenario
+         * @param audioProfile 音频采集/编码模式参数，参考AliEngineAudioProfile
+         * @return audioScene 音频场景模式参数，参考AliEngineAudioScenario
         */
-        virtual int SetAudioProfile(int audio_profile, int audio_scene) = 0;
+        virtual int SetAudioProfile(int audioProfile, int audioScene) = 0;
         
         /**
          * @brief 设置音量类型
@@ -2233,7 +2386,7 @@ namespace AliRTCSdk
          * @brief 获取当前摄像头方向
          * @return 0为成功，非0失败
          */
-        virtual AliEngineCameraDirection getCurrentCameraDirection() = 0;
+        virtual AliEngineCameraDirection GetCurrentCameraDirection() = 0;
 
         /**
          * @brief 设置摄像头缩放比例
@@ -2293,12 +2446,24 @@ namespace AliRTCSdk
 
         /**
          * @brief 开启音频采集
+         * @note 此接口可以控制提前打开音频采集，如果不设置，则SDK会在合适的时机在打开音频采集
+         * @note 调用此接口后，离会后采集设备保持开启状态
          * @return 0为成功，非0失败
          */
         virtual int StartAudioCapture() = 0;
         
         /**
+         * @brief 开启音频采集
+         * @note 此接口可以控制提前打开音频采集，如果不设置，则SDK会在合适的时机在打开音频采集
+         * @param keepAlive true: 离会后采集设备保持开启状态；false: 离会后采集设备关闭
+         * @return 0为成功，非0失败
+         */
+        virtual int StartAudioCapture(bool keepAlive) = 0;
+        
+        /**
          * @brief 关闭音频采集
+         * @note 此接口可以控制关闭音频采集，与startAudioCapture对应
+         * @note 调用此接口后，入会后、离会再入会，采集设备保持关闭状态
          * @return 0为成功，非0失败
          */
         virtual int StopAudioCapture() = 0;
@@ -2454,7 +2619,7 @@ namespace AliRTCSdk
         virtual int SetAudioEffectReverbParamType(const AliEngineAudioEffectReverbParamType& type,
                                                   float value) = 0;
 
-#if defined(__ANDROID__) || (defined(__APPLE__) && TARGET_OS_IOS)
+#if defined(__ANDROID__) || defined(__APPLE__) || defined(_WIN32)
         /**
          * @brief 开始混音
          * @param onlyLocalPlay 是否只本地播放
@@ -2524,6 +2689,7 @@ namespace AliRTCSdk
         /**
          * @brief 获取伴奏文件时长, 单位为ms
          * @return 返回0为成功，其他返回错误码
+         * @note OnAudioPlayingStateChanged回调播放状态为AliEngineAudioPlayingStarted后获取伴奏时长有效
          */
         virtual int GetAudioAccompanyDuration() = 0;
 
@@ -2535,10 +2701,10 @@ namespace AliRTCSdk
 
         /**
          * @brief 设置音频文件的播放位置
-         * @param pos_ms 进度条位置，单位为毫秒
+         * @param pos 进度条位置，单位为毫秒
          * @return 进度条位置，单位为毫秒
          */
-        virtual int SetAudioAccompanyPosition(int pos_ms) = 0;
+        virtual int SetAudioAccompanyPosition(int pos) = 0;
 
         /**
          * @brief 预加载音效文件
@@ -2613,13 +2779,13 @@ namespace AliRTCSdk
         virtual int GetAudioEffectPlayoutVolume(unsigned int soundId) = 0;
         
         /**
-         * @brief 设置所有音效本地播放音量
+         * @brief 设置所有音效推流音量
          * @param volume 混音音量 0~100
          * @return 返回0为成功，其他返回错误码
         */
         virtual int SetAllAudioEffectsPublishVolume(int volume) = 0;
         /**
-         * @brief 设置所有音效推流音量
+         * @brief 设置所有音效本地播放音量
          * @param volume 混音音量 0~100
          * @return 返回0为成功，其他返回错误码
         */
@@ -2650,7 +2816,10 @@ namespace AliRTCSdk
          * @return 返回0为成功，其他返回错误码
          */
         virtual int ResumeAllAudioEffects() = 0;
+
+#endif
         
+#if defined(__ANDROID__) || (defined(__APPLE__) && TARGET_OS_IOS)
         /**
          * @brief 启用耳返
          * @param enable 是否启用耳返
@@ -2771,7 +2940,7 @@ namespace AliRTCSdk
          * @param transcoding 推流所需参数，详见AliRtcLiveTranscoding
          * @return 返回0为成功，其他返回错误码
         */
-        virtual int StartPublishLiveStream(const String& streamURL, const AliEngineLiveTranscoding &transcoding) = 0;
+        virtual int StartPublishLiveStream(const String& streamURL, const AliEngineLiveTranscodingParam &transcoding) = 0;
         
         /**
          * @brief 更新旁路直播相关参数
@@ -2779,7 +2948,7 @@ namespace AliRTCSdk
          * @param transcoding 推流所需参数，详见AliRtcLiveTranscoding
          * @return 返回0为成功，其他返回错误码
         */
-        virtual int UpdatePublishLiveStream(const String& streamURL, const AliEngineLiveTranscoding &transcoding) = 0;
+        virtual int UpdatePublishLiveStream(const String& streamURL, const AliEngineLiveTranscodingParam &transcoding) = 0;
         
         /**
          * @brief 停止旁路直播
@@ -2788,6 +2957,13 @@ namespace AliRTCSdk
         */
         virtual int StopPublishLiveStream(const String& streamURL) = 0;
 
+        /**
+         * @brief 获得旁路直播状态
+         * @param streamURL 推流地址
+         * @return 返回AliEngineLiveTranscodingState
+        */
+        virtual AliEngineLiveTranscodingState GetPublishLiveStreamState(const String& streamURL) = 0;
+        
         /**
          * @brief 设置直播拉流窗口及渲染参数
          * @param config 包含了窗口以及渲染方式
@@ -2997,39 +3173,65 @@ namespace AliRTCSdk
         /** plugin api*/
         /**
          * @brief 添加音视频处理算法插件
-         * @param module_name 插件包名
-         * @param plugin_name 插件类名
-         * @param plugin_type 插件类型
-         * @param op_type 调用init函数传入插件
+         * @param moduleName 插件包名
+         * @param pluginName 插件类名
+         * @param pluginType 插件类型
+         * @param opType 调用init函数传入插件
          * @param option 通过init函数传入插件
          * @return return >0 为pluginID，return<0 Failure
         */
-        virtual int32_t EnablePlugin(const char* module_name, const char* plugin_name, uint32_t plugin_type, uint32_t op_type, const void* option) = 0;
+        virtual int EnablePlugin(const char* moduleName, const char* pluginName, unsigned int pluginType, unsigned int opType, const void* option) = 0;
         
         /**
          * @brief 移除音视频处理算法插件
-         * @param plugin_id 插件ID
+         * @param pluginId 插件ID
          * @return return >0 为pluginID，return<0 Failure
         */
-        virtual int32_t RemovePlugin(uint32_t plugin_id) = 0;
+        virtual int RemovePlugin(unsigned int pluginId) = 0;
                  
         /**
          * @brief 设置插件参数
-         * @param plugin_id 插件ID,由 enablePlugin接口 返回
-         * @param op_type 参数
+         * @param pluginId 插件ID,由 enablePlugin接口 返回
+         * @param opType 参数
          * @param option 参数值
          * @return return = 0 Success
         */
-        virtual int32_t SetPluginOption(uint32_t plugin_id, uint32_t op_type, const void* option) = 0;
+        virtual int SetPluginOption(unsigned int pluginId, unsigned int opType, const void* option) = 0;
                  
         /**
          * @brief 获取插件设置
-         * @param plugin_id 插件ID,由 enablePlugin接口 返回
-         * @param op_type 参数
+         * @param pluginId 插件ID,由 enablePlugin接口 返回
+         * @param opType 参数
          * @param option 查找结果
          * @return return = 0 Success
         */
-        virtual int32_t GetPluginOption(uint32_t plugin_id, uint32_t op_type, void* option) = 0;
+        virtual int GetPluginOption(unsigned int pluginId, unsigned int opType, void* option) = 0;
+        
+        /**
+         * @brief 展示用户Debug数据
+         * @param view 对外展示的View，由客户传入，显示样式由客户指定
+         * @param showType 展示类型:0: 不显示 1.音频 2.视频 3.网络 4.全部；另外可以传入特殊的值来展示
+         * @param uid 对应用户ID
+         * @return return = 0 Success
+        */
+        virtual int ShowDebugView(void* view,const AliEngineShowDebugViewType showType,const char *uid) = 0;
+        /**
+         * @brief 开启/关闭虚拟背景替换功能：需要对应PluginBokeh 库添加
+         * @param enable 是否开启
+         * @param path 本地图片路径，支持 JPG，png 格式
+         * @param model 背景图缩放模式，裁剪或缩放
+         * @return 0 Success 非0 Failure
+        */
+        virtual int EnableBackgroundExchange(bool enable, const char* path,const AliEngineBokehScaleModel model) = 0;
+        
+
+        /**
+         * @brief 开启/关闭虚拟背景虚化功能：需要对应PluginBokeh 库添加，背景替换与虚化不同时出现
+         * @param enable 是否开启
+         * @param degree  虚化程度 [0-100]
+         * @return 0 Success 非0 Failure
+        */
+        virtual int EnableBackgroundBlur(bool enable, uint32_t degree) = 0;
     };
     /// The declarations listed above are subject to change without notice.
 }

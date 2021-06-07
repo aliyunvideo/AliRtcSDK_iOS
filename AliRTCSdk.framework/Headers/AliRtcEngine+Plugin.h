@@ -56,8 +56,16 @@ enum AliRtcPluginOperationType{
   AliRtcPluginRender,              /* 渲染 */
 };
 
-
+#pragma mark - 接口主类
+/// @addtogroup AliRtc_ios AliRtcEngine
+/// AliRTC功能的插件扩展
+/// @{
 @interface AliRtcEngine(Plugin)
+
+/**
+ * @name 插件接口
+ * @{
+ */
 
 /**
  * @brief SDK添加音视频处理算法插件
@@ -91,4 +99,9 @@ enum AliRtcPluginOperationType{
  * @return return=0 Success
 */
 - (int32_t)getPluginOption:(uint32_t)pluginId opType:(uint32_t)opType option:(void* _Nonnull )option;
+
+/** @} */
+
 @end
+
+/** @} */

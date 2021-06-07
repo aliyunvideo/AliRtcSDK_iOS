@@ -1,38 +1,39 @@
-/* Copyright (c) 2018, Alibaba Inc.
+/*
+ * @brief This header file is part of Alibaba RTC engine sdk for iOS system
+ *
+ * @copyright Copyright (c) 2021, Alibaba Inc.
  * All rights reserved
- */
-
-/* This header file is part of Alibaba RTC engine sdk for
- * Mac system.
  */
 
 #import <UIKit/UIKit.h>
 #import <UIKit/UIImage.h>
 
 /**
- * @brief 视频流类型
+ * @defgroup AliRtcDef_ios 关键类型定义
+ * AliRTC功能的关键类型定义
+ * @{
+ */
 
- - AliRtcVideoTrackNo: 无摄像头和屏幕共享
- - AliRtcVideoTrackCamera: 摄像头
- - AliRtcVideoTrackScreen: 屏幕共享
- - AliRtcVideoTrackBoth: 摄像头+屏幕共享
+/**
+ * @brief 视频流类型
  */
 typedef NS_ENUM(NSUInteger, AliRtcVideoTrack) {
+    /** 无摄像头和屏幕共享 */
     AliRtcVideoTrackNo     = 0,
+    /** 摄像头 */
     AliRtcVideoTrackCamera = 1,
+    /** 屏幕共享 */
     AliRtcVideoTrackScreen = 2,
+    /** 摄像头+屏幕共享 */
     AliRtcVideoTrackBoth   = 3,
 };
 
 /**
  * @brief 音频流类型
-
- - AliRtcAudioTrackNo: 无麦克风
- - AliRtcAudioTrackMic: 麦克风
  */
 typedef NS_ENUM(NSUInteger, AliRtcAudioTrack) {
-    AliRtcAudioTrackNo   = 0,
-    AliRtcAudioTrackMic  = 1,
+    AliRtcAudioTrackNo   = 0, ///< 无麦克风
+    AliRtcAudioTrackMic  = 1, ///< 麦克风
 };
 
 
@@ -111,6 +112,7 @@ typedef NS_ENUM(NSInteger, AliRtcAudioScenario) {
     AliRtcSceneEducationMode = 0x0100,
     AliRtcSeneMediaMode      = 0x0200,
     AliRtcSceneMusicMode     = 0x0300,
+    AliRtcSceneChatroomMode  = 0x0400,
 };
 
 /**
@@ -132,10 +134,7 @@ typedef NS_ENUM(NSUInteger, AliRtcRenderMode) {
  * @brief Log级别
  */
 typedef NS_ENUM(NSUInteger, AliRtcLogLevel) {
-    AliRtcLogLevelDump,
-    AliRtcLogLevelDebug,
-    AliRtcLogLevelVerbose,
-    AliRtcLogLevelInfo,
+    AliRtcLogLevelInfo = 3,
     AliRtcLogLevelWarn,
     AliRtcLogLevelError,
     AliRtcLogLevelFatal,
@@ -219,10 +218,10 @@ typedef NS_ENUM(NSInteger, AliRtcOrientationMode) {
  - AliRtcAudioSessionOperationRestrictionDeactivateSession: SDK不能关闭AVAudioSession的活动状态，离开频道时，AVAudioSession依然处于活动状态
  */
 typedef NS_ENUM(NSInteger, AliRtcAudioSessionOperationRestriction) {
-    AliRtcAudioSessionOperationRestrictionNone = 0,
-    AliRtcAudioSessionOperationRestrictionSetCategory = 1,
-    AliRtcAudioSessionOperationRestrictionConfigureSession = 2,
-    AliRtcAudioSessionOperationRestrictionDeactivateSession = 3
+    AliRtcAudioSessionOperationRestrictionNone              = 0,
+    AliRtcAudioSessionOperationRestrictionSetCategory       = 1 << 0,
+    AliRtcAudioSessionOperationRestrictionConfigureSession  = 1 << 1,
+    AliRtcAudioSessionOperationRestrictionDeactivateSession = 1 << 2,
 };
 
 
@@ -304,7 +303,6 @@ typedef NS_ENUM(NSInteger, AliRtcVideoFormat) {
 
  - AliRtcBufferType_Raw_Data: YUV裸数据
  - AliRtcBufferType_CVPixelBuffer: CVPixelBuffer数据
- - AliRtcBufferType_Texture: 纹理数据
  */
 typedef NS_ENUM(NSInteger, AliRtcBufferType) {
     AliRtcBufferType_Raw_Data = 0,
@@ -474,6 +472,7 @@ typedef NS_ENUM(NSInteger, AliRtcRenderMirrorMode) {
  - AliRtcAudioPlayingEnded: 播放完毕
  - AliRtcAudioPlayingBuffering: 正在缓冲
  - AliRtcAudioPlayingBufferingEnd: 缓冲结束
+ - AliRtcAudioPlayingFailed: 播放失败
  */
 typedef NS_ENUM(NSInteger, AliRtcAudioPlayingStateCode) {
     AliRtcAudioPlayingStarted   = 100,
@@ -574,6 +573,33 @@ typedef NS_ENUM(NSInteger, AliRtcVideoObserPosition) {
     AliRtcPositionPostCapture = 1 << 0,       // 采集视频数据，对应输出回调onCaptureVideoSample
     AliRtcPositionPreRender = 1 << 1,         // 渲染视频数据，对应输出回调onRemoteVideoSample
     AliRtcPositionPreEncoder = 1 << 2,        // 编码前视频数据，对应输出回调onPreEncodeVideoSample
+};
+  
+/**
+ * @brief 视频输出宽度对齐方式
+ * AliRtcAlignmentDefault：保持原有视频宽度(默认值)
+ * AliRtcAlignmentEven：宽度偶数对齐
+ * AliRtcAlignment4：宽度是4的倍数
+ * AliRtcAlignment8：宽度是8的倍数
+ * AliRtcAlignment16：宽度是16的倍数
+ */
+typedef enum {
+  AliRtcAlignmentDefault = 0,
+  AliRtcAlignmentEven = 1,
+  AliRtcAlignment4 = 2,
+  AliRtcAlignment8 = 3,
+  AliRtcAlignment16 = 4,
+} AliRtcVideoObserAlignment;
+
+/**
+ * @brief 用户离线原因
+ */
+typedef NS_ENUM(NSInteger, AliRtcShowDebugViewType){
+    AliRtcShowTypeNone     = 0,  /* 不显示 */
+    AliRtcShowTypeAudio    = 1,  /* 音频 */
+    AliRtcShowTypeVideo    = 2,  /* 视频 */
+    AliRtcShowTypeNetwork  = 3,  /* 网络 */
+    AliRtcShowTypeAll      = 4,  /* 全部 */
 };
 
 /**
@@ -761,16 +787,10 @@ typedef NS_ENUM(NSInteger, AliRtcFeedbackType) {
 /**
  * @brief 旁路推流LiveStream状态
  */
-typedef NS_ENUM(NSInteger, AliRtcTrascodingLiveStreamStatus) {
-    AliRtcTrascodingStatusStart         = 0, // 任务开始
-    AliRtcTrascodingStatusUpdate        = 1, // 任务更新
-    AliRtcTrascodingStatusStop          = 2, // 任务停止
-    AliRtcTrascodingStatusEnd           = 3, // 推流未开始或已结束
-    AliRtcTrascodingStatusConnect       = 4, // 正在连接推流服务器和 RTMP 服务器
-    AliRtcTrascodingStatusRunning       = 5, // 推流正在进行
-    AliRtcTrascodingStatusRecovering    = 6, // 正在恢复推流
-    AliRtcTrascodingStatusFailed        = 7, // 推流失败
-    AliRtcTrascodingStatusUnknow        = 8, // 未知错误
+typedef NS_ENUM(NSInteger, AliRtcTrascodingLiveTaskStatus) {
+    AliRtcTrascodingLiveTaskStatusStart = 0,                /* 任务开始 */
+    AliRtcTrascodingLiveTaskStatusUpdate = 1,               /* 任务更新 */
+    AliRtcTrascodingLiveTaskStatusStop = 2,                 /* 任务已停止 */
 };
 
 /**
@@ -877,8 +897,13 @@ typedef struct {
     long long call_duration;     // 通话时长(s)
     float cpu_usage;            // 进程CPU使用量(%)
     float systemCpuUsage;       // 系统CPU使用量(%)
-    long long sent_loss_rate;      // 客户端到服务器的丢包率(%)
-    long long lastmile_delay;      // 客户端到服务器的延迟(ms)
+    long long sent_loss_rate;     // 客户端到服务器的丢包率(%)
+    long long sent_loss_pkts;     // 客户端到服务器的丢包数
+    long long sent_expected_pkts; // 客户端到服务器的总包数
+    long long rcvd_loss_rate;     // 客户端到服务器的下行丢包率（%）
+    long long rcvd_loss_pkts;     // 客户端到服务器的下行丢包数
+    long long rcvd_expected_pkts; // 客户端到服务器的下行总包数
+    long long lastmile_delay;     // 客户端到服务器的延迟(ms)
 } AliRtcStats;
 
 
@@ -887,10 +912,14 @@ typedef struct {
  */
 @interface AliRtcLocalVideoStats : NSObject
 
-@property (nonatomic, assign) AliRtcVideoTrack track; // 视频流track类型
-@property (nonatomic, assign) unsigned int sent_bitrate;  // 发送码率
-@property (nonatomic, assign) unsigned int sent_fps;      // 发送帧率
-@property (nonatomic, assign) unsigned int encode_fps;    // 编码帧率
+/** 视频流track类型 */
+@property (nonatomic, assign) AliRtcVideoTrack track;
+/** 发送码率 */
+@property (nonatomic, assign) unsigned int sent_bitrate;
+/** 发送帧率 */
+@property (nonatomic, assign) unsigned int sent_fps;
+/** 编码帧率 */
+@property (nonatomic, assign) unsigned int encode_fps;
 
 @end
 
@@ -932,6 +961,8 @@ typedef struct {
 @property (nonatomic, assign) unsigned int audio_loss_rate;    // 回调周期内的音频丢帧率
 @property (nonatomic, assign) unsigned int rcvd_bitrate;       // 接收流的瞬时码率（Kbps）
 @property (nonatomic, assign) unsigned int total_frozen_times; // 远端用户加入频道后音频卡顿的累计时长 (ms)。
+@property (nonatomic, assign) unsigned int network_transport_delay; // 发送端到接收端的网络延时（ms)
+@property (nonatomic, assign) unsigned int jitter_buffer_delay; // 接受端到网络抖动缓存的网络延时（ms)
 
 @end
 
@@ -1080,108 +1111,217 @@ typedef struct {
 
 @end
 
-/**
- * @brief 旁路直播用户信息
-*/
-@interface AliRtcTranscodingUser : NSObject
-
-@property (nonatomic, assign) NSString *_Nonnull userId;
-
-@end
+typedef NS_ENUM(NSUInteger, AliRtcLiveTranscodingDisplayType) {
+    NOT_DISPLAY = 0,
+    ALWAYS = 1,
+    WHEN_NO_VIDEO = 2
+};
 
 /**
- * @brief 旁路直播水印配置
+* @brief 旁路直播图片
 */
-@interface AliRtcTranscodingImage : NSObject
-
-@property (nonatomic, copy) NSString *_Nonnull url;
+@interface AliRtcLiveTranscodingImage : NSObject
+@property (nonatomic, copy) NSString *_Nullable url;
 @property (nonatomic, assign) float alpha;
-@property (nonatomic, assign) int display;
-@property (nonatomic, assign) float x;
-@property (nonatomic, assign) float y;
-@property (nonatomic, assign) float width;
-@property (nonatomic, assign) float height;
-@property (nonatomic, assign) int zorder;
-
+@property (nonatomic, assign) AliRtcLiveTranscodingDisplayType display;
+@property (nonatomic, assign) int x;
+@property (nonatomic, assign) int y;
+@property (nonatomic, assign) int width;
+@property (nonatomic, assign) int height;
+@property (nonatomic, assign) int zOrder;
 @end
 
-/**
- * @brief 旁路直播文字配置
-*/
-@interface AliRtcTranscodingText : NSObject
+typedef NS_ENUM(NSUInteger, AliRtcLiveTranscodingFontType) {
+  NOTO_SERIF_CJKSC_REGULAR = 0,
+  ALIBABA_PUHUITI_REGULAR = 1,
+  ALIBABA_PUHUITI_BOLD = 2,
+  ALIBABA_PUHUITI_Heavy = 3,
+  ALIBABA_PUHUITI_LIGHT = 4,
+  ALIBABA_PUHUITI_MEDIUM = 5
+};
 
-@property (nonatomic, copy) NSString *_Nonnull text;
-@property (nonatomic, assign) float x;
-@property (nonatomic, assign) float y;
-@property (nonatomic, assign) float width;
-@property (nonatomic, assign) float height;
-@property (nonatomic, assign) int zorder;
+/**
+* @brief 旁路直播文字格式
+*/
+@interface AliRtcLiveTranscodingText : NSObject
+@property (nonatomic, copy) NSString *_Nullable text;
+@property (nonatomic, assign) int x;
+@property (nonatomic, assign) int y;
+@property (nonatomic, assign) int zOrder;
+@property (nonatomic, assign) AliRtcLiveTranscodingFontType fontType;
 @property (nonatomic, assign) int fontSize;
-
+@property (nonatomic, assign) int fontColor;//0xRRGGBB
 @end
 
 /**
- * @brief 旁路直播用户窗格信息
+* @brief 旁路直播输入类型
 */
-@interface AliRtcTranscodingUserPane : NSObject
+typedef NS_ENUM(NSUInteger, AliRtcLiveTranscodingSegmentType) {
+    AliRtcLiveTranscodingNoBody = 0, /* 无人像分割 */
+    AliRtcLiveTranscodingBody = 1    /* 人像分割 */
+};
 
-@property (nonatomic, assign) int paneId;
-@property (nonatomic, copy) NSString *_Nonnull userId;
-@property (nonatomic, copy) NSString *_Nonnull sourceType;
-
-@end
+/**
+* @brief 旁路直播输入类型
+*/
+typedef NS_ENUM(NSUInteger, AliRtcLiveTranscodingSourceType) {
+    AliRtcLiveTranscodingCamera = 0,
+    AliRtcLiveTranscodingShareScreen = 1
+};
 
 /**
  * @brief 旁路直播用户自定义窗格信息
 */
-
-@interface AliRtcTranscodingPane : NSObject
-
-@property (nonatomic, assign) int paneId;
-@property (nonatomic, assign) int majorPane;
-@property (nonatomic, assign) float x;
-@property (nonatomic, assign) float y;
-@property (nonatomic, assign) float width;
-@property (nonatomic, assign) float height;
-@property (nonatomic, assign) int zorder;
+@interface AliRtcLiveTranscodingPane : NSObject
+@property (nonatomic, assign) int x;
+@property (nonatomic, assign) int y;
+@property (nonatomic, assign) int width;
+@property (nonatomic, assign) int height;
+@property (nonatomic, assign) int zOrder;
 @property (nonatomic, copy) NSString *_Nonnull userId;
-@property (nonatomic, copy) NSString *_Nonnull sourceType;
-@property (nonatomic, assign) int segmentType;
+@property (nonatomic, assign) AliRtcLiveTranscodingSourceType sourceType;
+@property (nonatomic, assign) AliRtcLiveTranscodingSegmentType segmentType;
+@property (nonatomic, copy) NSArray<AliRtcLiveTranscodingImage *> *_Nullable images;
+@property (nonatomic, copy) NSArray<AliRtcLiveTranscodingText *> *_Nullable texts;
 
 @end
 
+/** 旁路直播 **/
+typedef NS_ENUM(NSUInteger, AliRtcLiveTranscodingState) {
+    AliRtcLiveTranscodingState_IDLE = 0,
+    AliRtcLiveTranscodingState_CONNNECT = 1,
+    AliRtcLiveTranscodingState_RUNNING = 2,
+    AliRtcLiveTranscodingState_RECOVERING = 3,
+    AliRtcLiveTranscodingState_FAILURE = 4,
+    AliRtcLiveTranscodingState_END = 5
+};
+
 /**
- * @brief 旁路直播用户自定义layout信息
+* @brief 旁路模式
 */
+typedef NS_ENUM(NSUInteger, AliRtcLiveTranscodingMixMode) {
+    AliRtcLiveTranscodingSINGLE = 0,  /* 单路模式 */
+    AliRtcLiveTranscodingMIX = 1      /* 混流模式 */
+};
 
-@interface AliRtcTranscodingLayout : NSObject
+/**
+* @brief 旁路直播转推流模式
+*/
+typedef NS_ENUM(NSUInteger, AliRtcLiveTranscodingStreamType) {
+    AliRtcLiveTranscodingOrigin = 0,
+    AliRtcLiveTranscodingAudio = 1,
+    AliRtcLiveTranscodingVideo = 2
+};
 
-@property (nonatomic, assign) int audioMixCount;
-@property (nonatomic, copy) NSArray<AliRtcTranscodingPane *> *_Nullable panes;
+/**
+* @brief 旁路直播媒体处理模式
+*/
+typedef NS_ENUM(NSUInteger, AliRtcLiveTranscodingMediaProcessMode) {
+    AliRtcLiveTranscodingNormal = 0, /*通用模式*/
+    AliRtcLiveTranscodingVirtualBackground = 1 /*虚拟背景模式*/
+};
 
+/**
+* @brief 旁路直播裁剪模式
+*/
+typedef NS_ENUM(NSUInteger, AliRtcLiveTranscodingCropMode) {
+    AliRtcLiveTranscodingCrop = 1,
+    AliRtcLiveTranscodingFill = 2
+};
+
+/**
+* @brief 旁路直播时钟格式
+*/
+@interface AliRtcLiveTranscodingClockWidget : NSObject
+@property (nonatomic, assign) int x;
+@property (nonatomic, assign) int y;
+@property (nonatomic, assign) AliRtcLiveTranscodingFontType fontType;
+@property (nonatomic, assign) int fontSize;
+@property (nonatomic, assign) int fontColor;  // 0xRRGGBB
+@property (nonatomic, assign) int zOrder;
+@end
+
+/**
+* @brief 旁路直播音频采样
+*/
+typedef NS_ENUM(NSUInteger, AliRtcLiveTranscodingAudioSampleRate) {
+    AliRtcLiveTranscoding_HZ_48000 = 0,
+    AliRtcLiveTranscoding_HZ_44100 = 1,
+    AliRtcLiveTranscoding_HZ_32000 = 2,
+    AliRtcLiveTranscoding_HZ_16000 = 3,
+    AliRtcLiveTranscoding_HZ_8000 = 4
+};
+
+/**
+* @brief 旁路直播自定义编码参数
+*/
+@interface AliRtcLiveTranscodingEncodeParam : NSObject
+@property (nonatomic, assign) int videoWidth; //(0-1920]
+@property (nonatomic, assign) int videoHeight; //(0-1920]
+@property (nonatomic, assign) int videoFramerate; //[1,60]
+@property (nonatomic, assign) int videoBitrate; //[1kbps,10000kbps]
+@property (nonatomic, assign) int videoGop; //[1,60]
+@property (nonatomic, assign) AliRtcLiveTranscodingAudioSampleRate audioSamplerate;
+@property (nonatomic, assign) int audioBitrate; //[8kbps,500kbps]
+@property (nonatomic, assign) int audioChannels; //[1,2]
+@end
+
+/**
+* @brief 旁路直播计费规格
+*/
+typedef NS_ENUM(NSUInteger, AliRtcLiveTranscodingTaskProfile) {
+    AliRtcLiveTranscoding_Profile_1IN_1080P = 0,
+    AliRtcLiveTranscoding_Profile_1IN_720P = 1,
+    AliRtcLiveTranscoding_Profile_1IN_360P = 2,
+    AliRtcLiveTranscoding_Profile_2IN_1080P = 3,
+    AliRtcLiveTranscoding_Profile_2IN_720P = 4,
+    AliRtcLiveTranscoding_Profile_2IN_360P = 5,
+    AliRtcLiveTranscoding_Profile_4IN_1080P = 6,
+    AliRtcLiveTranscoding_Profile_4IN_720P = 7,
+    AliRtcLiveTranscoding_Profile_4IN_360P = 8,
+    AliRtcLiveTranscoding_Profile_9IN_1080P = 9,
+    AliRtcLiveTranscoding_Profile_9IN_720P = 10,
+    AliRtcLiveTranscoding_Profile_9IN_360P = 11,
+    AliRtcLiveTranscoding_Profile_12IN_1080P = 12,
+    AliRtcLiveTranscoding_Profile_12IN_720P = 13,
+    AliRtcLiveTranscoding_Profile_12IN_360P = 14,
+    AliRtcLiveTranscoding_Profile_16IN_1080P = 15,
+    AliRtcLiveTranscoding_Profile_16IN_720P = 16,
+    AliRtcLiveTranscoding_Profile_16IN_360P = 17,
+    AliRtcLiveTranscoding_Profile_Mixed = 9999 // only audio
+};
+
+/**
+* @brief 旁路模式单路参数
+*/
+@interface AliRtcLiveTranscodingSingleParam : NSObject
+@property (nonatomic, copy) NSString *_Nullable userId;
+@property (nonatomic, assign) AliRtcLiveTranscodingStreamType streamType;
+@property (nonatomic, assign) AliRtcLiveTranscodingSourceType sourceType;
+@end
+
+/**
+* @brief 旁路模式混流参数
+*/
+@interface AliRtcLiveTranscodingMixParam : NSObject
+@property (nonatomic, assign) AliRtcLiveTranscodingTaskProfile taskProfile;
+@property (nonatomic, strong) AliRtcLiveTranscodingEncodeParam *_Nullable encodeParam;
+@property (nonatomic, strong) NSArray<AliRtcLiveTranscodingPane *> *_Nullable users;
+@property (nonatomic, assign) int backgroundColor; //0xRRGGBB
+@property (nonatomic, strong) NSArray<AliRtcLiveTranscodingImage *> *_Nullable backgrounds;
+@property (nonatomic, strong) NSArray<AliRtcLiveTranscodingImage *> *_Nullable watermarks;
+@property (nonatomic, strong) NSArray<AliRtcLiveTranscodingClockWidget *> *_Nullable clockWidgets;
+@property (nonatomic, assign) AliRtcLiveTranscodingCropMode cropMode;
+@property (nonatomic, assign) AliRtcLiveTranscodingMediaProcessMode mediaProcessMode;
 @end
 
 /**
  * @brief 旁路直播配置
 */
-@interface AliRtcLiveTranscoding : NSObject
-
-@property (nonatomic, assign) int mixMode;  // 0 single stream, 1 multy stream
-@property (nonatomic, copy) NSArray<NSString *> *_Nullable layoutIds;
-@property (nonatomic, strong) NSMutableArray<AliRtcTranscodingUser *> *_Nullable subSpecUsers;
-@property (nonatomic, copy) NSArray<AliRtcTranscodingUserPane *> *_Nullable userPanes;
-@property (nonatomic, copy) NSArray<AliRtcTranscodingLayout *> *_Nullable layouts;
-@property (nonatomic, copy) NSString *_Nullable taskProfile;
-@property (nonatomic, strong) UIColor *_Nullable backgroundColor;
-@property (nonatomic, assign) int mediaEncode;
-@property (nonatomic, assign) int cropMode;
-@property (nonatomic, assign) int streamType;  // 0 original stream, 1 audio only, 2 video only 
-@property (nonatomic, copy) NSString *_Nullable sourceType;
-@property (nonatomic, copy) NSString *_Nullable externalParam;
-
-- (void)addUser:(AliRtcTranscodingUser *_Nonnull)user;
-- (void)removeUser:(AliRtcTranscodingUser *_Nonnull)user;
-
+@interface AliRtcLiveTranscodingParam : NSObject
+@property (nonatomic, assign) AliRtcLiveTranscodingMixMode mixMode;
+@property (nonatomic, strong) AliRtcLiveTranscodingSingleParam* _Nullable singleParam;
+@property (nonatomic, strong) AliRtcLiveTranscodingMixParam* _Nullable mixParam;
 @end
 
 /**
@@ -1209,9 +1349,30 @@ typedef struct {
 @property (nonatomic, assign) AliRtcRotationMode rotationMode;
 @end
 
+/**
+ * @brief 视频状态
+ */
+typedef NS_ENUM(NSInteger, AliRtcVideoState){
+    AliRtcVideoClose     = 0,  /* 视频关闭 */
+    AliRtcVideoOpen    = 1,  /* 视频打开 */
+};
+
+/**
+ * @brief 视频状态变化原因
+ */
+typedef NS_ENUM(NSInteger, AliRtcVideoReason){
+    AliRtcVideoChangeByClient     = 0,  /* 由客户端触发 */
+    AliRtcVideoChangeByServer    = 1,  /* 由服务器触发 */
+};
+
+/** @} AliRtcDef_ios */
 
 #pragma mark - 回调
-
+/**
+ * @defgroup AliRtcEngineDelegate_ios AliRtcEngineDelegate
+ * AliRTC功能的事件回调接口
+ * @{
+ */
 @protocol AliRtcEngineDelegate <NSObject>
 @optional
 
@@ -1481,11 +1642,24 @@ typedef struct {
 - (void)onActiveSpeaker:(NSString *_Nonnull)uid;
 
 /**
+ * @brief 视频输出数据是否由用户来获取
+ * @return true, 用户获取；false（默认）, sdk向外抛
+ */ 
+- (BOOL)onGetIfUserFetchObserverData;
+
+/**
  * @brief 视频数据输出格式
  * @return 期望视频输出格式
  * @note 在注册registerVideoSampleObserver后触发回调，应用可返回期望输出的视频数据格式，默认返回AliRtcYUV420
  */
 - (AliRtcVideoFormat)onGetVideoFormatPreference;
+  
+ /**
+ * @brief 视频数据输出对齐方式
+ * @return 期望视频数据对齐方式
+ * @note 在注册registerVideoSampleObserver后触发回调，应用可返回期望输出的视频数据格式，默认返回AliRtcAlignmentDefault，不需要对齐
+*/
+- (AliRtcVideoObserAlignment)onGetVideoAlignment;
 
 /**
  * @brief 视频数据输出位置
@@ -1494,6 +1668,18 @@ typedef struct {
  * @note 默认返回全部类型数据，即AliRtcPositionPostCapture | AliRtcPositionPreRender | AliRtcPositionPreEncoder
  */
 - (NSInteger)onGetVideoObservedFramePosition;
+
+/**
+ * @brief 视频输出数据是否需要镜像
+ * @return true, 镜像；false（默认）, 不镜像
+ */ 
+- (BOOL)onGetObserverDataMirrorApplied;
+
+/**
+ * @brief 拉流视频数据是否平滑输出
+ * @return true, 平滑输出；false（默认）, 直接输出。只在 onGetIfUserFetchObserverData 为false时有效
+ */ 
+- (BOOL)onGetSmoothRenderingEnabled;
 
 /**
  * @brief 订阅的本地采集视频数据回调
@@ -1540,7 +1726,7 @@ typedef struct {
  * @param uid 执行EnableLocalVideo的用户
  * @param isEnable YES:打开相机流采集 NO:关闭相机流采集
  */
-- (void)OnUserVideoEnabled:(NSString *_Nullable)uid videoEnabled:(BOOL)isEnable;
+- (void)onUserVideoEnabled:(NSString *_Nullable)uid videoEnabled:(BOOL)isEnable;
 
 /**
  * @brief 用户audio被中断通知（一般用户打电话等音频被抢占场景）
@@ -1652,7 +1838,7 @@ typedef struct {
 
 /**
  * @brief 远端音频统计信息(2s触发一次)
- * @param remoteAudioStats 远端视频统计信息
+ * @param remoteAudioStats 远端音频统计信息
  */
 - (void)onRtcRemoteAudioStats:(AliRtcRemoteAudioStats *_Nonnull)remoteAudioStats;
 
@@ -1697,19 +1883,20 @@ typedef struct {
  * @param state  状态
  * @param errCode 错误码
  */
-- (void)onPublishLiveStreamStateChanged:(NSString *_Nonnull)streamURL state:(AliRtcTrascodingLiveStreamStatus)state errCode:(AliRtcTrascodingLiveStreamErrorCode)errCode;
+- (void)onPublishLiveStreamStateChanged:(NSString *_Nonnull)streamURL state:(AliRtcLiveTranscodingState)state errCode:(AliRtcTrascodingLiveStreamErrorCode)errCode;
 
 /**
  * @brief 旁路任务状态改变回调
  * @param streamURL  流地址
  * @param state  状态
  */
-- (void)onPublishTaskStateChanged:(NSString *_Nonnull)streamURL state:(AliRtcTrascodingLiveStreamStatus)state;
+- (void)onPublishTaskStateChanged:(NSString *_Nonnull)streamURL state:(AliRtcTrascodingLiveTaskStatus)state;
 
 /**
  * @brief 跨频道转推状态变化
  * @param state 当前状态，参考AliRtcChannelRelayState
  * @param code 错误码
+ * @param message 状态信息
  */
 - (void)onChannelRelayStateChanged:(int)state code:(int)code message:(NSString *_Nullable)message;
 
@@ -1719,17 +1906,31 @@ typedef struct {
  */
 - (void)onChannelRelayEvent:(int)event;
 
-@end
+/**
+ * @brief 用户remote video change通知
+ * @param uid 需要被通知的用户
+ * @param trackType 变化视频track
+ * @param state 视频状态的类型
+ * @param reason 触发状态变化的原因
+ */
+- (void)onRemoteVideoChanged:(NSString *_Nonnull)uid trackType:(AliRtcVideoTrack)trackType state:(AliRtcVideoState)state reason:(AliRtcVideoReason)reason;
 
+@end
+/** @} AliRtcEngineDelegate */
 
 #pragma mark - 接口主类
-
+/**
+ * @defgroup AliRtc_ios AliRtcEngine
+ * AliRTC功能的主要接口类
+ * @{
+ */
 @interface AliRtcEngine : NSObject <AliRtcEngineDelegate>
 
-/** remove for support multil channels */
-//- (instancetype)init __attribute__((unavailable("use sharedInstance to create the singletone")));
-
 #pragma mark - "Engine的生命周期，工作参数以及频道操作"
+/**
+ * @name Engine的生命周期，工作参数以及频道操作
+ * @{
+ */
 
 /**
  * @brief 初始化
@@ -1852,30 +2053,26 @@ typedef struct {
  * @brief 更新鉴权信息
  * @param authInfo 鉴权信息
  * @return 0为成功，非0失败
-*/
+ */
 - (int)refreshAuthInfo:(AliRtcAuthInfo *_Nonnull)authInfo;
 
+/** @} */
 
 #pragma mark - "设置和操作本地的媒体"
-
 /**
- * @brief 设置设备横竖屏方向
- * @param mode 设备方向
- * @return 0表示Success 非0表示Failure
- * @note 当前只支持固定横竖屏模式，仅允许在推流和预览之前进行设置
+ * @name 设置和操作本地的媒体
+ * @{
  */
-- (int)setDeviceOrientationMode:(AliRtcOrientationMode)mode;
 
 /**
  * @brief 为本地预览设置窗口以及绘制参数
  * @param viewConfig 包含了窗口以及渲染方式
- * @param track      must be AliVideoTrackCamera
- * @return 0表示Success 非0表示Failure
- * @note 支持joinChannel之前和之后切换窗口。如果viewConfig或者viewConfig中的view为nil，则停止渲染
- *       如果在播放过程中需要重新设置render mode，请保持canvas中其他成员变量不变，仅修改
- *       renderMode
- *       如果在播放过程中需要重新设置mirror mode，请保持canvas中其他成员变量不变，仅修改
- *       mirrorMode
+ * @param track     必须是{@link AliRtcVideoTrackCamera}
+ * @return 0表示Success； 非0表示Failure
+ * @note
+ *  - 支持joinChannel之前和之后切换窗口。如果viewConfig或者viewConfig中的view为nil，则停止渲染
+ *  - 如果在播放过程中需要重新设置render mode，请保持canvas中其他成员变量不变，仅修改renderMode
+ *  - 如果在播放过程中需要重新设置mirror mode，请保持canvas中其他成员变量不变，仅修改mirrorMode
  */
 - (int)setLocalViewConfig:(AliVideoCanvas *_Nullable)viewConfig forTrack:(AliRtcVideoTrack)track;
 
@@ -1967,7 +2164,13 @@ typedef struct {
 */
 - (int)publishLocalAudioStream:(BOOL)enabled;
 
+/** @} */
+
 #pragma mark - "操作来自远端的媒体"
+/**
+ * @name 操作来自远端的媒体
+ * @{
+ */
 
 /**
  * @brief 为远端的视频设置窗口以及绘制参数
@@ -2016,7 +2219,13 @@ typedef struct {
  */
 - (int)muteAllRemoteVideoRendering:(BOOL)mute;
 
+/** @} */
+
 #pragma mark - "用户管理"
+/**
+ * @name 用户管理
+ * @{
+ */
 
 /**
  * @brief 查询是否设置推送视频流
@@ -2154,8 +2363,13 @@ typedef struct {
  */
 - (AliRtcConnectionStatus)getCurrentConnectionStatus;
 
+/** @} */
 
 #pragma mark - "设备管理"
+/**
+ * @name 设备管理
+ * @{
+ */
 
 /**
  * @brief 设置音频输出为听筒还是扬声器
@@ -2275,12 +2489,21 @@ typedef struct {
 /**
  * @brief 开启音频采集
  * @note 此接口可以控制提前打开音频采集，如果不设置，则SDK会在合适的时机在打开音频采集
+ * @note 调用此接口后，离会后采集设备保持开启状态
  */
 - (void)startAudioCapture;
 
 /**
+ * @brief 开启音频采集
+ * @note 此接口可以控制提前打开音频采集，如果不设置，则SDK会在合适的时机在打开音频采集
+ * @param keepAlive YES: 离会后采集设备保持开启状态；NO: 离会后采集设备关闭
+ */
+- (void)startAudioCapture:(BOOL)keepAlive;
+
+/**
  * @brief 关闭音频采集
  * @note 此接口可以控制关闭音频采集，与startAudioCapture对应
+ * @note 调用此接口后，入会后、离会再入会，采集设备保持关闭状态
  */
 - (void)stopAudioCapture;
 
@@ -2296,8 +2519,13 @@ typedef struct {
  */
 - (void)stopAudioPlayer;
 
+/** @} */
 
 #pragma mark - "其他"
+/**
+ * @name 其他
+ * @{
+ */
 
 /**
  * @brief 设置log
@@ -2348,8 +2576,21 @@ typedef struct {
  */
 + (BOOL)getH5CompatibleMode;
 
+/**
+ * 展示用户Debug数据
+ * @param view 对外展示的View，由客户传入，显示样式由客户指定
+ * @param showType 展示类型:0: 不显示 1.音频 2.视频 3.全部；另外可以传入特殊的值来展示
+ * @param userId 对应用户数据
+ */
+- (int)showDebugView:(UITextView * _Nonnull)view showType:(AliRtcShowDebugViewType)showType userId:(NSString * _Nullable)userId;
+
+/** @} */
 
 #pragma mark - "音视频裸数据输入输出"
+/**
+ * @name 音视频裸数据输入输出
+ * @{
+ */
 
 /**
  * @brief 设置回调音频声道数，默认单声道 （混音前数据不支持该参数设置）
@@ -2395,6 +2636,28 @@ typedef struct {
  * @brief 取消订阅视频数据
 */
 - (void)unregisterVideoSampleObserver;
+
+NS_ASSUME_NONNULL_BEGIN
+/**
+ * @brief 主动获取采集数据，onGetIfUserFetchObserverData 返回true时有效
+ * @param videoTrack AliRtcVideoTrackCamera 或 AliRtcVideoTrackScreen
+*/
+- (BOOL)getVideoCaptureData:(AliRtcVideoTrack)videoTrack videoSample:(AliRtcVideoDataSample**)p_sample;
+
+/**
+ * @brief 主动获取编码前数据，onGetIfUserFetchObserverData 返回true时有效
+ * @param videoTrack AliRtcVideoTrackCamera 或 AliRtcVideoTrackScreen
+*/
+- (BOOL)getVideoPreEncoderData:(AliRtcVideoTrack)videoTrack videoSample:(AliRtcVideoDataSample**)p_sample;
+
+/**
+ * @brief 主动获取拉流数据，onGetIfUserFetchObserverData 返回true时有效
+ * @param uid 远端用户uid
+ * @param videoTrack AliRtcVideoTrackCamera 或 AliRtcVideoTrackScreen
+*/
+- (BOOL)getVideoRenderData:(NSString*)uid videoTrack:(AliRtcVideoTrack)videoTrack videoSample:(AliRtcVideoDataSample**)p_sample;
+
+NS_ASSUME_NONNULL_END
 
 /**
  * @brief 订阅本地视频纹理数据
@@ -2485,8 +2748,13 @@ typedef struct {
  */
 - (int)pushExternalAudioRenderRawData:(const void* _Nullable)audioSamples sampleLength:(NSUInteger)sampleLength sampleRate:(NSUInteger)sampleRate channelsPerFrame:(NSUInteger)channelsPerFrame timestamp:(long long)timestamp;
 
+/** @} */
 
 #pragma mark - "音乐伴奏音效"
+/**
+ * @name 音乐伴奏音效
+ * @{
+ */
 
 /**
  * @brief 设置变调参数
@@ -2757,7 +3025,13 @@ typedef struct {
  */
 - (int)enableMusicMode:(BOOL)enable;
 
+/** @} */
+
 #pragma mark - "文件录制"
+/**
+ * @name 文件录制
+ * @{
+ */
 
 /**
  * @brief 开始录制
@@ -2776,8 +3050,13 @@ typedef struct {
  */
 - (void)stopRecord;
 
+/** @} */
 
 #pragma mark - "网络测试"
+/**
+ * @name  网络测试
+ * @{
+ */
 
 /**
  * @brief 开始网络质量探测
@@ -2792,8 +3071,13 @@ typedef struct {
  */
 - (int)stopLastmileDetect;
 
+/** @} */
 
 #pragma mark - "低延时互动直播模式"
+/**
+ * @name 低延时互动直播模式
+ * @{
+ */
 
 /**
  * @brief 开始低延时互动直播拉流
@@ -2813,7 +3097,14 @@ typedef struct {
  */
 - (int)setLiveStreamingViewConfig:(AliVideoCanvas *_Nullable)canvas;
 
+/** @} */
+
 #pragma mark - "美颜控制"
+/**
+ * @name 美颜控制
+ * @{
+ */
+
 /**
  * @brief 设置美颜
  * @param enable 美颜开关
@@ -2821,13 +3112,26 @@ typedef struct {
 */
 - (int)setBeautyEffect:(BOOL)enable config:(AliRtcBeautyConfig *_Nullable)config;
 
+/** @} */
+
 #pragma mark - "视频画面截图"
+/**
+ * @name 视频画面截图
+ * @{
+ */
+
 /**
  * @brief 视频画面截图
  */
 - (int)snapshotVideo:(NSString*_Nullable)userId type:(AliRtcVideoTrack)type;
 
+/** @} */
+
 #pragma mark - "媒体扩展信息"
+/**
+ * @name 媒体扩展信息
+ * @{
+ */
 
 /**
  * @brief 发送媒体扩展信息
@@ -2848,7 +3152,13 @@ typedef struct {
 */
 - (int)clearVideoWatermark:(AliRtcVideoTrack)track;
 
+/** @} */
+
 #pragma mark - "问题上报"
+/**
+ * @name 问题上报
+ * @{
+ */
 
 /**
  * @brief SDK问题反馈
@@ -2860,7 +3170,13 @@ typedef struct {
  */
 - (void)postFeedbackWithUid:(NSString *_Nullable)uid channleId:(NSString *_Nullable)channelId description:(NSString *_Nonnull)description type:(AliRtcFeedbackType)type timeStamp:(NSTimeInterval)timeStamp;
 
+/** @} */
+
 #pragma mark - "消息通道"
+/**
+ * @name 消息通道
+ * @{
+ */
 
 /**
  * @brief 下行消息通道 反馈消息处理结果
@@ -2876,7 +3192,14 @@ typedef struct {
  */
 - (int)sendUplinkMessage:(AliRtcMessage *_Nonnull)messageInfo;
 
+/** @} */
+
 #pragma mark - "多频道"
+/**
+ * @name 多频道
+ * @{
+ */
+
 /**
  * @brief 创建子频道
  * @param delegate delegate
@@ -2890,23 +3213,29 @@ typedef struct {
  */
 - (void)destroyChannel;
 
+/** @} */
+
 #pragma mark - "旁路转推"
+/**
+ * @name 旁路转推
+ * @{
+ */
 
 /**
  * @brief 开启旁路直播
  * @param streamURL 推流地址
- * @param trancoding 推流所需参数，详见AliRtcLiveTranscoding
+ * @param trancoding 推流所需参数，详见AliRtcLiveTranscodingParam
  * @return 0:Success 非0:Failure
  */
-- (int)startPublishLiveStreamWithURL:(NSString *_Nonnull)streamURL liveTranscoding:(AliRtcLiveTranscoding *_Nonnull)trancoding;
+- (int)startPublishLiveStreamWithURL:(NSString *_Nonnull)streamURL liveTranscoding:(AliRtcLiveTranscodingParam *_Nonnull)trancoding;
 
 /**
  * @brief 更新旁路直播相关参数
  * @param streamURL 推流地址
- * @param trancoding 推流所需参数，详见AliRtcLiveTranscoding
+ * @param trancoding 推流所需参数，详见AliRtcLiveTranscodingParam
  * @return 0:Success 非0:Failure
  */
-- (int)updatePublishLiveStreamWithURL:(NSString *_Nonnull)streamURL liveTranscoding:(AliRtcLiveTranscoding *_Nonnull)trancoding;
+- (int)updatePublishLiveStreamWithURL:(NSString *_Nonnull)streamURL liveTranscoding:(AliRtcLiveTranscodingParam *_Nonnull)trancoding;
 
 /**
  * @brief 停止旁路直播
@@ -2915,7 +3244,19 @@ typedef struct {
  */
 - (int)stopPublishLiveStreamWithURL:(NSString *_Nonnull)streamURL;
 
+/**
+* @brief 获得旁路直播状态
+* @param streamURL 推流地址
+* @return AliRtcLiveTranscodingState
+*/
+- (AliRtcLiveTranscodingState)GetPublishLiveStreamStateWithURL:(NSString *_Nonnull)streamURL;
+
 #pragma mark - "跨频道转推"
+/**
+ * @name 跨频道转推
+ * @{
+ */
+
 /**
  * @brief 开始跨频道转推
  * @param configuration 配置
@@ -2943,4 +3284,9 @@ typedef struct {
  * @note 已废弃使用
 */
 - (void)setPublishVideoStreamAttribute:(AliRtcVideoTrack)track attr:(NSString *_Nullable)attr;
+
+/** @} */
+
 @end
+
+/** @} AliRtc_ios AliRtcEngine */
