@@ -106,6 +106,7 @@ typedef NS_ENUM(NSInteger, AliRtcAudioProfile) {
  - AliRtcSceneEducationMode 教育场景，优先保证音频连续性与稳定性
  - AliRtcSeneMediaMode 媒体场景，保真人声与音乐音质, 连麦直播间推荐使用
  - AliRtcSceneMusicMode 音乐场景，高保真音乐音质，乐器教学等对音乐音质有要求的场景推荐使用
+ - AliRtcSceneChatroomMode 聊天室场景，适用于频繁上下麦的聊天场景
  */
 typedef NS_ENUM(NSInteger, AliRtcAudioScenario) {
     AliRtcSceneDefaultMode   = 0x0000,
