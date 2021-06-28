@@ -1,1 +1,1 @@
-/Users/eidanlin/Desktop/rtc_demo/AliRtcSDK_iOS/AliRTCSdk.framework/AliRTCSdk filter=lfs diff=lfs merge=lfs -text
+AliRTCSdk.framework.zip filter=lfs diff=lfs merge=lfs -text
