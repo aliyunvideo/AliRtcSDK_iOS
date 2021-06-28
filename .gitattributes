@@ -1,1 +1,2 @@
 AliRTCSdk.framework.zip filter=lfs diff=lfs merge=lfs -text
+AliRTCSdk filter=lfs diff=lfs merge=lfs -text
