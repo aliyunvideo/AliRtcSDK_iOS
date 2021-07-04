@@ -15,16 +15,12 @@ namespace AliRTCSdk
     } AliEngineAudioTrack;
 
     /**
-     * @brief 视频流类型
+     * @brief 视频track的类型
      */
     typedef enum {
-        /** 无视频流 */
         AliEngineVideoTrackNo     = 0,
-        /** 相机流 */
         AliEngineVideoTrackCamera = 1,
-        /** 屏幕共享流 */
         AliEngineVideoTrackScreen = 2,
-        /** 相机流和屏幕共享流 */
         AliEngineVideoTrackBoth   = 3,
     } AliEngineVideoTrack;
 
@@ -51,13 +47,9 @@ namespace AliRTCSdk
      * @brief 录制视频数据源
     */
     typedef enum {
-      /** 录制相机流视频 */
       AliEngineVideoRecordSourceCamera = 0,
-      /** 录制屏幕流视频 */
       AliEngineVideoRecordSourceScreenShare = 1,
-      /** 录制相机和屏幕流视频 */
       AliEngineVideoRecordSourceBoth = 2,
-      /** 枚举边界（不允许使用） */
       AliEngineVideoRecordSourceTypeMax,
     } AliEngineVideoRecordSource;
 
@@ -101,20 +93,14 @@ namespace AliRTCSdk
     } AliEngineTextureType;
 
     /**
-     * @brief 视图显示模式
+     * @brief 视频窗口填充方式
      */
     typedef enum {
-        /** 自动模式 */
         AliEngineRenderModeAuto     = 0,
-        /** 延伸模式 */
         AliEngineRenderModeStretch  = 1,
-        /** 填充模式 */
         AliEngineRenderModeFill     = 2,
-        /** 裁剪模式 */
         AliEngineRenderModeCrop     = 3,
-        /** 已废弃 */
         AliEngineRenderModeScroll   = 4,
-        /** 沿用之前的显示模式 */
         AliEngineRenderModeNoChange = 99,
     } AliEngineRenderMode;
 
@@ -122,15 +108,10 @@ namespace AliRTCSdk
      * @brief 视频旋转角度
      */
     typedef enum {
-        /** 沿用之前的旋转角度 */
       AliEngineRotationModeNoChange = -1,
-        /** 0 */
       AliEngineRotationMode_0 = 0,
-        /** 90 */
       AliEngineRotationMode_90 = 90,
-        /** 180 */
       AliEngineRotationMode_180 = 180,
-        /** 270 */
       AliEngineRotationMode_270 = 270,
     } AliEngineRotationMode;
 
@@ -138,9 +119,7 @@ namespace AliRTCSdk
      * @brief 音频声道类型
     */
     typedef enum {
-      /** 单声道 */
       AliEngineMonoAudio = 1,
-      /** 双声道 */
       AliEngineStereoAudio = 2,
     } AliEngineAudioNumChannelType;
 
@@ -148,19 +127,12 @@ namespace AliRTCSdk
      * @brief 音频采样率类型
      */
     typedef enum {
-      /** 8000采样率 */
       AliEngineAudioSampleRate_8000 = 0,
-      /** 11025采样率 */
       AliEngineAudioSampleRate_11025 = 1,
-      /** 16000采样率 */
       AliEngineAudioSampleRate_16000 = 2,
-      /** 22050采样率 */
       AliEngineAudioSampleRate_22050 = 3,
-      /** 32000采样率 */
       AliEngineAudioSampleRate_32000 = 4,
-      /** 44100采样率 */
       AliEngineAudioSampleRate_44100 = 5,
-      /** 48000采样率 */
       AliEngineAudioSampleRate_48000 = 6,
     } AliEngineAudioSampleRate;
 

@@ -85,12 +85,10 @@ namespace AliRTCSdk
     }AliEngineCaptureOutputPreference;
 
     /**
-     * @brief 视频宽高比
+     * @brief 视频比例
      */
     typedef enum  {
-        /** 16 : 9 */
       AliEngineVideoScale_16_9 = 0,
-        /** 4 : 3 */
       AliEngineVideoScale_4_3,
     }AliEngineVideoScale;
 
@@ -184,11 +182,8 @@ namespace AliRTCSdk
      * @brief 录制类型
      */
     typedef enum {
-        /** 录制单个音频文件 */
         AliEngineRecordTypeAudio   = 0,
-        /** 录制单个音视频文件 */
         AliEngineRecordTypeVideo,
-        /** 录制纯音频和音视频文件 */
         AliEngineRecordTypeBoth,
     } AliEngineRecordType;
 
@@ -196,11 +191,8 @@ namespace AliRTCSdk
      * @brief 录制格式
      */
     typedef enum {
-        /** 录制AAC格式文件 */
         AliEngineRecordFormatAAC   = 0,
-        /** 录制WAV格式文件 */
         AliEngineRecordFormatWAV,
-        /** 录制MP4格式文件 */
         AliEngineRecordFormatMP4,
     } AliEngineRecordFormat;
 
@@ -208,11 +200,8 @@ namespace AliRTCSdk
      * @brief 录制音频质量
      */
     typedef enum {
-        /** 低质量文件录制，文件体积较小，音质一般 */
         AliEngineAudioQualityLow       = 0,
-        /** 中等质量文件录制，文件体积中等，音质中等 */
         AliEngineAudioQualityMidium,
-        /** 高质量文件录制，文件体积较大，音质较好 */
         AliEngineAudioQualityHigh,
     } AliEngineAudioQuality;
 
@@ -220,30 +209,23 @@ namespace AliRTCSdk
      * @brief 录制视频质量
      */
     typedef enum {
-        /** 录制默认质量视频, 和采集一致 */
         AliEngineVideoQualityDefault = 0,
     } AliEngineVideoQuality;
 
     /**
      * @brief 录制视频分辨率
-     * @note 画布大小
-     */
+    */
     typedef struct AliEngineVideoRecordCanvasConfig {
-        /** 录制视频宽 */
         int canvasWidth;
-        /** 录制视频高 */
         int canvasHeight;
     }AliEngineVideoRecordCanvasConfig;
 
     /**
      * @brief 录制视频背景色
-     */
+    */
     typedef struct AliEngineRecordVideoBgColor {
-        /** 红色分量 */
         unsigned char r;
-        /** 绿色分量 */
         unsigned char g;
-        /** 蓝色分量 */
         unsigned char b;
     }AliEngineRecordVideoBgColor;
 
@@ -259,13 +241,9 @@ namespace AliRTCSdk
     * @brief 录制视频布局
     */
     typedef enum {
-        /** 网格布局 */
         AliEngineRecordVideoLayoutModeGrid = 0,
-        /** 演讲者布局 */
         AliEngineRecordVideoLayoutModeSpeaker,
-        /** 只有一个画面布局 */
         AliEngineRecordVideoLayoutModeUnique,
-        /** 自定义布局 */
         AliEngineRecordVideoLayoutModeCustom,
     }AliEngineRecordVideoLayoutMode;
 
@@ -313,11 +291,8 @@ namespace AliRTCSdk
      * @brief 录制视频布局
     */
     typedef struct AliEngineRecordVideoLayout {
-        /** 视频布局模式 */
         AliEngineRecordVideoLayoutMode mode = AliEngineRecordVideoLayoutModeGrid;
-        /** 录制视频用户布局数组 */
         AliEngineRecordVideoRegionArray shapes;
-        /** 录制视频背景色 */
         AliEngineRecordVideoBgColor backColor = {0x00, 0x00, 0x00};
     }AliEngineRecordVideoLayout;
 
@@ -325,25 +300,17 @@ namespace AliRTCSdk
      * @brief 录制视频模板
     */
     typedef struct AliEngineRecordTemplate {
-        /** 录制类型 */
         AliEngineRecordType recordType;
-        /** 录制格式 */
         AliEngineRecordFormat recordFormat;
-        /** 音频采样率类型 */
+        //audio
         AliEngineAudioSampleRate sampleRate = AliEngineAudioSampleRate_16000;
-        /** 音频录制质量 */
         AliEngineAudioQuality audioQuality  = AliEngineAudioQualityHigh;
-        /** 外部pcm采集 */
         bool externalPcmCaptureRecording    = false;
-        /** 外部pcm渲染 */
         bool externalPcmRenderRecording     = true;
-        /** 录制视频分辨率 */
+        //video
         AliEngineVideoRecordCanvasConfig canvas;
-        /** 分段录制 */ 
         bool isFragment                     = true;
-        /** 帧率 */
         int fps                             = 15;
-        /** 码率 */
         int bitrate                         = 500;
     }AliEngineRecordTemplate;
 
@@ -882,28 +849,15 @@ namespace AliRTCSdk
      * @brief 视频显示窗口设置
      */
     typedef struct AliEngineVideoCanvas {
-        /** 显示视图 */
         void *displayView   = nullptr;
-        /** 背景颜色，格式为RGB的Hex */
         int backgroundColor = 0;
-        /** 渲染模式，默认值为{@link AliRTCSdk::AliEngineRenderModeAuto} */
-        AliEngineRenderMode renderMode = AliEngineRenderMode::AliEngineRenderModeAuto;
-        /** 镜像模式，默认值为{@link AliRTCSdk::AliEngineRenderMirrorModeOnlyFrontMirror} */
+        AliEngineRenderMode renderMode = AliEngineRenderModeAuto;
         AliEngineRenderMirrorMode mirrorMode = AliEngineRenderMirrorModeOnlyFrontMirror;
-        /** 视频宽高比，默认值为 {@link AliRTCSdk::AliEngineVideoScale_16_9} */
         AliEngineVideoScale scaleMode = AliEngineVideoScale_16_9;
-        /** 旋转角度，默认值为 {@link AliRTCSdk::AliEngineRotationMode_0} */
         AliEngineRotationMode rotation = AliEngineRotationMode_0;
-        /** 支持第三方OpenGL ES纹理显示，纹理ID */
         long long renderId = 0;
-        /** 支持第三方OpenGL ES纹理显示，纹理宽 */
         int width = 0;
-        /** 支持第三方OpenGL ES纹理显示，纹理高 */
         int height = 0;
-        /** 该参数只在iOS和Mac平台生效，
-         * - true : 使用OpenGL ES 渲染
-         * - false : 使用Metal渲染
-         */
         bool enableGL = true;
     } AliEngineVideoCanvas;
 
@@ -911,13 +865,9 @@ namespace AliRTCSdk
      * @brief 录制音频设置
      */
     typedef struct AliEngineRecordAudioConfig {
-        /** 音频采样率类型 */
         AliEngineAudioSampleRate sampleRate = AliEngineAudioSampleRate_16000;
-        /** 音频录制质量 */
         AliEngineAudioQuality quality       = AliEngineAudioQualityHigh;
-        /** 是否允许录制外部pcm输入采集数据 */
         bool externalPcmCaptureRecording    = false;
-        /** 是否允许录制外部pcm输入渲染数据 */
         bool externalPcmRenderRecording     = true;
     } AliEngineRecordAudioConfig;
 
@@ -925,15 +875,10 @@ namespace AliRTCSdk
      * @brief 录制视频设置
      */
     typedef struct AliEngineRecordVideoConfig {
-        /** 帧率 */
         int fps;
-        /** 码率 */
         int bitrate;
-        /** 视频录制质量 */
         AliEngineVideoQuality quality;
-        /** 录制视频数据源 */
         AliEngineVideoRecordSource sourceType;
-        /** 视频录制分辨率设置 */
         AliEngineVideoRecordCanvasConfig canvas;
     } AliEngineRecordVideoConfig;
 
@@ -1023,13 +968,11 @@ namespace AliRTCSdk
     } AliEngineRemoteAudioStats;
         
     /**
-     * @brief 美颜参数
+     * @brief 美颜设置
      */
     typedef struct AliEngineBeautyConfig {
-        /** 美白等级，建议取值范围[0 - 1.0]  */
-        float whiteningLevel;
-        /** 磨皮等级，建议取值范围[0 - 1.0] */
-        float smoothnessLevel;
+        float whiteningLevel;       /* 美白等级[0-1.0] */
+        float smoothnessLevel;      /* 磨皮等级[0-1.0] */
     } AliEngineBeautyConfig;
 
     /**
@@ -1046,15 +989,10 @@ namespace AliRTCSdk
      * @brief 水印配置
      */
     typedef struct AliEngineWaterMarkConfig {
-        /** 预览水印是否可见  */
         bool visibleInPreview = true;
-        /** 竖屏水印坐标信息  */
         AliEngineWaterMarkPosition positionInPortraitMode;
-        /** 横屏水印坐标信息  */
         AliEngineWaterMarkPosition positionInLandscapeMode;
-        /** 水印透明度  */
         float alpha = 1.0;
-        /** 归一化  */
         bool normalized = false;
     } AliEngineWaterMarkConfig;
 
@@ -1141,21 +1079,16 @@ namespace AliRTCSdk
     * @brief 旁路模式
     */
     enum AliEngineLiveTranscodingMixMode {
-        /** 单路模式 */
-        AliEngineLiveTranscodingSINGLE = 0,  
-        /** 混流模式 */
-        AliEngineLiveTranscodingMIX = 1      
+        AliEngineLiveTranscodingSINGLE = 0,  // 单路模式
+        AliEngineLiveTranscodingMIX = 1      // 混流模式
     };
 
     /**
     * @brief 旁路直播转推流模式
     */
     enum AliEngineLiveTranscodingStreamType {
-        /** 原始流 */
         AliEngineLiveTranscodingOrigin = 0,
-        /** 音频 */
         AliEngineLiveTranscodingAudio = 1,
-        /** 视频 */
         AliEngineLiveTranscodingVideo = 2
     };
 
@@ -1163,9 +1096,7 @@ namespace AliRTCSdk
     * @brief 旁路直播输入类型
     */
     enum AliEngineLiveTranscodingSourceType {
-        /** 相机流 */
         AliEngineLiveTranscodingCamera = 0,
-        /** 屏幕流 */
         AliEngineLiveTranscodingShareScreen = 1
     };
 
@@ -1333,9 +1264,7 @@ namespace AliRTCSdk
     * @brief 旁路直播裁剪模式
     */
     enum AliEngineLiveTranscodingCropMode {
-        /** 剪裁 */
         AliEngineLiveTranscodingCrop = 1,
-        /** 填充 */
         AliEngineLiveTranscodingFill = 2
     };
 
@@ -1343,20 +1272,16 @@ namespace AliRTCSdk
     * @brief 旁路直播媒体处理模式
     */
     enum AliEngineLiveTranscodingMediaProcessMode {
-        /** 通用模式 */
-        AliEngineLiveTranscodingNormal = 0, 
-        /** 虚拟背景模式 */
-        AliEngineLiveTranscodingVirtualBackground = 1 
+        AliEngineLiveTranscodingNormal = 0, /*通用模式*/
+        AliEngineLiveTranscodingVirtualBackground = 1 /*虚拟背景模式*/
     };
 
     /**
     * @brief 旁路直播输入类型
     */
     enum AliEngineLiveTranscodingSegmentType {
-        /** 无人像分割 */
-        AliEngineLiveTranscodingNoBody = 0,
-        /** 人像分割 */ 
-        AliEngineLiveTranscodingBody = 1    
+        AliEngineLiveTranscodingNoBody = 0, /* 无人像分割 */
+        AliEngineLiveTranscodingBody = 1    /* 人像分割 */
     };
 
     /**
@@ -1406,11 +1331,8 @@ namespace AliRTCSdk
     */
     struct AliEngineLiveTranscodingSingleParam
     {
-        /** 用户id */
         String userId;
-        /** 推流模式 */
         AliEngineLiveTranscodingStreamType streamType;
-        /** 旁路直播输入类型 */
         AliEngineLiveTranscodingSourceType sourceType;
     };
 
@@ -1419,23 +1341,14 @@ namespace AliRTCSdk
     */
     struct AliEngineLiveTranscodingMixParam
     {
-        /** 旁路直播计费规格 */
         AliEngineLiveTranscodingTaskProfile taskProfile;
-        /** 旁路直播自定义编码参数 */
         AliEngineLiveTranscodingEncodeParam encodeParam;
-        /** 旁路直播用户列表 */
         AliEngineLiveTranscodingUserArray users;
-        /** 背景色 */
         int backgroundColor = 0x000000; //0xRRGGBB
-        /** 背景图片列表 */
         AliEngineLiveTranscodingImageArray backgrounds;
-        /** 水印列表 */
         AliEngineLiveTranscodingImageArray watermarks;
-        /** 时钟组件列表 */
         AliEngineLiveTranscodingClockWidgetArray clockWidgets;
-        /** 剪裁模式 */
         AliEngineLiveTranscodingCropMode cropMode;
-        /** 媒体处理模式 */
         AliEngineLiveTranscodingMediaProcessMode mediaProcessMode;
     };
 
@@ -1444,11 +1357,8 @@ namespace AliRTCSdk
     */
     struct AliEngineLiveTranscodingParam
     {
-        /** 旁路模式 */
         AliEngineLiveTranscodingMixMode mixMode = AliEngineLiveTranscodingMIX;
-        /** 路模式单路参数 */
         AliEngineLiveTranscodingSingleParam singleParam;
-        /** 旁路模式混流参数 */
         AliEngineLiveTranscodingMixParam mixParam;
     };
 
@@ -2321,82 +2231,53 @@ namespace AliRTCSdk
         virtual int SwitchChannel(const AliEngineAuthInfo &authInfo) = 0;
 
         /**
-         * @brief 设置本地预览显示视图
-         * @param renderConfig renderConfig 本地视频显示属性, 详细见{@link AliEngineVideoCanvas}
-         * @param track  只支持{@link AliEngineVideoTrackCamera}和{@link AliEngineVideoTrackScreen}
-         * @return
-         * - 0 : 成功
-         * - < 0 : 失败
-         * @note 支持joinChannel之前和之后切换窗口。如果{@link AliEngineVideoCanvas::displayView}为null，则停止显示。
-         *       如果需要重新设置{@link AliEngineVideoCanvas::renderMode}，请保持renderConfig中其他属性不变，仅修改
-         *       {@link AliEngineVideoCanvas::renderMode}。
-         *       如果需要重新设置{@link AliEngineVideoCanvas::mirrorMode}，请保持renderConfig中其他属性不变，仅修改
-         *       {@link AliEngineVideoCanvas::mirrorMode}。
+         * @brief 为本地预览设置窗口以及绘制参数
+         * @param renderConfig 包含了窗口以及渲染方式
+         * @param track AliEngineVideoTrackCamera
          */
         virtual int SetLocalViewConfig(AliEngineVideoCanvas renderConfig,
                                          AliEngineVideoTrack track) = 0;
         
         /**
          * @brief 设置摄像头采集偏好
-         * @param config 采集偏好
-         *      - preference: {@link AliEngineCaptureOutputPreference::AliEngineCaptureOutputPreferencePreview} 高清预览，采集优先保证视频预览质量
-         *                    {@link AliEngineCaptureOutputPreference::AliEngineCaptureOutputPreferencePerformance} 采集选择最接近推流的分辨率，优先保证设备性能
-         *                    {@link AliEngineCaptureOutputPreference::AliEngineCaptureOutputPreferenceAuto} 自动调整采集分辨率
-         *      - cameraDirection: 设置采集方向，前置 或 后置，仅对android和ios有效
+         * @param config see AliEngineCameraCapturerConfiguration
          * @return 0为成功，非0失败
-         * @note 必须在打开摄像头之前设置，如{@link StartPreview}，{@link JoinChannel}之前设置
          */
         virtual int SetCameraCapturerConfiguration(const AliEngineCameraCapturerConfiguration& config) = 0;
 
 #if defined(__ANDROID__) || (defined(__APPLE__) && TARGET_OS_IOS)
         /**
-         * @brief 设备方向
+         * @brief 设置设备方向
          * @param mode 设备方向
-         * @return
-         * - 0 : 成功
-         * - < 0 : 失败
+         * @return 0为成功，非0失败
          */
         virtual int SetDeviceOrientationMode(AliEngineOrientationMode mode) = 0;
 #endif
 
         /**
-         * @brief 开启本地视频预览
-         * @return
-         * - 0 : 成功
-         * - < 0 : 失败
-         * @note 如果没有调用{@link SetLocalViewConfig}设置显示的view，则无法预览。
-         *       可以在{@link JoinChannel}之前就开启预览会自动打开摄像头。
+         * @brief 开始本地预览
+         * @return 0为成功，非0失败
          */
         virtual int StartPreview() = 0;
         
         /**
-         * @brief 关闭本地视频预览
-         * @return
-         * - 0 : 成功
-         * - < 0 : 失败
-         * @note {@link LeaveChannel}会自动停止本地预览；如果没有在推相机流，则会自动关闭摄像头。
+         * @brief 停止本地预览
+         * @return 0为成功，非0失败
          */
         virtual int StopPreview() = 0;
         
         /**
-         * @brief 禁用或启用本地视频采集
-         * @param enabled
-         * - true : 启用本地视频采集
-         * - false : 禁用本地视频采集
-         * @return
-         * - 0 : 成功
-         * - < 0 : 失败
-         * @note 默认为开启状态, 通过监听{@link AliEngineEventListener::OnUserVideoEnabled}获取用户是否禁用或启用本地视频采集状态。
+         * @brief 禁用或重新启用本地视频采集
+         * @param enabled  false表示停止视频采集；true表示恢复正常
+         * @return 0为成功，非0失败
          */
         virtual int EnableLocalVideo(bool enabled) = 0;
 
         /**
          * @brief 停止/恢复本地视频数据数据发送
          * @param mute true表示视频数据发送黑帧；false表示恢复正常
-         * @param track 只支持{@link AliEngineVideoTrackCamera}
-         * @return
-         * - 0: 为成功
-         * - 非0: 失败
+         * @param track 需要停止的视频track
+         * @return 0为成功，非0失败
          * @note 此接口只是控制指定视频流上是否发送黑帧，采集和数据发送不会停止
          * @note 如果需要关闭采集请使用EnableLocalVideo接口，如果需要中止视频数据发送请使用PublishLocalVideoStream接口
          */
@@ -2457,18 +2338,11 @@ namespace AliRTCSdk
         virtual int MuteLocalMic(bool mute, AliEngineMuteLocalAudioMode mode = AliEngineMuteLocalAudioModeDefault) = 0;
 
         /**
-         * @brief 设置本地预览显示视图
-         * @param renderConfig renderConfig 本地视频显示属性, 详细见{@link AliEngineVideoCanvas}
-         * @param uid User ID，从App server分配的唯一标示符
-         * @param track  只支持{@link AliEngineVideoTrackCamera}和{@link AliEngineVideoTrackScreen}
-         * @return
-         * - 0 : 成功
-         * - < 0 : 失败
-         * @note 支持joinChannel之前和之后切换窗口。如果{@link AliEngineVideoCanvas::displayView}为null，则停止显示。
-         *       如果需要重新设置{@link AliEngineVideoCanvas::renderMode}，请保持renderConfig中其他属性不变，仅修改
-         *       {@link AliEngineVideoCanvas::renderMode}。
-         *       如果需要重新设置{@link AliEngineVideoCanvas::mirrorMode}，请保持renderConfig中其他属性不变，仅修改
-         *       {@link AliEngineVideoCanvas::mirrorMode}。
+         * @brief 为远端的视频设置窗口以及绘制参数
+         * @param renderConfig config包含了窗口以及渲染方式
+         * @param uid    User ID。从App server分配的唯一标示符
+         * @param track  需要设置的track，可选相机流，屏幕分享流，见AliEngineVideoTrack枚举类型
+         * @return 0为成功，非0失败
          */
         virtual int SetRemoteViewConfig(AliEngineVideoCanvas renderConfig,
                                           const char *uid,
@@ -2606,14 +2480,12 @@ namespace AliRTCSdk
         virtual int SubscribeRemoteVideoStream(const char* uid, AliEngineVideoTrack track, bool sub) = 0;
  
         /**
-         * @brief 设置视频流属性
-         * @param videoTrack 视频流类型，详细见{@link AliEngineVideoTrack}
-         * @param attr 视频流属性
-         * @return
-         * - 0 : 成功
-         * - < 0 : 失败
-         * @note 已废弃使用。
-         */
+         * @brief 设置视频流附加属性
+         * @param videoTrack 视频流类型
+         * @param attr 流属性
+         * @return 0为成功，非0失败
+         * @note 已废弃使用
+        */
         virtual int SetPublishVideoStreamAttribute(AliEngineVideoTrack videoTrack, const char* attr) = 0;
 
         /**
@@ -2650,14 +2522,10 @@ namespace AliRTCSdk
         
         /**
          * @brief 添加水印
-         * @details SDK提供了添加水印的功能，适用于推送屏幕流或者相机流场景
-         * @param track 视频流类型，只支持{@link AliEngineVideoTrackCamera}和{@link AliEngineVideoTrackScreen}
+         * @param track 数据流类型
          * @param imageUrl 水印图片路径
-         * @param options 水印配置，详细见{@link AliEngineWaterMarkConfig}
-         * @return 
-         * - 0 : 成功
-         * - -1 : 失败
-         * @note 目前水印图片仅仅支持png格式
+         * @param options 水印配置
+         * @return 0:成功，-1:失败
          */
         virtual int AddVideoWatermark(AliEngineVideoTrack track,
                                       const char* imageUrl,
@@ -2670,12 +2538,9 @@ namespace AliRTCSdk
         */
         virtual int SetPublishImage(const char* image_url) = 0;
         /**
-         * @brief 清理水印
-         * @details SDK提供了清理水印的功能，适用于推送屏幕流或者相机流场景
-         * @param track 视频流类型，只支持{@link AliEngineVideoTrackCamera}和{@link AliEngineVideoTrackScreen}
-         * @return 
-         * - 0 : 成功
-         * - -1 : 失败
+         * @brief 清理对应数据流水印信息
+         * @param track 数据流类型
+         * @return 0:成功，-1：失败
          */
         virtual int ClearVideoWatermark(AliEngineVideoTrack track) = 0;
 
@@ -2943,10 +2808,7 @@ namespace AliRTCSdk
         
         /**
          * @brief 检查当前是否打开摄像头
-         * @return
-         * - true: 表示已开启
-         * - false: 表示未开启
-         * @note 该接口用于检查当前camera的状态
+         * @return true表示已开启；false表示未开启
          */
         virtual bool IsCameraOn() = 0;
         
@@ -3222,41 +3084,31 @@ namespace AliRTCSdk
         virtual bool IsBeautifierEnabled() = 0;
 
         /**
-         * @brief 开启或关闭美颜功能，并设置美颜效果参数
-         * @param enable
-         * - true 开启美颜功能
-         * - false 关闭美颜功能
-         * @param config 美颜效果参数, 详细定义见{@link AliEngineBeautyConfig}
-         * @return
-         * - 0 : 成功
-         * - < 0 : 失败
+         * @brief 开启美颜功能
+         * @param enable 是否启用美颜功能
+         * @param config 美颜参数配置
+         * @return return=0 Success, return<0 Failure
          */
         virtual int SetBeautyEffect(bool enable, const AliEngineBeautyConfig &config) = 0;
         
         /**
-         * @brief 视频截图功能
-         * @param userId 用户ID， userId 为""代表本地用户
-         * @param trackType 视频流类型，只支持{@link AliEngineVideoTrackCamera}和{@link AliEngineVideoTrackScreen}
-         * @return
-         * - 0 : 仅代表调用该接口成功，是否获取到截图画面，详细见{@link AliEngineEventListener::onSnapshotComplete}
-         * - < 0 : 失败
-         * @note 视频截图功能为异步接口, 通过监听{@link AliEngineEventListener::onSnapshotComplete}回调获取当前截图画面。
+         * @brief 截图
+         * @param userId 用户id
+         * @param trackType 流类型
+         * @return return=0 Success, return<0 Failure
+         * @note 截图结果通过OnSnapshotComplete回调返回
          */
-        virtual int SnapshotVideo(const String& userId, const AliEngineVideoTrack &trackType) = 0;
+       virtual int SnapshotVideo(const String& userId, const AliEngineVideoTrack &trackType) = 0;
 
         /**
          * @brief 开始录制
-         * @details SDK提供了屏录录制的功能，可以录制本地或远端的音频流、视频流、相机流
-         * @param recordType 录制类型, 详细定义见{@link AliEngineRecordType}
-         * @param recordFormat 录制文件格式, 详细定义见{@link AliEngineRecordFormat}
+         * @param recordType 录制类型
+         * @param recordFormat 录制文件格式
          * @param filePath 文件路径
-         * @param audioConfig 音频设置, 详细定义见{@link AliEngineRecordAudioConfig}
-         * @param videoConfig 视频设置, 详细定义见{@link AliEngineRecordVideoConfig}
+         * @param audioConfig 音频设置
+         * @param videoConfig 视频设置
          * @param isFragment 是否支持mp4内部分段，只在录制mp4时有效
-         * @return
-         * - true : 成功
-         * - false : 失败
-         * @note 此接口为旧接口，新接口为{@link StartRecord(const char* filePath, const AliEngineRecordVideoLayout& layout)}
+         * @return 成功/失败
          */
         virtual bool StartRecord(AliEngineRecordType recordType,
                                  AliEngineRecordFormat recordFormat,
@@ -3267,62 +3119,40 @@ namespace AliRTCSdk
         
         /**
          * @brief 更新录制内容信息
-         * @details SDK提供了更新录制内容信息的功能,用于实时更新录制模板内容设置
-         * @param layout 录制视频内容及布局, 详细定义见{@link AliEngineRecordVideoLayout}
-         * @return
-         * - true : 成功
-         * - false : 失败
-         * @note UpdateRecordLayout更新录制内容信息应该在录制过程中调用
-         */
+         * @param layout 录制视频内容及布局，查看 AliEngineRecordVideoLayout 配置
+         * @return 成功/失败
+        */
         virtual bool UpdateRecordLayout(AliEngineRecordVideoLayout& layout) = 0;
         
         /**
          * @brief 添加录制模板
-         * @details SDK提供了添加录制模板的功能,用于添加录制模板
-         * @param rTemplate 录制模板, 详细定义见{@link AliEngineRecordTemplate}
-         * @return
-         * - 0 : 成功
-         * - -1 : 失败
-         * @note AddRecordTemplate添加录制模板必须在StartRecord之前调用
-         */
+         * @param rTemplate 录制模板
+         * @return 成功/失败
+        */
         virtual int AddRecordTemplate(const AliEngineRecordTemplate& rTemplate) = 0;
 
         /**
          * @brief 开始录制
-         * @details SDK提供了屏录录制的功能，可以录制本地或远端的音频流、视频流、相机流，窗口布局设置参考{@link AliEngineRecordVideoLayout}
          * @param filePath 文件路径
-         * @param layout 视频窗口布局设置, 详细定义见{@link AliEngineRecordVideoLayout}
-         * @return
-         * - 0 : 成功
-         * - -1 : 失败
-         * @note StartRecord之前调用必须先调用AddRecordTemplate添加录制模板
+         * @param layout 视频窗口布局设置
+         * @return 成功/失败
          */
         virtual int StartRecord(const char* filePath, const AliEngineRecordVideoLayout& layout) = 0;
         
         /**
          * @brief 暂停录制
-         * @details SDK提供了暂停录制的功能
-         * @return
-         * - true : 成功
-         * - false : 失败
-         */
+         * @return 成功/失败
+        */
         virtual bool PauseRecord()  = 0;
         
         /**
          * @brief 重新开始录制
-         * @details SDK提供了重新开始录制的功能
-         * @return
-         * - true : 成功
-         * - false : 失败
-         */
+         * @return 成功/失败
+        */
         virtual bool ResumeRecord()  = 0;
         
         /**
          * @brief 停止录制
-         * @details SDK提供了停止录制的功能
-         * @return
-         * - true : 成功
-         * - false : 失败
          */
         virtual bool StopRecord() = 0;
 
@@ -3378,40 +3208,25 @@ namespace AliRTCSdk
 
         /**
          * @brief 开启旁路直播
-         * @details SDK提供了开启旁路直播的功能，可以把实时音视频流经过混流、混音处理转为标准直播流并推送至指定CDN供应商
          * @param streamURL 推流地址
-         * @param transcoding 推流所需参数, 详细定义见{@link AliEngineLiveTranscodingParam}
-         * @return
-         * - 0 : 成功
-         * - 非0 : 失败
-         *      ERR_INNER(-1) : SDK内部错误，可能的情况为SDK未初始化或者SDK销毁后调用
-         *      其他 : 返回值参考官网错误码
-         */
+         * @param transcoding 推流所需参数，详见AliRtcLiveTranscoding
+         * @return 返回0为成功，其他返回错误码
+        */
         virtual int StartPublishLiveStream(const String& streamURL, const AliEngineLiveTranscodingParam &transcoding) = 0;
         
         /**
          * @brief 更新旁路直播相关参数
-         * @details SDK提供了更新旁路直播的功能，用于实时更新旁路直播参数
          * @param streamURL 推流地址
-         * @param transcoding 推流所需参数, 详细定义见{@link AliEngineLiveTranscodingParam}
-         * @return
-         * - 0 : 成功
-         * - 非0 : 失败
-         *      ERR_INNER(-1) : SDK内部错误，可能的情况为SDK未初始化或者SDK销毁后调用
-         *      其他 : 返回值参考官网错误码
-         */
+         * @param transcoding 推流所需参数，详见AliRtcLiveTranscoding
+         * @return 返回0为成功，其他返回错误码
+        */
         virtual int UpdatePublishLiveStream(const String& streamURL, const AliEngineLiveTranscodingParam &transcoding) = 0;
         
         /**
          * @brief 停止旁路直播
-         * @details SDK提供了停止旁路直播的功能
          * @param streamURL 推流地址
-         * @return
-         * - 0 : 成功
-         * - 非0 : 失败
-         *      ERR_INNER(-1) : SDK内部错误，可能的情况为SDK未初始化或者SDK销毁后调用
-         *      其他 : 返回值参考官网错误码
-         */
+         * @return 返回0为成功，其他返回错误码
+        */
         virtual int StopPublishLiveStream(const String& streamURL) = 0;
 
         /**
@@ -3430,24 +3245,13 @@ namespace AliRTCSdk
         
         /**
          * @brief 发送媒体扩展信息
-         * @details SDK提供了发送和接收媒体扩展信息的功能，接收端参考 {@link AliEngineEventListener::OnMediaExtensionMsgReceived}，使用场景：
-         * - 使用媒体扩展信息传递时间戳，计算端到端的网络延迟，或者跟自身其他业务做数据同步
-         * - 使用媒体扩展信息传递位控制信息。目前可以传递8 Byte数据，即64位，每一位或几位可以表示控制信息，用于自身业务上的指令传输
-         * 
          * @param message 扩展信息内容, 长度限制为最大8字节
          * @param length 扩展信息长度
-         * @param repeatCount 重复次数，代表消息冗余度，用于防止网络丢包导致的消息丢失
+         * @param repeatCount 重试次数
          * @return
          * - 0: 成功
          * - <0: 失败
-         *      - ERR_INNER(-1): SDK内部错误，可能的情况为SDK未初始化或者SDK销毁后调用
-         * 
-         * @note 使用媒体扩展信息时需要复用音视频数据通道，因此必须控制自定义消息的发送频率和消息数据长度，使用限制如下：
-         * - 每秒最多发送30条消息
-         * - 为了不影响媒体数据的传输质量，自定义消息体长度限制为8 Byte，可以用来传输时间戳，位控制信息等
-         * - sendMediaExtensionMsg函数中repeatCount参数为自定义消息冗余度，若大于1，则会发送多次，防止网络丢包导致的消息丢失，此时房间里的其他人也会收到多次相同的消息，需要去重
-         * - 发送的自定义消息，在旁路直播时，房间里的订阅者也一样会收到
-         * - 目前H5端不支持发送和接收媒体扩展信息
+         * @note 该接口用于发送媒体扩展信息，接收端参考 {@link AliEngineEventListener::OnMediaExtensionMsgReceived}
          */
         virtual int SendMediaExtensionMsg(unsigned char *message, unsigned int length, int repeatCount) = 0;
 

@@ -9,7 +9,7 @@
 #import <UIKit/UIImage.h>
 
 /**
- * @defgroup AliRtcDef_ios iOS关键类型定义
+ * @defgroup AliRtcDef_ios 关键类型定义
  * AliRTC功能的关键类型定义
  * @{
  */
@@ -116,16 +116,17 @@ typedef NS_ENUM(NSInteger, AliRtcAudioScenario) {
 };
 
 /**
- * @brief 视图显示模式
+ * @brief 渲染模式
+
+ - AliRtcRenderModeAuto: 自动模式
+ - AliRtcRenderModeStretch: 延伸
+ - AliRtcRenderModeFill: 填充
+ - AliRtcRenderModeCrop: 裁剪
  */
 typedef NS_ENUM(NSUInteger, AliRtcRenderMode) {
-    /** 自动模式 */
     AliRtcRenderModeAuto    = 0,
-    /** 延伸模式 */
     AliRtcRenderModeStretch = 1,
-    /** 填充模式 */
     AliRtcRenderModeFill    = 2,
-    /** 裁剪模式 */
     AliRtcRenderModeCrop    = 3,
 };
 
@@ -173,13 +174,9 @@ typedef NS_ENUM(NSInteger, AliRtcVideoEncoderMirrorMode) {
  * @brief 视频旋转角度
  */
 typedef NS_ENUM(NSInteger, AliRtcRotationMode) {
-    /** 0 */
   AliRtcRotationMode_0    = 0,
-    /** 90 */
   AliRtcRotationMode_90   = 90,
-    /** 180 */
   AliRtcRotationMode_180  = 180,
-    /** 270 */
   AliRtcRotationMode_270  = 270,
 };
 
@@ -453,14 +450,15 @@ typedef NS_ENUM(NSInteger, AliRtcMuteLocalAudioMode) {
 
 
 /**
- * @brief 镜像模式
+ * @brief 渲染镜像模式
+
+ - AliRtcRenderMirrorModeOnlyFrontCameraPreviewEnabled: 只有前置摄像头预览镜像，其余不镜像
+ - AliRtcRenderMirrorModeAllEnabled: 全部镜像
+ - AliRtcRenderMirrorModeAllDisabled: 全部不镜像
  */
 typedef NS_ENUM(NSInteger, AliRtcRenderMirrorMode) {
-    /** 只有前置摄像头预览镜像，其余不镜像 */
     AliRtcRenderMirrorModeOnlyFrontCameraPreviewEnabled = 0,
-    /** 镜像开启 */
     AliRtcRenderMirrorModeAllEnabled = 1,
-    /** 镜像关闭 */
     AliRtcRenderMirrorModeAllDisabled = 2,
 };
 
@@ -506,37 +504,39 @@ typedef NS_ENUM(NSInteger, AliRtcAudioPlayingErrorCode) {
  - AliRtcRecordTypeAudio: 纯音频录制
 */
 typedef NS_ENUM(NSUInteger, AliRtcRecordType) {
-    /** 录制单个音频文件 */
     AliRtcRecordTypeAudio = 0,
 };
 
 /**
  * @brief 录制格式
- */
+
+ - AliRtcRecordFormatAAC: AAC文件
+ - AliRtcRecordFormatWAV: WAV文件
+*/
 typedef NS_ENUM(NSUInteger, AliRtcRecordFormat) {
-    /** 录制AAC格式文件 */
     AliRtcRecordFormatAAC = 0,
-    /** 录制WAV格式文件 */
     AliRtcRecordFormatWAV,
 };
 
 /**
  * @brief 录制音频质量
- */
+
+ - AliRtcAudioQualityLow: 低
+ - AliRtcAudioQualityMidium: 中
+ - AliRtcAudioQualityHigh: 高
+*/
 typedef NS_ENUM(NSUInteger, AliRtcAudioQuality) {
-    /** 低质量文件录制，文件体积较小，音质一般 */
     AliRtcAudioQualityLow = 0,
-    /** 中等质量文件录制，文件体积中等，音质中等 */
     AliRtcAudioQualityMidium,
-    /** 高质量文件录制，文件体积较大，音质较好 */
     AliRtcAudioQualityHigh,
 };
 
 /**
  * @brief 录制视频质量
- */
+
+ - AliRtcVideoQualityDefault: 默认，和采集保持一致
+*/
 typedef NS_ENUM(NSUInteger, AliRtcVideoQuality) {
-    /**  默认，和采集保持一致 */
     AliRtcVideoQualityDefault = 0,
 };
 
@@ -604,32 +604,36 @@ typedef NS_ENUM(NSInteger, AliRtcShowDebugViewType){
 
 /**
  * @brief 录制音频设置
- */
+
+ - sampleRate: 音频采样率
+ - quality: 音频质量
+ - enableRecordExternalRenderPCM: 是否允许录制外部pcm输入渲染数据
+*/
 typedef struct  {
-    /** 音频采样率类型 */
     AliRtcAudioSampleRate sampleRate;
-    /** 音频录制质量 */
     AliRtcAudioQuality quality;
-    /** 是否允许录制外部pcm输入渲染数据 */
     bool enableRecordExternalRenderPCM;
 }AliRtcRecordAudioConfig;
 
 /**
  * @brief 录制视频设置
- */
+
+ - quality: 视频质量
+*/
 typedef struct  {
-    /** 视频质量 */
-    AliRtcVideoQuality quality;
+    AliRtcVideoQuality quality; //视频质量
 }AliRtcRecordVideoConfig;
 
 /**
- * @brief 美颜参数
- */
+ * @brief 美颜设置
+
+ - whiteningLevel: 美白等级
+ - smoothnessLevel: 磨皮等级
+*/
 @interface AliRtcBeautyConfig : NSObject
-/** 美白等级，建议取值范围[0-1.0] */
-@property (nonatomic, assign) float whiteningLevel;
-/** 磨皮等级，建议取值范围[0-1.0] */
-@property (nonatomic, assign) float smoothnessLevel;
+
+@property (nonatomic, assign) float whiteningLevel;      //美白等级[0-1.0]
+@property (nonatomic, assign) float smoothnessLevel;     //磨皮等级[0-1.0]
 
 @end
 
@@ -1021,19 +1025,19 @@ typedef NS_ENUM(NSUInteger, AliRtcBokehScaleModel) {
 @end
 
 /**
- * @brief 显示视图配置
-*/
+ * @brief 渲染配置
+ */
 @interface AliVideoCanvas : NSObject
-/** 显示视图 */
-@property (nonatomic, strong) UIView * _Nonnull view;
-/** 渲染模式，默认值为{@link AliRtcRenderModeAuto} */
-@property (nonatomic) AliRtcRenderMode renderMode;
-/** 镜像模式，默认值为{@link AliRtcRenderMirrorModeAllDisabled} */
-@property (nonatomic) AliRtcRenderMirrorMode mirrorMode;
-/** 背景颜色，格式为RGB的Hex */
-@property (nonatomic) int backgroundColor;
-/** 旋转角度，默认值为 {@link AliRtcRotationMode_0} */
+
+@property (nonatomic, strong) UIView * _Nonnull view;         // 渲染view，不可为nil
+@property (nonatomic) AliRtcRenderMode renderMode;            // 渲染模式，默认AliRtcRenderModeAuto
+@property (nonatomic) AliRtcRenderMirrorMode mirrorMode;      // 镜像模式
+@property (nonatomic) int backgroundColor;                    // 背景颜色，格式为RGB的Hex
 @property (nonatomic, assign) AliRtcRotationMode rotationMode;
+
+@property (nonatomic) int textureId;                          // 纹理Id
+@property (nonatomic) int textureWidth;                       // 纹理宽
+@property (nonatomic) int textureHeight;                      // 纹理高
 
 @end
 
@@ -1041,19 +1045,14 @@ typedef NS_ENUM(NSUInteger, AliRtcBokehScaleModel) {
  * @brief 水印配置
  */
 @interface AliRtcWatermarkConfig : NSObject
-/** 预览水印是否可见  */
+
 @property (nonatomic, assign) BOOL visibleInPreview;
-/** 竖屏水印坐标信息  */
 @property (nonatomic, assign) CGRect positionInPortraitMode;
-/** 横屏水印坐标信息  */
 @property (nonatomic, assign) CGRect positionInLandscapeMode;
-/** 水印透明度  */
 @property (nonatomic, assign) float alpha;
-/** 归一化  */
 @property (nonatomic, assign) BOOL normalized;
 
 @end
-
 
 /**
  * @brief 音频裸数据
@@ -1230,21 +1229,16 @@ typedef NS_ENUM(NSUInteger, AliRtcLiveTranscodingState) {
 * @brief 旁路模式
 */
 typedef NS_ENUM(NSUInteger, AliRtcLiveTranscodingMixMode) {
-    /** 单路模式 */
-    AliRtcLiveTranscodingSINGLE = 0,
-    /** 混流模式 */
-    AliRtcLiveTranscodingMIX = 1
+    AliRtcLiveTranscodingSINGLE = 0,  /* 单路模式 */
+    AliRtcLiveTranscodingMIX = 1      /* 混流模式 */
 };
 
 /**
 * @brief 旁路直播转推流模式
 */
 typedef NS_ENUM(NSUInteger, AliRtcLiveTranscodingStreamType) {
-    /** 原始流 */
     AliRtcLiveTranscodingOrigin = 0,
-    /** 音频 */
     AliRtcLiveTranscodingAudio = 1,
-    /** 视频 */
     AliRtcLiveTranscodingVideo = 2
 };
 
@@ -1252,19 +1246,15 @@ typedef NS_ENUM(NSUInteger, AliRtcLiveTranscodingStreamType) {
 * @brief 旁路直播媒体处理模式
 */
 typedef NS_ENUM(NSUInteger, AliRtcLiveTranscodingMediaProcessMode) {
-    /** 通用模式 */
-    AliRtcLiveTranscodingNormal = 0,
-    /** 虚拟背景模式 */
-    AliRtcLiveTranscodingVirtualBackground = 1
+    AliRtcLiveTranscodingNormal = 0, /*通用模式*/
+    AliRtcLiveTranscodingVirtualBackground = 1 /*虚拟背景模式*/
 };
 
 /**
 * @brief 旁路直播裁剪模式
 */
 typedef NS_ENUM(NSUInteger, AliRtcLiveTranscodingCropMode) {
-    /** 剪裁 */
     AliRtcLiveTranscodingCrop = 1,
-    /** 填充 */
     AliRtcLiveTranscodingFill = 2
 };
 
@@ -1334,11 +1324,8 @@ typedef NS_ENUM(NSUInteger, AliRtcLiveTranscodingTaskProfile) {
 * @brief 旁路模式单路参数
 */
 @interface AliRtcLiveTranscodingSingleParam : NSObject
-/** 用户id */
 @property (nonatomic, copy) NSString *_Nullable userId;
-/** 推流模式 */
 @property (nonatomic, assign) AliRtcLiveTranscodingStreamType streamType;
-/** 旁路直播输入类型 */
 @property (nonatomic, assign) AliRtcLiveTranscodingSourceType sourceType;
 @end
 
@@ -1346,36 +1333,24 @@ typedef NS_ENUM(NSUInteger, AliRtcLiveTranscodingTaskProfile) {
 * @brief 旁路模式混流参数
 */
 @interface AliRtcLiveTranscodingMixParam : NSObject
-/** 旁路直播计费规格 */
 @property (nonatomic, assign) AliRtcLiveTranscodingTaskProfile taskProfile;
-/** 旁路直播自定义编码参数 */
 @property (nonatomic, strong) AliRtcLiveTranscodingEncodeParam *_Nullable encodeParam;
-/** 旁路直播用户列表 */
 @property (nonatomic, strong) NSArray<AliRtcLiveTranscodingPane *> *_Nullable users;
-/** 背景色 */
 @property (nonatomic, assign) int backgroundColor; //0xRRGGBB
-/** 背景图片列表 */
 @property (nonatomic, strong) NSArray<AliRtcLiveTranscodingImage *> *_Nullable backgrounds;
-/** 水印列表 */
 @property (nonatomic, strong) NSArray<AliRtcLiveTranscodingImage *> *_Nullable watermarks;
-/** 时钟组件列表 */
 @property (nonatomic, strong) NSArray<AliRtcLiveTranscodingClockWidget *> *_Nullable clockWidgets;
-/** 剪裁模式 */
 @property (nonatomic, assign) AliRtcLiveTranscodingCropMode cropMode;
-/** 媒体处理模式 */
 @property (nonatomic, assign) AliRtcLiveTranscodingMediaProcessMode mediaProcessMode;
 @end
 
 /**
- * @brief 旁路模式参数
+ * @brief 旁路直播配置
 */
 @interface AliRtcLiveTranscodingParam : NSObject
-/** 旁路模式 */
 @property (nonatomic, assign) AliRtcLiveTranscodingMixMode mixMode;
-/** 路模式单路参数 */
-@property (nonatomic, strong) AliRtcLiveTranscodingSingleParam *_Nullable singleParam;
-/** 旁路模式混流参数 */
-@property (nonatomic, strong) AliRtcLiveTranscodingMixParam *_Nullable mixParam;
+@property (nonatomic, strong) AliRtcLiveTranscodingSingleParam* _Nullable singleParam;
+@property (nonatomic, strong) AliRtcLiveTranscodingMixParam* _Nullable mixParam;
 @end
 
 /**
@@ -2062,7 +2037,7 @@ typedef NS_ENUM(NSInteger, AliRtcVideoEncodedFrameType) {
 
 
 @end
-/** @} AliRtcEngineDelegate_ios AliRtcEngineDelegate */
+/** @} AliRtcEngineDelegate */
 
 #pragma mark - 接口主类
 /**
@@ -2263,70 +2238,53 @@ typedef NS_ENUM(NSInteger, AliRtcVideoEncodedFrameType) {
  */
 
 /**
- * @brief 设置本地预览显示视图
- * @param viewConfig 本地视频显示属性, 详细见{@link AliVideoCanvas}
- * @param track  只支持{@link AliRtcVideoTrackCamera}和{@link AliRtcVideoTrackScreen}
- * @return
- * - 0 : 成功
- * - < 0 : 失败
- * @note 支持joinChannel之前和之后切换窗口。如果canvas或者{@link AliVideoCanvas::view}为nil，则停止显示。
- *       如果需要重新设置{@link AliVideoCanvas::renderMode}，请保持canvas中其他属性不变，仅修改
- *       {@link AliVideoCanvas::renderMode}。
- *       如果需要重新设置{@link AliVideoCanvas::mirrorMode}，请保持canvas中其他属性不变，仅修改
- *       {@link AliVideoCanvas::mirrorMode}。
+ * @brief 为本地预览设置窗口以及绘制参数
+ * @param viewConfig 包含了窗口以及渲染方式
+ * @param track     必须是{@link AliRtcVideoTrackCamera}
+ * @return 0表示Success； 非0表示Failure
+ * @note
+ *  - 支持joinChannel之前和之后切换窗口。如果viewConfig或者viewConfig中的view为nil，则停止渲染
+ *  - 如果在播放过程中需要重新设置render mode，请保持canvas中其他成员变量不变，仅修改renderMode
+ *  - 如果在播放过程中需要重新设置mirror mode，请保持canvas中其他成员变量不变，仅修改mirrorMode
  */
 - (int)setLocalViewConfig:(AliVideoCanvas *_Nullable)viewConfig forTrack:(AliRtcVideoTrack)track;
 
 /**
- * @brief 开启本地视频预览
- * @return
- * - 0 : 成功
- * - < 0 : 失败
- * @note 如果没有调用{@link #setLocalViewConfig:forTrack:}设置显示的view，则无法预览。
- * 可以在{@link #joinChannel:name:onResult:}之前就开启预览会自动打开摄像头。
+ * @brief 开始本地预览
+ * @return 0表示Success 非0表示Failure
+ * @note 如果没有设置view，则无法预览。可以在joinChannel之前就开启预览
+ *       会自动打开摄像头
  */
 - (int)startPreview;
 
 /**
- * @brief 关闭本地视频预览
- * @return
- * - 0 : 成功
- * - < 0 : 失败
- * @note {@link #leaveChannel}会自动停止本地预览；如果没有在推相机流，则会自动关闭摄像头。
+ * @brief 停止本地预览
+ * @return 0表示Success 非0表示Failure
+ * @note leaveChannel会自动停止本地预览
+ *       会自动关闭摄像头 (如果正在publish camera流，则不会关闭摄像头)
  */
 - (int)stopPreview;
 
 /**
  * @brief 设置camera采集偏好
- * @param config 偏好设置
- *      - preference: {@link AliRtcCaptureOutputPreference::AliRtcCaptureOutputPreferencePreview} 高清预览，采集优先保证视频预览质量
- *                    {@link AliRtcCaptureOutputPreference::AliRtcCaptureOutputPreferencePerformance} 采集选择最接近推流的分辨率，优先保证设备性能
- *                    {@link AliRtcCaptureOutputPreference::AliRtcCaptureOutputPreferenceAuto} 自动调整采集分辨率
- *      - cameraDirection: 设置采集方向，前置 或 后置
+ * @param config 偏好设置，详见AliRtcCameraCapturerConfiguration参数
  * @return 0为成功，非0失败
- * @note 必须在打开摄像头之前设置，如{@link AliRtcEngine::startPreview}，{@link AliRtcEngine::joinChannel:name:onResult:} / {@link AliRtcEngine::joinChannel:name:onResultWithUserId:}之前设置
+ * @note 必须在首次打开摄像头之前设置，如startPreview，joinchannel，publish之前设置
 */
 - (int)setCameraCapturerConfiguration:(AliRtcCameraCapturerConfiguration* _Nonnull )config;
 
 /**
- * @brief 禁用或启用本地视频采集
- * @param enabled
- * - YES : 启用本地视频采集
- * - NO : 禁用本地视频采集
- * @return
- * - 0 : 成功
- * - < 0 : 失败
- * @note 默认为开启状态, 通过监听{@link #onUserVideoEnabled:videoEnabled: }获取用法是否禁用或启用本地视频采集状态。
- */
+ * @brief 禁用或重新启用本地视频采集
+ * @param enabled NO表示停止视频采集；YES表示恢复正常
+ * @return 0表示Success 非0表示Failure
+*/
 - (int)enableLocalVideo:(BOOL)enabled;
 
 /**
  * @brief 是否将停止本地视频数据发送
  * @param mute  YES表示视频数据发送黑帧；NO表示恢复正常
- * @param track  只支持{@link AliRtcVideoTrackCamera}
- * @return 
- * - 0: 表示Success
- * - 非0: 表示Failure
+ * @param track  需要停止发送的track
+ * @return 0表示Success 非0表示Failure
  * @note 发送黑色的视频帧。本地预览也呈现黑色。采集，编码，发送模块仍然工作，
  *       只是视频内容是黑色帧
 */
@@ -2396,18 +2354,16 @@ typedef NS_ENUM(NSInteger, AliRtcVideoEncodedFrameType) {
  */
 
 /**
- * @brief 设置远端视频显示视图
- * @param canvas 本地视频显示属性, 详细见{@link AliVideoCanvas}
- * @param uid User ID，从App server分配的唯一标示符
- * @param track  只支持{@link AliRtcVideoTrack#AliRtcVideoTrackCamera}和{@link AliRtcVideoTrack#AliRtcVideoTrackScreen}
- * @return
- * - 0 ：成功
- * - < 0 ：失败
- * @note 支持joinChannel之前和之后切换窗口。如果canvas或者{@link AliVideoCanvas#view}为nil，则停止显示。
- *       如果需要重新设置{@link AliVideoCanvas#renderMode}，请保持canvas中其他属性不变，仅修改
- *       {@link AliVideoCanvas#renderMode}。
- *       如果需要重新设置{@link AliVideoCanvas#mirrorMode}，请保持canvas中其他属性不变，仅修改
- *       {@link AliVideoCanvas#mirrorMode}。
+ * @brief 为远端的视频设置窗口以及绘制参数
+ * @param canvas canvas包含了窗口以及渲染方式
+ * @param uid    User ID。从App server分配的唯一标示符
+ * @param track  需要设置的track
+ * @return 0表示Success 非0表示Failure
+ * @note 支持joinChannel之前和之后切换窗口。如果canvas为nil或者view为nil，则停止渲染相应的流
+ *       如果在播放过程中需要重新设置render mode，请保持canvas中其他成员变量不变，仅修改
+ *       renderMode
+ *       如果在播放过程中需要重新设置mirror mode，请保持canvas中其他成员变量不变，仅修改
+ *       mirrorMode
  */
 - (int)setRemoteViewConfig:(AliVideoCanvas *_Nullable)canvas uid:(NSString *_Nonnull)uid forTrack:(AliRtcVideoTrack)track;
 
@@ -2666,9 +2622,7 @@ typedef NS_ENUM(NSInteger, AliRtcVideoEncodedFrameType) {
 
 /**
  * @brief 切换前后摄像头
- * @return
- * - 0: 表示Success
- * - 非0: 表示Failure
+ * @return 0表示Success 非0表示Failure
  * @note 只有iOS和android提供这个接口
  */
 - (int)switchCamera;
@@ -2676,89 +2630,59 @@ typedef NS_ENUM(NSInteger, AliRtcVideoEncodedFrameType) {
 /**
  * @brief 获取当前摄像头方向，默认前置摄像头
  * @return 摄像头方向
- * - AliRtcCameraDirectionFront 前置
- * - AliRtcCameraDirectionBack 后置
- * - AliRtcCameraDirectionInvalid 无效
- * @note 只有iOS和android提供这个接口，在Camera 已经open之后调用，否则会返回 {@link AliRtcCameraDirection::AliRtcCameraDirectionInvalid}
  */
 - (AliRtcCameraDirection)getCurrentCameraDirection;
 
 /**
- * @brief 设置摄像头zoom
- * @param zoom   zoom的级别，范围从 1 到 camera支持的最大 zoom值
- * @return
- * - 0: 表示Success
- * - 非0: 表示Failure
- * @note 只有iOS和android提供这个接口
+ * @brief 设置摄像头参数
+ * @param zoom   zoom的级别
+ * @return 0表示Success 非0表示Failure
  */
  - (int)setCameraZoom:(float)zoom;
 
 /**
- * @brief 设置摄像头闪光灯开关
- * @param flash  是否打开闪光灯
- * @return
- * - 0: 设置成功
- * - 非0: 设置失败
- * @note 只有iOS和android提供这个接口，一般后置摄像头有闪光灯功能
+ * @brief 设置摄像头参数
+ * @param flash  是否允许闪光灯
+ * @return 0表示Success 非0表示Failure
  */
 - (int)setCameraFlash:(BOOL)flash;
 
 /**
  * @brief 摄像头是否支持手动聚焦
- * @return 
- * - YES: 表示支持
- * - NO: 表示不支持
- * @note 只有iOS和android提供这个接口，用来检查当前camera是否可以设置聚焦点
+ * @return YES表示支持 NO表示不支持
  */
 - (BOOL)isCameraFocusPointSupported;
 
 /**
- * @brief 摄像头是否支持设置曝光点
- * @return 
- * - YES: 表示支持
- * - NO: 表示不支持
- * @note 只有iOS和android提供这个接口，用来检查当前camera是否可以设置曝光点
+ * @brief 摄像头是否支持设置曝光区域
+ * @return YES表示支持 NO表示不支持
  */
 - (BOOL)isCameraExposurePointSupported;
 
 /**
- * @brief 设置摄像头手动聚焦点
- * @param point   聚焦点坐标
- * @return
- * - 0: 表示Success
- * - 非0: 表示Failure
- * @note 只有iOS和android提供这个接口，调用后camera对所设点做一次曝光调整，后面一直保持这个对焦值
+ * @brief 设置摄像头手动聚焦
+ * @param point   聚焦点
+ * @return 0表示Success 非0表示Failure
  */
 - (int)setCameraFocusPoint:(CGPoint)point;
 
 /**
  * @brief 设置摄像头曝光点
  * @param point  曝光点
- * @return 
- * - 0: 表示Success
- * - 非0: 表示Failure
- * @note 只有iOS和android提供这个接口，调用后camera对所设点做一次曝光调整，后面一直保持这个曝光值
+ * @return 0表示Success 非0表示Failure
  */
 - (int)setCameraExposurePoint:(CGPoint)point;
 
 /**
  * @brief 摄像头是否支持人脸聚焦
- * @return
- * - YES: 表示支持
- * - NO: 表示不支持
- * @note 只有iOS和android提供这个接口，在camera没有打开的情况下返回false，
- *       在camera打开的情况下，如果当前camera同时支持人脸识别和对焦功能则返回true
+ * @return YES 表示支持 NO表示不支持
 */
 - (BOOL)isCameraAutoFocusFaceModeSupported;
 
 /**
  * @brief 设置摄像头人脸对焦
  * @param enable  YES: 开启; NO:关闭
- * @return
- * - YES: 表示成功
- * - NO: 表示失败
- * @note 只有iOS和android提供这个接口，如果{@link AliRtcEngine::isCameraAutoFocusFaceModeSupported}返回true
- *      且此调用enable为true的情况下，实时对焦到采集到数据的人脸上
+ * @return YES表示成功 NO表示失败
 */
 - (BOOL)setCameraAutoFocusFaceModeEnabled:(BOOL)enable;
 
@@ -2811,10 +2735,7 @@ typedef NS_ENUM(NSInteger, AliRtcVideoEncodedFrameType) {
 
 /**
  * @brief 检查camera是否打开
- * @return
- * - YES: 表示摄像头已打开
- * - NO: 表示摄像头没有打开
- * @note 该接口用于检查当前camera的状态
+ * @return YES表示摄像头已打开；NO表示摄像头没有打开
  */
 - (BOOL)isCameraOn;
 
@@ -3314,22 +3235,18 @@ NS_ASSUME_NONNULL_END
 
 /**
  * @brief 开始录制
- * @details SDK提供了屏录录制的功能，可以录制本地或远端的音频流、视频流、相机流
- * @param recordType 录制类型 详细定义见{@link AliRtcRecordType}
- * @param recordFormat 录制文件格式 详细定义见{@link AliRtcRecordFormat}
+ * @param recordType 录制类型
+ * @param recordFormat 录制文件格式
  * @param filePath 文件路径
- * @param audioConfig 音频设置 详细定义见{@link AliRtcRecordAudioConfig}
- * @param videoConfig 视频设置 详细定义见{@link AliRtcRecordVideoConfig}
- * @return
- * - YES: 成功
- * - NO: 失败
+ * @param audioConfig 音频设置
+ * @param videoConfig 视频设置
+ * @return 成功/失败
  */
 - (BOOL)startRecord:(AliRtcRecordType)recordType recordFormat:(AliRtcRecordFormat)recordFormat filePath:(NSString*_Nonnull)filePath audioConfig:(AliRtcRecordAudioConfig*_Nullable)audioConfig videoConfig:(AliRtcRecordVideoConfig*_Nullable)videoConfig;
 
 
 /**
- * @brief 停止录制
- * @details SDK提供了停止录制的功能
+ @brief 停止录制
  */
 - (void)stopRecord;
 
@@ -3419,15 +3336,10 @@ NS_ASSUME_NONNULL_END
 
 
 /**
- * @brief 开启或关闭美颜功能, 并设置美颜效果参数
- * @param enable
- * - YES 开启美颜功能
- * - NO 关闭美颜功能
- * @param config 美颜效果参数, 详细定义见{@link AliRtcBeautyConfig}
- * @return
- * - 0 : 成功
- * - < 0 : 失败
- */
+ * @brief 设置美颜
+ * @param enable 美颜开关
+ * @param config 美颜参数控制
+*/
 - (int)setBeautyEffect:(BOOL)enable config:(AliRtcBeautyConfig *_Nullable)config;
 
 /** @} */
@@ -3439,13 +3351,7 @@ NS_ASSUME_NONNULL_END
  */
 
 /**
- * @brief 视频截图功能
- * @param userId 用户ID，userId 为nil或者为""代表本地用户
- * @param type 视频流类型，只支持{@link AliRtcVideoTrack::AliRtcVideoTrackCamera}和{@link AliRtcVideoTrack::AliRtcVideoTrackScreen}
- * @return
- * - 0 : 仅代表调用该接口成功，是否获取到截图画面，详细见{@link onSnapshotComplete: videoTrack: image: success:}
- * - < 0 : 失败
- * @note 视频截图功能为异步接口, 通过监听{@link onSnapshotComplete: videoTrack: image: success:}回调获取当前截图画面。
+ * @brief 视频画面截图
  */
 - (int)snapshotVideo:(NSString*_Nullable)userId type:(AliRtcVideoTrack)type;
 
@@ -3459,47 +3365,27 @@ NS_ASSUME_NONNULL_END
 
 /**
  * @brief 发送媒体扩展信息
- * @details SDK提供了发送和接收媒体扩展信息的功能，接收端参考 {@link AliRtcEngineDelegate::onMediaExtensionMsgReceived:message:}，使用场景：
- * - 使用媒体扩展信息传递时间戳，计算端到端的网络延迟，或者跟自身其他业务做数据同步
- * - 使用媒体扩展信息传递位控制信息。目前可以传递8 Byte数据，即64位，每一位或几位可以表示控制信息，用于自身业务上的指令传输
- * 
- * @param data 扩展信息内容, 长度限制为最大8字节
- * @param repeatCount 重复次数，代表消息冗余度，用于防止网络丢包导致的消息丢失
+ * @param data 信息内容, 长度限制为最大8字节
+ * @param repeatCount 重复次数
  * @return
  * - 0: 成功
  * - <0: 失败
- *      - ERR_INNER(-1): SDK内部错误，可能的情况为SDK未初始化或者SDK销毁后调用
- * 
- * @note 使用媒体扩展信息时需要复用音视频数据通道，因此必须控制自定义消息的发送频率和消息数据长度，使用限制如下：
- * - 每秒最多发送30条消息
- * - 为了不影响媒体数据的传输质量，自定义消息体长度限制为8 Byte，可以用来传输时间戳，位控制信息等
- * - sendMediaExtensionMsg函数中repeatCount参数为自定义消息冗余度，若大于1，则会发送多次，防止网络丢包导致的消息丢失，此时房间里的其他人也会收到多次相同的消息，需要去重
- * - 发送的自定义消息，在旁路直播时，房间里的订阅者也一样会收到
- * - 目前H5端不支持发送和接收媒体扩展信息
+ * @note 该接口用于发送媒体扩展信息，接收端参考 {@link AliRtcEngineDelegate::onMediaExtensionMsgReceived:message:}
  */
 - (int)sendMediaExtensionMsg:(NSData *_Nonnull)data repeatCount:(int)repeatCount;
 
 /**
  * @brief 添加水印
- * @details SDK提供了添加水印的功能，适用于推送屏幕流或者相机流场景
- * @param track 视频流类型，只支持{@link AliRtcVideoTrack::AliRtcVideoTrackCamera}和{@link AliRtcVideoTrack::AliRtcVideoTrackScreen}
  * @param imageUrl png 文件路径
- * @param config 水印配置 详细定义见{@link AliRtcWatermarkConfig}
- * @return
- * - 0 : 成功
- * - -1 : 失败
- * @note 目前水印图片仅仅支持png格式
- */
+ * @param config 水印配置 详见:AliRtcWatermarkConfig
+ * @param track 流类型
+*/
 - (int)addVideoWatermark:(AliRtcVideoTrack)track image:(NSString*_Nonnull)imageUrl config:(AliRtcWatermarkConfig *_Nullable)config;
 
 /**
  * @brief 去除水印
- * @details SDK提供了清理水印的功能，适用于推送屏幕流或者相机流场景
- * @param track 视频流类型，只支持{@link AliRtcVideoTrack::AliRtcVideoTrackCamera}和{@link AliRtcVideoTrack::AliRtcVideoTrackScreen}
- * @return
- * - 0 : 成功
- * - -1 : 失败
- */
+ * @param track 流类型
+*/
 - (int)clearVideoWatermark:(AliRtcVideoTrack)track;
 
 /**
@@ -3591,39 +3477,24 @@ NS_ASSUME_NONNULL_END
 
 /**
  * @brief 开启旁路直播
- * @details SDK提供了开启旁路直播的功能，可以把实时音视频流经过混流、混音处理转为标准直播流并推送至指定CDN供应商
  * @param streamURL 推流地址
- * @param trancoding 推流所需参数 详细定义见{@link AliRtcLiveTranscodingParam}
- * @return
- * - 0 : 成功
- * - 非0 : 失败
- *      ERR_INNER(-1) : SDK内部错误，可能的情况为SDK未初始化或者SDK销毁后调用
- *      其他 : 返回值参考官网错误码
-*/
+ * @param trancoding 推流所需参数，详见AliRtcLiveTranscodingParam
+ * @return 0:Success 非0:Failure
+ */
 - (int)startPublishLiveStreamWithURL:(NSString *_Nonnull)streamURL liveTranscoding:(AliRtcLiveTranscodingParam *_Nonnull)trancoding;
 
 /**
  * @brief 更新旁路直播相关参数
- * @details SDK提供了更新旁路直播的功能，用于实时更新旁路直播参数
  * @param streamURL 推流地址
- * @param trancoding 推流所需参数 详细定义见{@link AliRtcLiveTranscodingParam}
- * @return
- * - 0 : 成功
- * - 非0 : 失败
- *      ERR_INNER(-1) : SDK内部错误，可能的情况为SDK未初始化或者SDK销毁后调用
- *      其他 : 返回值参考官网错误码
+ * @param trancoding 推流所需参数，详见AliRtcLiveTranscodingParam
+ * @return 0:Success 非0:Failure
  */
 - (int)updatePublishLiveStreamWithURL:(NSString *_Nonnull)streamURL liveTranscoding:(AliRtcLiveTranscodingParam *_Nonnull)trancoding;
 
 /**
  * @brief 停止旁路直播
- * @details SDK提供了停止旁路直播相关参数的功能
  * @param streamURL 推流地址
- * @return
- * - 0 : 成功
- * - 非0 : 失败
- *      ERR_INNER(-1) : SDK内部错误，可能的情况为SDK未初始化或者SDK销毁后调用
- *      其他 : 返回值参考官网错误码
+ * @return 0:Success 非0:Failure
  */
 - (int)stopPublishLiveStreamWithURL:(NSString *_Nonnull)streamURL;
 
@@ -3671,11 +3542,11 @@ NS_ASSUME_NONNULL_END
 - (int)stopChannelRelay;
 
 /**
- * @brief 设置视频流属性
- * @param track 视频流类型，详细见{@link AliRtcVideoTrack}
- * @param attr 视频流属性
- * @note 已废弃使用。
- */
+ * @brief 设置视频流附加属性
+ * @param track 视频流类型
+ * @param attr 流属性
+ * @note 已废弃使用
+*/
 - (void)setPublishVideoStreamAttribute:(AliRtcVideoTrack)track attr:(NSString *_Nullable)attr;
 
 /**
